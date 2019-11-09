@@ -74,8 +74,9 @@ create table sys_goods
    goodsClass           varchar(100),
    goodsPath            varchar(500) not null,
    goodsFilename        varchar(200) not null,
+   goodsState           int not null ,
    uploadUser           bigint not null,
-   markUserID           bigint not null,
+   markUserID           bigint not null default 0,
    primary key (goodsID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
