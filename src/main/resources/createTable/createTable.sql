@@ -71,7 +71,7 @@ create table goods_class
 create table sys_goods
 (
    goodsID              int not null auto_increment,
-   goodsClass           varchar(100) not null,
+   goodsClass           varchar(100),
    goodsPath            varchar(500) not null,
    goodsFilename        varchar(200) not null,
    uploadUser           bigint not null,
@@ -94,3 +94,5 @@ alter table goods_class add constraint FK_Relationship_4 foreign key (upClassNam
 
 alter table sys_goods add constraint FK_Mark foreign key (goodsClass)
       references goods_class (goodsClass) on delete restrict on update restrict;
+
+select * from sys_goods;
