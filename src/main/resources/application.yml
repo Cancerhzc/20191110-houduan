@@ -3,11 +3,13 @@ server:
   servlet:
     context-path: /wh
 spring:
+  main: 
+    allow-bean-definition-overriding: true
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wanghuan?useSSL=false&amp;characterEncoding=utf-8&amp;jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wanghuan?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
-    password: whmtt
+    password: hzc990712
   redis:
     database: 0
     host: 127.0.0.1
@@ -22,3 +24,4 @@ logging:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
     com.wanghuan: DEBUG
+  
