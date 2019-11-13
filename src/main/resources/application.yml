@@ -1,7 +1,7 @@
 server:
   port: 8090
   servlet:
-    context-path: /wh
+    context-path: /youareright
 spring:
   main: 
     allow-bean-definition-overriding: true
@@ -17,7 +17,7 @@ spring:
     password: null
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.wanghuan.model
+  type-aliases-package: com.youareright.model
 
 logging:
   level:
