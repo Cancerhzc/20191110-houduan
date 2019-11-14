@@ -38,13 +38,13 @@ public class ClassServiceImpl implements ClassService {
 	}
 
 	@Override
-	public List<ClassEntity> classList(String goodsClass, int pageSize, int start) {
-		return classDao.classList( goodsClass, pageSize,  start);
+	public List<ClassEntity> classesList(String searchCondition, int pageSize, int start) {
+		return classDao.classesList(searchCondition, pageSize,  start);
 	}
 
 	@Override
-	public Integer classSize(String goodsClass, int pageSize, int start) {
-		return classDao.classSize(goodsClass, pageSize, start);
+	public Integer classesSize(String searchCondition, int pageSize, int start) {
+		return classDao.classesSize(searchCondition, pageSize, start);
 	}
 
 

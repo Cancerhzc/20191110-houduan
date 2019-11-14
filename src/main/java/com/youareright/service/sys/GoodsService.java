@@ -17,8 +17,8 @@ public interface GoodsService {
 	public void deleteGoodses(List<String> groupID);
 	
 
-	public List<GoodsEntity> goodsList(String goodsClass, int pageSize, int start);
+	public List<GoodsEntity> goodsesList(String searchCondition, int pageSize, int start);
 	
-	public Integer goodsSize(int pageSize, int start);
+	public Integer goodsesSize(String searchCondition,int pageSize, int start);
 
 }

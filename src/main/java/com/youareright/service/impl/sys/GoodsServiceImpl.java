@@ -34,12 +34,12 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsDao.deleteGoodses(groupID);
 	}
 	
-	public List<GoodsEntity> goodsList(String goodsFilename, int pageSize, int start) {
-		return goodsDao.goodsList(goodsFilename,  pageSize,  start);
+	public List<GoodsEntity> goodsesList(String searchCondition, int pageSize, int start) {
+		return goodsDao.goodsesList(searchCondition, pageSize, start);
 	}
 	
-	public Integer goodsSize( int pageSize, int start) {
-		return goodsDao.goodsSize(pageSize, start);
+	public Integer goodsesSize(String searchCondition, int pageSize, int start) {
+		return goodsDao.goodsesSize(searchCondition, pageSize, start);
 	}
 	
 

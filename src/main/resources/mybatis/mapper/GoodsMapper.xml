@@ -56,11 +56,11 @@
 	</update>
 	
 	<!-- 获取goods列表 -->
-	<select id="goodsList" resultMap="goodsMap">
+	<select id="goodsesList" resultMap="goodsMap">
 	<![CDATA[select * from sys_goods]]>
 		<where>
-			<if test="goodsFilename != null and goodsFilename != ''">
-				goodsFilename like "%"#{goodsFilename}"%"
+			<if test="searchCondition != null and searchCondition != ''">
+				goodsFilename like "%"#{searchCondition}"%"
 			</if>
 		</where>
 	    <![CDATA[ order by goodsID]]>
@@ -70,7 +70,7 @@
 	</select>
 	
 	<!-- 获取goods列表的总量 -->
-	<select id="goodsSize" resultType="Integer">  
+	<select id="goodsesSize" resultType="Integer">  
 	    <![CDATA[select count(*) from sys_goods]]>
 	</select>
 	

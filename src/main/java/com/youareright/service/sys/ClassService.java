@@ -14,8 +14,8 @@ public interface ClassService {
 	
 	public void del(ClassEntity classEntity);
 	
-	public List<ClassEntity> classList(String goodsFilename, int pageSize, int start) ;
+	public List<ClassEntity> classesList(String searchCondition, int pageSize, int start) ;
 
-	public Integer classSize(String goodsClass, int pageSize, int start);
+	public Integer classesSize(String searchCondition, int pageSize, int start);
 
 }

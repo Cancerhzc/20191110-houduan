@@ -31,9 +31,9 @@ public interface GoodsDao {
 	public void updateGoods(@Param("goodsEntity") GoodsEntity goodsEntity);
 	
 	
-	public Integer goodsSize(@Param("pageSize") int pageSize,@Param("start") int start);
+	public Integer goodsesSize(@Param("searchCondition")String searchCondition,@Param("pageSize") int pageSize,@Param("start") int start);
 	
-	public ArrayList<GoodsEntity> goodsList(@Param("goodsFilename")String goodsFilename,@Param("pageSize")int pageSize, @Param("start")int start);
+	public ArrayList<GoodsEntity> goodsesList(@Param("searchCondition")String searchCondition,@Param("pageSize")int pageSize, @Param("start")int start);
 	
 
 }

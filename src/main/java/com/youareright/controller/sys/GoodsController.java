@@ -75,10 +75,10 @@ public class GoodsController {
 	 * @return
 	 */
 	@GetMapping("/goods")
-	public PageResult goodsList(String goodsFilename, int pageSize, int page) {
+	public PageResult goodsesList(String searchCondition, int pageSize, int page) {
 		PageResult pageResult = new PageResult();
-		pageResult.setData(goodsService.goodsList(goodsFilename, pageSize, page * pageSize));
-		pageResult.setTotalCount(goodsService.goodsSize( pageSize, page * pageSize));
+		pageResult.setData(goodsService.goodsesList(searchCondition, pageSize, page * pageSize));
+		pageResult.setTotalCount(goodsService.goodsesSize(searchCondition, pageSize, page * pageSize));
 		log.debug("The method is ending");
 		return pageResult;
 	}

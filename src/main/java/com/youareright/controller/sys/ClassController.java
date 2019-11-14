@@ -37,10 +37,10 @@ public class ClassController {
 	 * @return
 	 */
 	@GetMapping("/classes")
-	public PageResult usersList(String goodsClass, int pageSize, int page) {
+	public PageResult classesList(String searchCondition, int pageSize, int page) {
 		PageResult pageResult = new PageResult();
-		pageResult.setData(classService.classList(goodsClass, pageSize, page * pageSize));
-		pageResult.setTotalCount(classService.classSize(goodsClass, pageSize, page * pageSize));
+		pageResult.setData(classService.classesList(searchCondition, pageSize, page * pageSize));
+		pageResult.setTotalCount(classService.classesSize(searchCondition, pageSize, page * pageSize));
 		log.debug("The method is ending");
 		return pageResult;
 	}

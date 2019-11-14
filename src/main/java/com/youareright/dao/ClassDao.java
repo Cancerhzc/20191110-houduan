@@ -31,8 +31,8 @@ public interface ClassDao {
 	public void updateClass(@Param("classEntity") ClassEntity classEntity);
 	
 	
-	public Integer classSize(@Param("goodsClass")String goodsClass,@Param("pageSize") int pageSize,@Param("start") int start);
+	public Integer classesSize(@Param("goodsClass")String goodsClass,@Param("pageSize") int pageSize,@Param("start") int start);
 	
-	public ArrayList<ClassEntity> classList(@Param("goodsClass")String goodsClass,@Param("pageSize")int pageSize, @Param("start")int start);
+	public ArrayList<ClassEntity> classesList(@Param("goodsClass")String goodsClass,@Param("pageSize")int pageSize, @Param("start")int start);
 	
 }
