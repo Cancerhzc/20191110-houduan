@@ -1,7 +1,7 @@
 package com.youareright.model.sys;
 
 public class GoodsEntity {
-    private int goodsID;
+    private Integer goodsID;
     private String goodsClass;
     private String goodsPath;
     private String goodsFilename;

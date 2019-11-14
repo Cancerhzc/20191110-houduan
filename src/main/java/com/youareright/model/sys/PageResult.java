@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * 用于包装list数据的类
- * @author wanghuan
  *
  */
 public class PageResult {

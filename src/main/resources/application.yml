@@ -2,6 +2,10 @@ server:
   port: 8090
   servlet:
     context-path: /youareright
+  tomcat:
+    uri-encoding: utf-8
+    connection-timeout: 60000
+    
 spring:
   main: 
     allow-bean-definition-overriding: true
