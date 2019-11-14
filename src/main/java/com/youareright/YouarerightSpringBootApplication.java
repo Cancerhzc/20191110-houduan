@@ -1,12 +1,12 @@
-package com.wanghuan;
+package com.youareright;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WhSpringBootApplication {
+public class YouarerightSpringBootApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WhSpringBootApplication.class, args);
+		SpringApplication.run(YouarerightSpringBootApplication.class, args);
 	}
 }

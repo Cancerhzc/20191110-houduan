@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youareright.dao.GoodsDao">
+	<resultMap id="goodsMap" type="com.youareright.model.sys.GoodsEntity">
+		<id column="goodsID" property="goodsID" />
+		<result column="goodsClass" property="goodsClass" />
+		<result column="goodsPath" property="goodsPath" />
+		<result column="goodsFilename" property="goodsFilename" />
+		<result column="goodsState" property="goodsState" />
+		<result column="uploadUser" property="uploadUser" />
+		<result column="markUserID" property="markUserID" />
+	</resultMap>
+	
+	<insert id="insertGoods">
+		insert into sys_goods (goodsID,goodsClass,goodsPath,goodsFilename,goodsState,uploadUser,markUserID)
+		values
+		(#{goodsEntity.goodsID},#{goodsEntity.goodsClass},#{goodsEntity.goodsPath},#{goodsEntity.goodsFilename},#{goodsEntity.goodsState},#{goodsEntity.uploadUser},#{goodsEntity.markUserID})
+	</insert>
+	
+	<!-- 单独删除图片信息 -->
+	<delete id="del">
+		delete from sys_goods
+		<where>
+			<if test="goodsEntity.goodsID != null and goodsEntity.goodsID != ''">goodsID = #{goodsEntity.goodsID}</if>
+		</where>
+	</delete>
+	
+	<!-- 批量删除图片信息 -->
+	<delete id="deleteGoodses">
+		delete from sys_goods
+		<where>
+			<if test="groupId !=null">
+				goodsID in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+	
+	
+	<update id="updateGoods">
+		update sys_goods set
+		goodsID = #{goodsEntity.goodsID},
+		goodsClass = #{goodsEntity.goodsClass},
+		goodsPath = #{goodsEntity.goodsPath},
+		goodsFilename = #{goodsEntity.goodsFilename},
+		goodsState = #{goodsEntity.goodsState},
+		uploadUser = #{goodsEntity.uploadUser},
+		markUserID = #{goodsEntity.markUserID}
+		
+		<where>
+			goodsID = #{goodsEntity.goodsID}
+		</where>
+	</update>
+	
+	<!-- 获取goods列表 -->
+	<select id="goodsList" resultMap="goodsMap">
+	<![CDATA[select * from sys_goods]]>
+		<where>
+			<if test="goodsFilename != null and goodsFilename != ''">
+				goodsFilename like "%"#{goodsFilename}"%"
+			</if>
+		</where>
+	    <![CDATA[ order by goodsID]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取goods列表的总量 -->
+	<select id="goodsSize" resultType="Integer">  
+	    <![CDATA[select count(*) from sys_goods]]>
+	</select>
+	
+	<select id="selectAll">
+		select * from sys_goods
+		<where>
+			<if test="goodsID != null">goodsID = #{goodsID}</if>
+			<if test="goodsClass != null">goodsClass = #{goodsClass}</if>
+		</where>
+	</select>
+	
+</mapper>
+	
