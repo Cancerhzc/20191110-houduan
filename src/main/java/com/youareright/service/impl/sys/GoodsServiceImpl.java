@@ -30,8 +30,8 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsDao.del(goodsEntity);
 	}
 	
-	public void deleteGoodses(List<String> groupID) {
-		goodsDao.deleteGoodses(groupID);
+	public void deleteGoodses(List<String> groupId) {
+		goodsDao.deleteGoodses(groupId);
 	}
 	
 	public List<GoodsEntity> goodsesList(String searchCondition, int pageSize, int start) {
@@ -40,6 +40,10 @@ public class GoodsServiceImpl implements GoodsService {
 	
 	public Integer goodsesSize(String searchCondition, int pageSize, int start) {
 		return goodsDao.goodsesSize(searchCondition, pageSize, start);
+	}
+	
+	public Integer maxGoodsID() {
+		return goodsDao.maxGoodsID();
 	}
 	
 

@@ -12,16 +12,22 @@ import com.youareright.model.sys.UserEntity;
 @Mapper
 public interface ClassDao {
 	/**
-	 * 新建标签
+	 * 新建标签1
 	 * @param classEntity
 	 */
 	public void insertClass(@Param("classEntity") ClassEntity classEntity);
+	
+	
+	/**
+	 * 新建标签2
+	 */
+	public void insertClass2(String goodsClass,String goodsName);
 	
 	/**
 	 * 删除标签
 	 * @param classEntity
 	 */
-	public void deleteClasses(@Param("groupID") List<String> groupID);
+	public void deleteClasses(@Param("groupId") List<String> groupID);
 	
 	public void del(@Param("classEntity") ClassEntity classEntity);
 	/**

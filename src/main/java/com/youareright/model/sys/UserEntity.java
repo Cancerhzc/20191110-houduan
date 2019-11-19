@@ -1,8 +1,5 @@
 package com.youareright.model.sys;
 
-/**
- *
- */
 public class UserEntity {
 	/**
 	 * id

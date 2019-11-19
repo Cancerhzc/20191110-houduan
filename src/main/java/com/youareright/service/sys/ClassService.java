@@ -8,6 +8,8 @@ public interface ClassService {
 	
 	public void insertClass(ClassEntity classEntity);
 	
+	public void insertClass2(String goodsClass,String goodsName);
+	
 	public void updateClass(ClassEntity classEntity);
 	
 	public void deleteClasses(List<String> className);

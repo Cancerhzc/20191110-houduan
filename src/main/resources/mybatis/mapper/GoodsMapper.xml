@@ -12,9 +12,9 @@
 	</resultMap>
 	
 	<insert id="insertGoods">
-		insert into sys_goods (goodsID,goodsClass,goodsPath,goodsFilename,goodsState,uploadUser,markUserID)
+		insert into sys_goods (goodsClass,goodsPath,goodsFilename,goodsState,uploadUser,markUserID)
 		values
-		(#{goodsEntity.goodsID},#{goodsEntity.goodsClass},#{goodsEntity.goodsPath},#{goodsEntity.goodsFilename},#{goodsEntity.goodsState},#{goodsEntity.uploadUser},#{goodsEntity.markUserID})
+		(#{goodsEntity.goodsClass},#{goodsEntity.goodsPath},#{goodsEntity.goodsFilename},#{goodsEntity.goodsState},#{goodsEntity.uploadUser},#{goodsEntity.markUserID})
 	</insert>
 	
 	<!-- 单独删除图片信息 -->
@@ -62,8 +62,11 @@
 			<if test="searchCondition != null and searchCondition != ''">
 				goodsFilename like "%"#{searchCondition}"%"
 			</if>
+			<if test="searchCondition != null and searchCondition != ''">
+				or goodsClass like "%"#{searchCondition}"%"
+			</if>
 		</where>
-	    <![CDATA[ order by goodsID]]>
+	    <![CDATA[ order by goodsID desc]]>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
 		</if>
@@ -72,6 +75,14 @@
 	<!-- 获取goods列表的总量 -->
 	<select id="goodsesSize" resultType="Integer">  
 	    <![CDATA[select count(*) from sys_goods]]>
+	    <where>
+			<if test="searchCondition != null and searchCondition != ''">
+				goodsFilename like "%"#{searchCondition}"%"
+			</if>
+			<if test="searchCondition != null and searchCondition != ''">
+				or goodsClass like "%"#{searchCondition}"%"
+			</if>
+		</where>
 	</select>
 	
 	<select id="selectAll">
@@ -80,6 +91,11 @@
 			<if test="goodsID != null">goodsID = #{goodsID}</if>
 			<if test="goodsClass != null">goodsClass = #{goodsClass}</if>
 		</where>
+	</select>
+	
+	<!-- 获取goodsID最大值 -->
+	<select id="maxGoodsID" resultType="Integer">  
+	    <![CDATA[select max(goodsID) from sys_goods]]>
 	</select>
 	
 </mapper>

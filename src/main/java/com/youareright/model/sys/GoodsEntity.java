@@ -9,6 +9,7 @@ public class GoodsEntity {
     private int uploadUser;
     private int markUserID;
 
+    
     public int getGoodsID() {
         return goodsID;
     }

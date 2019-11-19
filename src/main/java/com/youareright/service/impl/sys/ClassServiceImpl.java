@@ -3,12 +3,10 @@ package com.youareright.service.impl.sys;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.youareright.dao.ClassDao;
 import com.youareright.model.sys.ClassEntity;
-import com.youareright.model.sys.UserEntity;
 import com.youareright.service.sys.ClassService;
 
 @Service(value = "classServiceImpl")
@@ -20,6 +18,9 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public void insertClass(ClassEntity classEntity) {
 		classDao.insertClass(classEntity);
+	}
+	public void insertClass2(String goodsClass,String goodsName) {
+		classDao.insertClass2(goodsClass,goodsName);
 	}
 
 	@Override

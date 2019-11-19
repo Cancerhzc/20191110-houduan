@@ -22,7 +22,7 @@ public interface GoodsDao {
 	 */
 	public void del(@Param("goodsEntity") GoodsEntity goodsEntity);
 	
-	public void deleteGoodses(@Param("groupID") List<String> groupId);
+	public void deleteGoodses(@Param("groupId") List<String> groupId);
 	
 	/**
 	 * 更新商品图片信息
@@ -35,5 +35,5 @@ public interface GoodsDao {
 	
 	public ArrayList<GoodsEntity> goodsesList(@Param("searchCondition")String searchCondition,@Param("pageSize")int pageSize, @Param("start")int start);
 	
-
+	public Integer maxGoodsID();
 }

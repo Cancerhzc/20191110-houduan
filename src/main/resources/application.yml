@@ -19,13 +19,23 @@ spring:
     host: 127.0.0.1
     port: 6379
     password: null
+  servlet:
+    multipart:
+      enabled: true      max-file-size: 5MB
+      max-request-size: 100MB
+              
+
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.youareright.model
+  
 
 logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
     com.wanghuan: DEBUG
+    
+
+
   

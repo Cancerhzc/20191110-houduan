@@ -60,6 +60,7 @@ public class UserController {
 	@PostMapping("/users/user")
 	public UserEntity insertUser(@RequestBody UserEntity userEntity) {
 		userService.insertUser(userEntity);
+		System.out.println(userEntity.getPassword());
 		log.debug("The method is ending");
 		return userEntity;
 	}

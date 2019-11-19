@@ -14,11 +14,13 @@ public interface GoodsService {
 	
 	public void del(GoodsEntity goodsEntity);
 	
-	public void deleteGoodses(List<String> groupID);
+	public void deleteGoodses(List<String> groupId);
 	
 
 	public List<GoodsEntity> goodsesList(String searchCondition, int pageSize, int start);
 	
 	public Integer goodsesSize(String searchCondition,int pageSize, int start);
-
+	
+	public Integer maxGoodsID();
+	
 }

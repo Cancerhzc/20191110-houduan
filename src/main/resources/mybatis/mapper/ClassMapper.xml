@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youareright.dao.ClassDao">
+	<resultMap id="classMap" type="com.youareright.model.sys.ClassEntity">
+		<id column="classID" property="classID" />
+		<result column="goodsClass" property="goodsClass" />
+		<result column="upClassName" property="upClassName" />
+		<result column="goodsName" property="goodsName" />
+	</resultMap>
+	
+	<insert id="insertClass">
+		insert into goods_class(goodsClass,goodsName)
+		values
+		(#{classEntity.goodsClass},#{classEntity.goodsName})
+	</insert>
+	
+	<insert id="insertClass2">
+		insert into goods_class(goodsClass,goodsName)
+		values
+		(#{goodsClass},#{goodsName})
+	</insert>
+	
+	<!-- 单独删除标签信息 -->
+	<delete id="del">
+		delete from goods_class
+		<where>
+			<if test="classEntity.classID != null and classEntity.classID != ''">classID = #{classEntity.classID}</if>
+		</where>
+	</delete>
+	
+	<!-- 批量删除标签信息 -->
+	<delete id="deleteClasses">
+		delete from goods_class
+		<where>
+			<if test="groupId !=null">
+				classID in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+	
+	
+	<update id="updateClass">
+		update goods_class set
+		classID = #{classEntity.classID},
+		goodsClass = #{classEntity.goodsClass},
+		goodsName = #{classEntity.goodsName},
+		upClassName = #{classEntity.upClassName},
+		<where>
+			classID = #{classEntity.classID}
+		</where>
+	</update>
+	
+	<!-- 获取class列表 -->
+	<select id="classesList" resultMap="classMap">
+	<![CDATA[select * from goods_class]]>
+		<where>
+			<if test="searchCondition != null and searchCondition != ''">
+				goodsName like "%"#{searchCondition}"%"
+			</if>
+			<if test="searchCondition != null and searchCondition != ''">
+				or goodsClass like "%"#{searchCondition}"%"
+			</if>
+		</where>
+	    <![CDATA[ order by classID]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取class列表的总量 -->
+	<select id="classesSize" resultType="Integer">  
+	    <![CDATA[select count(*) from goods_class]]>
+	    <where>
+			<if test="searchCondition != null and searchCondition != ''">
+				goodsName like "%"#{searchCondition}"%"
+			</if>
+			<if test="searchCondition != null and searchCondition != ''">
+				or goodsClass like "%"#{searchCondition}"%"
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectAll">
+		select * from goods_class
+		<where>
+			<if test="classID != null">classID = #{classID}</if>
+			<if test="goodsClass != null">goodsClass = #{goodsClass}</if>
+		</where>
+	</select>
+	
+	
+</mapper>

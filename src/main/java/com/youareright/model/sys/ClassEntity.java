@@ -1,15 +1,16 @@
 package com.youareright.model.sys;
 
 public class ClassEntity {
-	private String classID;
+	private Integer classID;
 	private String goodsClass;
 	private String upClassName;
 	private String goodsName;
 	
-	public String getClassID() {
+	
+	public Integer getClassID() {
 		return classID;
 	}
-	public void setClassID(String classID) {
+	public void setClassID(Integer classID) {
 		this.classID = classID;
 	}
 	public String getGoodsClass() {
@@ -30,6 +31,5 @@ public class ClassEntity {
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
-	
 	
 }
