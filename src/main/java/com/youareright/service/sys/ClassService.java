@@ -19,5 +19,9 @@ public interface ClassService {
 	public List<ClassEntity> classesList(String searchCondition, int pageSize, int start) ;
 
 	public Integer classesSize(String searchCondition, int pageSize, int start);
+	
+	public Integer checkClassIsExisted(String labelName);
+	
+	public Integer maxClassID();
 
 }

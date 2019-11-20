@@ -57,24 +57,38 @@ public class GoodsController {
 	    //System.err.println(multipartFiles);
 		UserEntity currentUser=userService.getUserEntityByLoginName(loginname);
 		int currentUserID=currentUser.getId();
-		System.out.println(currentUserID);
 		String labelName=goodsEntity.getGoodsClass();
 		String goodsName=goodsEntity.getGoodsFilename();
-		if(labelName.equals("")||goodsName.equals(""))
+		Boolean isLabeled=true;
+		if(labelName==null||goodsName==null)
 		{
 			labelName="未打标商品";
 			goodsName="未打标商品";
+			isLabeled=false;
 		}
-		classService.insertClass2(labelName,goodsName);		//在goodsClass类中增加
+		else if(labelName.equals("")||goodsName.equals("")) {
+			labelName="未打标商品";
+			goodsName="未打标商品";
+			isLabeled=false;
+		}
+		else if(classService.checkClassIsExisted(labelName)==0) {
+			classService.insertClass2(labelName,goodsName);		//如果goodsClass中无此标签名，就在goodsClass类中增加
+			int thisClassID=classService.maxClassID();
+			labelName = Integer.toString(thisClassID);
+		}
+		
+		if(isLabeled==true) {
+			goodsEntity.setMarkUserID(currentUserID);
+		}
+		
+		goodsEntity.setGoodsState(0);
+		goodsEntity.setUploadUser(currentUserID);
 	    List<String> resultList = new ArrayList<>();
 	    for (MultipartFile multipartFile : multipartFiles) {
-	    	int thisID=goodsService.maxGoodsID()+1;
-	        String url = copyFile(multipartFile,labelName,goodsName,thisID);
+	    	int thisGoodsID=goodsService.maxGoodsID()+1;
+	        String url = copyFile(multipartFile,labelName,thisGoodsID);
 	        resultList.add(url);
-			goodsEntity.setGoodsState(0);
-			goodsEntity.setUploadUser(currentUserID);
 			goodsEntity.setGoodsPath(url);
-			goodsEntity.setMarkUserID(currentUserID);
 			goodsService.insertGoods(goodsEntity);
 	    }
 	    log.debug("The method is ending");
@@ -125,12 +139,12 @@ public class GoodsController {
 	}
 	
 	
-	private String copyFile(MultipartFile file,String labelName,String goodsName,int newID) {
+	private String copyFile(MultipartFile file,String labelName,int newID) {
 	    String originalFilename = file.getOriginalFilename();
 	    String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 	    String newIDString = Integer.toString(newID); 
 	    //s = s.replaceAll("-", "");
-	    String newName = goodsName + '-' + newIDString + suffix;
+	    String newName = newIDString + suffix;
 	    String url = "/src/images/"+labelName+"/"+newName;
 	    String parentPath = "G:/git/wh-web/src/images/"+labelName;
 	    File dest = new File(parentPath, newName);

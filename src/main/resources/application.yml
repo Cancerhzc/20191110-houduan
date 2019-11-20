@@ -4,7 +4,6 @@ server:
     context-path: /youareright
   tomcat:
     uri-encoding: utf-8
-    connection-timeout: 60000
     
 spring:
   main: 
@@ -23,18 +22,16 @@ spring:
     multipart:
       enabled: true      max-file-size: 5MB
       max-request-size: 100MB
-              
-
+      
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.youareright.model
-  
 
 logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
-    com.wanghuan: DEBUG
+    com.youareright: DEBUG
     
 
 

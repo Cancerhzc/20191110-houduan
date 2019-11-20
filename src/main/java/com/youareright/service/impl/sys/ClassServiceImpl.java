@@ -47,6 +47,16 @@ public class ClassServiceImpl implements ClassService {
 	public Integer classesSize(String searchCondition, int pageSize, int start) {
 		return classDao.classesSize(searchCondition, pageSize, start);
 	}
+	
+	@Override
+	public Integer checkClassIsExisted(String labelName) {
+		return classDao.checkClassIsExisted(labelName);
+	}
+	
+	@Override
+	public Integer maxClassID() {
+		return classDao.maxClassID();
+	}
 
 
 }

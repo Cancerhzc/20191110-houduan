@@ -41,4 +41,8 @@ public interface ClassDao {
 	
 	public ArrayList<ClassEntity> classesList(@Param("goodsClass")String goodsClass,@Param("pageSize")int pageSize, @Param("start")int start);
 	
+	public Integer checkClassIsExisted(String labelName);
+	
+	public Integer maxClassID();
+	
 }

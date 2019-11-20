@@ -21,6 +21,7 @@ public interface UserDao {
 	
 	/**
 	 * 通过登录名拿到用户信息
+	 * @param loginName
 	 * @return
 	 */
 	public UserEntity getUserEntityByLoginName(@Param("loginName") String loginName);
