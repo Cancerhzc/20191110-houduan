@@ -5,12 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
 import com.youareright.model.sys.PageResult;
 import com.youareright.model.sys.UserEntity;
 import com.google.common.io.Files;
@@ -31,6 +28,40 @@ import com.youareright.service.sys.UserService;
 import java.io.File;
 
 import java.io.IOException;
+
+class Mark{
+	String goodsClass;
+	String goodsFilename;
+	String currentLoginName;
+	List<String> groupId;
+	
+	public String getGoodsClass() {
+		return goodsClass;
+	}
+	public void setGoodsClass(String goodsClass) {
+		this.goodsClass = goodsClass;
+	}
+	public String getGoodsFilename() {
+		return goodsFilename;
+	}
+	public void setGoodsFilename(String goodsFilename) {
+		this.goodsFilename = goodsFilename;
+	}
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
+	}
+	public List<String> getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(List<String> groupId) {
+		this.groupId = groupId;
+	}
+	
+	
+}
 
 @RestController
 public class GoodsController {
@@ -59,6 +90,7 @@ public class GoodsController {
 		int currentUserID=currentUser.getId();
 		String labelName=goodsEntity.getGoodsClass();
 		String goodsName=goodsEntity.getGoodsFilename();
+		String classIDToString=new String();
 		Boolean isLabeled=true;
 		if(labelName==null||goodsName==null)
 		{
@@ -74,7 +106,7 @@ public class GoodsController {
 		else if(classService.checkClassIsExisted(labelName)==0) {
 			classService.insertClass2(labelName,goodsName);		//如果goodsClass中无此标签名，就在goodsClass类中增加
 			int thisClassID=classService.maxClassID();
-			labelName = Integer.toString(thisClassID);
+			classIDToString = Integer.toString(thisClassID);
 		}
 		
 		if(isLabeled==true) {
@@ -83,10 +115,11 @@ public class GoodsController {
 		
 		goodsEntity.setGoodsState(0);
 		goodsEntity.setUploadUser(currentUserID);
+		System.out.println(classIDToString);
 	    List<String> resultList = new ArrayList<>();
 	    for (MultipartFile multipartFile : multipartFiles) {
 	    	int thisGoodsID=goodsService.maxGoodsID()+1;
-	        String url = copyFile(multipartFile,labelName,thisGoodsID);
+	        String url = getFile(multipartFile,classIDToString,thisGoodsID);
 	        resultList.add(url);
 			goodsEntity.setGoodsPath(url);
 			goodsService.insertGoods(goodsEntity);
@@ -107,6 +140,15 @@ public class GoodsController {
 		log.debug("The method is ending");
 		return goodsEntity;
 	}
+	
+	public GoodsEntity updateGoods2(GoodsEntity goodsEntity, int id) {   //不是从前端获取变量
+		if (goodsEntity.getGoodsID() == id) {
+			goodsService.updateGoods(goodsEntity);
+		}
+		log.debug("The method is ending");
+		return goodsEntity;
+	}
+	
 	
 	
 	/**
@@ -139,14 +181,18 @@ public class GoodsController {
 	}
 	
 	
-	private String copyFile(MultipartFile file,String labelName,int newID) {
+	private String getFile(MultipartFile file,String classIDString,int newID) {
+		if(classIDString.equals("")) {
+			classIDString="未打标商品";
+		}
+		
 	    String originalFilename = file.getOriginalFilename();
 	    String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 	    String newIDString = Integer.toString(newID); 
 	    //s = s.replaceAll("-", "");
 	    String newName = newIDString + suffix;
-	    String url = "/src/images/"+labelName+"/"+newName;
-	    String parentPath = "G:/git/wh-web/src/images/"+labelName;
+	    String url = "/src/images/"+classIDString+"/"+newName;
+	    String parentPath = "G:/git/wh-web/src/images/"+classIDString;
 	    File dest = new File(parentPath, newName);
 	    try {
 	        //目录不存在则创建，依赖google的guava工具包
@@ -158,8 +204,75 @@ public class GoodsController {
 	    }
 	    return null;
 	}
-
 	
 
+	
+	public void moveFile(String srcFilePath,String dstPath)
+	{
+		try
+		{
+			File srcFile=new File(srcFilePath); //源文件
+			File dstPathOpen=new File(dstPath);
+			if(!dstPathOpen.exists()) {
+				dstPathOpen.mkdirs();
+			}
+			String newPath=dstPath+"/"+srcFile.getName();
+			System.out.println(newPath);
+			if (srcFile.renameTo(new File(dstPath+"/"+srcFile.getName()))) //源文件移动至目标文件目录
+			{
+				System.out.println("File is moved successful!");//输出移动成功
+			}
+			else
+			{
+				System.out.println("File is failed to move !");//输出移动失败
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@PostMapping("/goods/modify")
+	public void markGoods(@RequestBody Mark goodsModify) {
+		GoodsEntity goodsTemp=new GoodsEntity();
+		int thisClassID=0;
+		String classIDToString=new String();
+		String labelName=goodsModify.getGoodsClass();
+		String goodsName=goodsModify.getGoodsFilename();
+		
+		UserEntity currentUser=userService.getUserEntityByLoginName(goodsModify.getCurrentLoginName());
+		int currentUserID=currentUser.getId();
+		
+		if(classService.checkClassIsExisted(labelName)==0) {
+			classService.insertClass2(labelName,goodsName);		//如果goodsClass中无此标签名，就在goodsClass类中增加
+		}
+		
+		thisClassID=classService.getClassID(labelName);            //通过goodsClass得到classID
+		classIDToString = Integer.toString(thisClassID);
+		
+		goodsTemp.setGoodsClass(labelName);
+		goodsTemp.setMarkUserID(currentUserID);
+		goodsTemp.setGoodsState(1);
+		List<String> currentListOfGoodsID=goodsModify.getGroupId();
+		for(int i=0;i<currentListOfGoodsID.size();i++) {		//对标记的每个图片进行操作
+			String currentGoodsIDString=currentListOfGoodsID.get(i);
+			int currentGoodsID=Integer.valueOf(currentGoodsIDString);   	//得到当前图片的ID
+			String srcFilePath="G:/git/wh-web/src/images/未打标商品/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+			String dstPath="G:/git/wh-web/src/images/"+classIDToString;
+			String goodsPath="/src/images/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+			moveFile(srcFilePath,dstPath);
+			goodsTemp.setGoodsPath(goodsPath);
+			goodsTemp.setGoodsID(currentGoodsID);
+			updateGoods2(goodsTemp, currentGoodsID);
+		}
+	}
+	
+	public String getSrcSuffix(int goodsID) {
+		String temp= goodsService.getSrc(goodsID); 
+		String suffix=temp.substring(temp.lastIndexOf("."));
+		return suffix;
+	}
+	
 }
 

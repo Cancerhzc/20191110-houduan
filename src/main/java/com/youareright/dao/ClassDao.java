@@ -37,12 +37,14 @@ public interface ClassDao {
 	public void updateClass(@Param("classEntity") ClassEntity classEntity);
 	
 	
-	public Integer classesSize(@Param("goodsClass")String goodsClass,@Param("pageSize") int pageSize,@Param("start") int start);
+	public Integer classesSize(@Param("searchCondition")String searchCondition,@Param("pageSize") int pageSize,@Param("start") int start);
 	
-	public ArrayList<ClassEntity> classesList(@Param("goodsClass")String goodsClass,@Param("pageSize")int pageSize, @Param("start")int start);
+	public ArrayList<ClassEntity> classesList(@Param("searchCondition")String searchCondition,@Param("pageSize")int pageSize, @Param("start")int start);
 	
 	public Integer checkClassIsExisted(String labelName);
 	
 	public Integer maxClassID();
+	
+	public Integer getClassID(@Param("goodsClass")String labelName);
 	
 }

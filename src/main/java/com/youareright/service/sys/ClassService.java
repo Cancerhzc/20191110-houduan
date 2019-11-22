@@ -23,5 +23,7 @@ public interface ClassService {
 	public Integer checkClassIsExisted(String labelName);
 	
 	public Integer maxClassID();
+	
+	public Integer getClassID(String labelName);
 
 }

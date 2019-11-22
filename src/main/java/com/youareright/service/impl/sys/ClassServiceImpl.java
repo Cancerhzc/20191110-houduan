@@ -57,6 +57,11 @@ public class ClassServiceImpl implements ClassService {
 	public Integer maxClassID() {
 		return classDao.maxClassID();
 	}
+	
+	@Override
+	public Integer getClassID(String labelName) {
+		return classDao.getClassID(labelName);
+	}
 
 
 }

@@ -30,10 +30,11 @@ public interface GoodsDao {
 	 */
 	public void updateGoods(@Param("goodsEntity") GoodsEntity goodsEntity);
 	
-	
 	public Integer goodsesSize(@Param("searchCondition")String searchCondition,@Param("pageSize") int pageSize,@Param("start") int start);
 	
 	public ArrayList<GoodsEntity> goodsesList(@Param("searchCondition")String searchCondition,@Param("pageSize")int pageSize, @Param("start")int start);
 	
 	public Integer maxGoodsID();
+	
+	public String getSrc(@Param("goodsID") int goodsID);
 }

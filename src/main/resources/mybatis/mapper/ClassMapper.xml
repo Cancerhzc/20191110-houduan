@@ -104,4 +104,11 @@
 	    <![CDATA[select IFNULL(MAX(classID),0) from goods_class]]>
 	</select>
 	
+	<select id="getClassID" resultType="Integer"> 
+		select classID from goods_class
+		<where>
+			goodsClass = #{goodsClass}
+		</where>
+	</select>
+	
 </mapper>

@@ -5,7 +5,7 @@
 
 	<groupId>com.youareright</groupId>
 	<artifactId>youareright-spring-boot</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.1.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>youareright-spring-boot</name>
@@ -93,10 +93,6 @@
 		    <artifactId>guava</artifactId>
 		    <version>28.1-jre</version>
 		</dependency>
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-lang3</artifactId>
-		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -116,6 +112,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.youareright.YouarerightSpringBootApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

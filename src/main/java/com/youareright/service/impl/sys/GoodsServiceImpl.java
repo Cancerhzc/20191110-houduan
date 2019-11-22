@@ -3,7 +3,6 @@ package com.youareright.service.impl.sys;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.youareright.dao.GoodsDao;
@@ -26,26 +25,35 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsDao.updateGoods(goodsEntity);
 	}
 	
+	@Override
 	public void del(GoodsEntity goodsEntity) {
 		goodsDao.del(goodsEntity);
 	}
 	
+	@Override
 	public void deleteGoodses(List<String> groupId) {
 		goodsDao.deleteGoodses(groupId);
 	}
 	
+	@Override
 	public List<GoodsEntity> goodsesList(String searchCondition, int pageSize, int start) {
 		return goodsDao.goodsesList(searchCondition, pageSize, start);
 	}
 	
+	@Override
 	public Integer goodsesSize(String searchCondition, int pageSize, int start) {
 		return goodsDao.goodsesSize(searchCondition, pageSize, start);
 	}
 	
+	@Override
 	public Integer maxGoodsID() {
 		return goodsDao.maxGoodsID();
 	}
 	
+	@Override
+	public String getSrc(int goodsID) {
+		return goodsDao.getSrc(goodsID);
+	}
 
 
 }

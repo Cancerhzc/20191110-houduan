@@ -42,17 +42,26 @@
 	
 	<update id="updateGoods">
 		update sys_goods set
-		goodsID = #{goodsEntity.goodsID},
 		goodsClass = #{goodsEntity.goodsClass},
 		goodsPath = #{goodsEntity.goodsPath},
 		goodsState = #{goodsEntity.goodsState},
-		uploadUser = #{goodsEntity.uploadUser},
-		markUserID = #{goodsEntity.markUserID}
-		
+		markUserID = #{goodsEntity.markUserID}		
 		<where>
 			goodsID = #{goodsEntity.goodsID}
 		</where>
 	</update>
+	
+	<update id="updateGoods2">
+		update sys_goods set
+		goodsClass = #{goodsEntity.goodsClass},
+		goodsPath = #{goodsEntity.goodsPath},
+		goodsState = #{goodsEntity.goodsState},
+		markUserID = #{goodsEntity.markUserID}		
+		<where>
+			goodsID = #{goodsEntity.goodsID}
+		</where>
+	</update>
+	
 	
 	<!-- 获取goods列表 -->
 	<select id="goodsesList" resultMap="goodsMap">
@@ -98,6 +107,13 @@
 	<!-- 获取goodsID最大值 -->
 	<select id="maxGoodsID" resultType="Integer">  
 	    <![CDATA[select IFNULL(MAX(goodsID),0) from sys_goods]]>
+	</select>
+	
+	<select id="getSrc" resultType="String">
+		select goodsPath from sys_goods
+			<where>
+				goodsID = #{goodsID}
+			</where>
 	</select>
 	
 </mapper>

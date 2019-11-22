@@ -85,6 +85,12 @@ public class ClassController {
 		classService.deleteClasses(groupID);
 		return groupID;
 	}
+	
+	public Integer getClassID(String labelName) {
+		return classService.getClassID(labelName);
+	}
+	
+	
 }
 
 
