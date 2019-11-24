@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.youareright.model.sys.PageResult;
 import com.youareright.model.sys.ClassEntity;
 import com.youareright.service.sys.ClassService;
+import com.youareright.utils.FileProcess;
 
 @RestController
 /*@PreAuthorize("hasRole('ADMI')")*/
@@ -26,6 +27,8 @@ public class ClassController {
 
 	@Resource(name = "classServiceImpl")
 	private ClassService classService;
+	
+	private FileProcess fileProcess=new FileProcess();
 
 
 	/**
@@ -82,6 +85,14 @@ public class ClassController {
 	 */
 	@DeleteMapping("/classes")
 	public List<String> deleteClasses(@RequestBody List<String> groupID) {
+		int groupIDSize = groupID.size();
+		if(groupID != null && groupIDSize != 0) {
+			for(int i=0;i<groupIDSize;i++) {
+				String currentClassIDString=groupID.get(i);
+				String path="G:/git/wh-web/src/images/"+currentClassIDString;
+				fileProcess.deleteFile(path);
+			}
+		}
 		classService.deleteClasses(groupID);
 		return groupID;
 	}

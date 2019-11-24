@@ -6,6 +6,7 @@
 		<result column="goodsClass" property="goodsClass" />
 		<result column="upClassName" property="upClassName" />
 		<result column="goodsName" property="goodsName" />
+		<result column="containGoodsNumber" property="containGoodsNumber"/>
 	</resultMap>
 	
 	<insert id="insertClass">
@@ -56,16 +57,17 @@
 	
 	<!-- 获取class列表 -->
 	<select id="classesList" resultMap="classMap">
-	<![CDATA[select * from goods_class]]>
+	<![CDATA[SELECT goods_class.classID,goods_class.goodsClass AS goodsClass,goods_class.goodsName AS goodsName,IFNULL(myCount,0) containGoodsNumber FROM 
+			goods_class LEFT OUTER JOIN 
+			(SELECT classID,COUNT(*) AS myCount FROM sys_goods GROUP BY classID) a 
+			ON goods_class.classID=a.classID]]>
 		<where>
 			<if test="searchCondition != null and searchCondition != ''">
-				goodsName like "%"#{searchCondition}"%"
-			</if>
-			<if test="searchCondition != null and searchCondition != ''">
-				or goodsClass like "%"#{searchCondition}"%"
+				goods_class.goodsName like "%"#{searchCondition}"%"
+				or goods_class.goodsClass like "%"#{searchCondition}"%"
 			</if>
 		</where>
-	    <![CDATA[ order by classID]]>
+	    <![CDATA[ order by goods_class.classID]]>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
 		</if>

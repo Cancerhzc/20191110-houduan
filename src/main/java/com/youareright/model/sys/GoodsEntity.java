@@ -2,6 +2,7 @@ package com.youareright.model.sys;
 
 public class GoodsEntity {
     private Integer goodsID;
+    private Integer classID;
     private String goodsClass;
     private String goodsPath;
     private String goodsFilename;
@@ -10,7 +11,16 @@ public class GoodsEntity {
     private int markUserID;
 
     
-    public int getGoodsID() {
+    
+    public String getGoodsClass() {
+		return goodsClass;
+	}
+
+	public void setGoodsClass(String goodsClass) {
+		this.goodsClass = goodsClass;
+	}
+
+	public int getGoodsID() {
         return goodsID;
     }
 
@@ -18,15 +28,15 @@ public class GoodsEntity {
         this.goodsID = goodsID;
     }
 
-    public String getGoodsClass() {
-        return goodsClass;
-    }
+    public Integer getClassID() {
+		return classID;
+	}
 
-    public void setGoodsClass(String goodsClass) {
-        this.goodsClass = goodsClass;
-    }
+	public void setClassID(Integer classID) {
+		this.classID = classID;
+	}
 
-    public String getGoodsPath() {
+	public String getGoodsPath() {
         return goodsPath;
     }
 
@@ -64,13 +74,6 @@ public class GoodsEntity {
     public void setGoodsState(int goodsState) {
         this.goodsState = goodsState;
     }
-
-	@Override
-	public String toString() {
-		return "GoodsEntity [goodsID=" + goodsID + ", goodsClass=" + goodsClass + ", goodsPath=" + goodsPath
-				+ ", goodsFilename=" + goodsFilename + ", goodsState=" + goodsState + ", uploadUser=" + uploadUser
-				+ ", markUserID=" + markUserID + "]";
-	}
     
     
 }

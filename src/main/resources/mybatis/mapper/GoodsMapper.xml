@@ -3,7 +3,7 @@
 <mapper namespace="com.youareright.dao.GoodsDao">
 	<resultMap id="goodsMap" type="com.youareright.model.sys.GoodsEntity">
 		<id column="goodsID" property="goodsID" />
-		<result column="goodsClass" property="goodsClass" />
+		<result column="classID" property="classID" />
 		<result column="goodsPath" property="goodsPath" />
 		<result column="goodsFilename" property="goodsFilename" />
 		<result column="goodsState" property="goodsState" />
@@ -12,9 +12,9 @@
 	</resultMap>
 	
 	<insert id="insertGoods">
-		insert into sys_goods (goodsClass,goodsPath,goodsState,uploadUser,markUserID)
+		insert into sys_goods (classID,goodsPath,goodsState,uploadUser,markUserID)
 		values
-		(#{goodsEntity.goodsClass},#{goodsEntity.goodsPath},#{goodsEntity.goodsState},#{goodsEntity.uploadUser},#{goodsEntity.markUserID})
+		(#{goodsEntity.classID},#{goodsEntity.goodsPath},#{goodsEntity.goodsState},#{goodsEntity.uploadUser},#{goodsEntity.markUserID})
 	</insert>
 	
 	<!-- 单独删除图片信息 -->
@@ -42,7 +42,7 @@
 	
 	<update id="updateGoods">
 		update sys_goods set
-		goodsClass = #{goodsEntity.goodsClass},
+		classID = #{goodsEntity.classID},
 		goodsPath = #{goodsEntity.goodsPath},
 		goodsState = #{goodsEntity.goodsState},
 		markUserID = #{goodsEntity.markUserID}		
@@ -53,7 +53,7 @@
 	
 	<update id="updateGoods2">
 		update sys_goods set
-		goodsClass = #{goodsEntity.goodsClass},
+		classID = #{goodsEntity.classID},
 		goodsPath = #{goodsEntity.goodsPath},
 		goodsState = #{goodsEntity.goodsState},
 		markUserID = #{goodsEntity.markUserID}		
@@ -65,15 +65,15 @@
 	
 	<!-- 获取goods列表 -->
 	<select id="goodsesList" resultMap="goodsMap">
-	<![CDATA[SELECT goodsID ,sys_goods.goodsClass as goodsClass,goodsPath,goods_class.goodsName as goodsFilename,goodsState,uploadUser,markUserID 
-	FROM sys_goods LEFT JOIN goods_class ON sys_goods.goodsClass = goods_class.goodsClass]]>
+	<![CDATA[SELECT goodsID ,goods_class.goodsClass as goodsClass,goodsPath,goods_class.goodsName as goodsFilename,goodsState,uploadUser,markUserID 
+	FROM sys_goods LEFT JOIN goods_class ON sys_goods.classID = goods_class.classID]]>
 		<where>
 			<if test="searchCondition != null and searchCondition != '' and searchCondition!='未打标' ">
 				(goods_class.goodsName like "%"#{searchCondition}"%"
 				or goods_class.goodsClass like "%"#{searchCondition}"%")
 			</if>
 			<if test="searchCondition == '未打标' ">
-				(sys_goods.goodsClass is null)
+				(sys_goods.classID is null)
 			</if>
 		</where>
 	    <![CDATA[ order by goodsID desc]]>
@@ -84,14 +84,14 @@
 	
 	<!-- 获取goods列表的总量 -->
 	<select id="goodsesSize" resultType="Integer">  
-	<![CDATA[select count(*) FROM sys_goods LEFT JOIN goods_class ON sys_goods.goodsClass = goods_class.goodsClass]]>
+	<![CDATA[select count(*) FROM sys_goods LEFT JOIN goods_class ON sys_goods.classID = goods_class.classID]]>
 	    <where>
 			<if test="searchCondition != null and searchCondition != '' and searchCondition!='未打标' ">
 				(goods_class.goodsName like "%"#{searchCondition}"%"
 				or goods_class.goodsClass like "%"#{searchCondition}"%")
 			</if>
 			<if test="searchCondition == '未打标' ">
-				(sys_goods.goodsClass is null)
+				(sys_goods.classID is null)
 			</if>
 		</where>
 	</select>
@@ -100,7 +100,7 @@
 		select * from sys_goods
 		<where>
 			<if test="goodsID != null">goodsID = #{goodsID}</if>
-			<if test="goodsClass != null">goodsClass = #{goodsClass}</if>
+			<if test="goodsClass != null">classID = #{classID}</if>
 		</where>
 	</select>
 	
@@ -116,5 +116,11 @@
 			</where>
 	</select>
 	
+	<select id="getClassIDByGoodsID" resultType="Integer">
+		<![CDATA[SELECT IFNULL(classID,-1) FROM sys_goods]]>
+			<where>
+				goodsID = #{goodsID}
+			</where>
+	</select>
 </mapper>
 	

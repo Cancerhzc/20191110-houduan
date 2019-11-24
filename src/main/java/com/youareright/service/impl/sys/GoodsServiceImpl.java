@@ -54,6 +54,11 @@ public class GoodsServiceImpl implements GoodsService {
 	public String getSrc(int goodsID) {
 		return goodsDao.getSrc(goodsID);
 	}
+	
+	@Override
+	public Integer getClassIDByGoodsID(int id) {
+		return goodsDao.getClassIDByGoodsID(id);
+	}
 
 
 }

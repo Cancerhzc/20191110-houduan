@@ -22,4 +22,6 @@ public interface GoodsService {
 	
 	public String getSrc(int goodsID);
 	
+	public Integer getClassIDByGoodsID(int id);
+	
 }

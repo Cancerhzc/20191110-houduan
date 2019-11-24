@@ -37,4 +37,6 @@ public interface GoodsDao {
 	public Integer maxGoodsID();
 	
 	public String getSrc(@Param("goodsID") int goodsID);
+	
+	public Integer getClassIDByGoodsID(@Param("goodsID")int goodsID);
 }

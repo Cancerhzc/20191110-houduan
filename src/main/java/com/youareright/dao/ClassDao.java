@@ -47,4 +47,5 @@ public interface ClassDao {
 	
 	public Integer getClassID(@Param("goodsClass")String labelName);
 	
+	
 }

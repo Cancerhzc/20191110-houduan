@@ -5,8 +5,14 @@ public class ClassEntity {
 	private String goodsClass;
 	private String upClassName;
 	private String goodsName;
+	private Integer containGoodsNumber;
 	
-	
+	public int getContainGoodsNumber() {
+		return containGoodsNumber;
+	}
+	public void setContainGoodsNumber(int containGoodsNumber) {
+		this.containGoodsNumber = containGoodsNumber;
+	}
 	public Integer getClassID() {
 		return classID;
 	}
