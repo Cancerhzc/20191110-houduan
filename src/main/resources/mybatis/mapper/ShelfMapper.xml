@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youareright.dao.ShelfDao">
+	<resultMap id="ShelfMap" type="com.youareright.model.sys.ShelfEntity">
+		<id column="shelfID" property="shelfID" />
+		<result column="shelfClassID" property="shelfClassID" />
+		<result column="shelfPath" property="shelfPath" />
+		<result column="XMLPath" property="XMLPath" />
+	</resultMap>
+	
+	<insert id="insertShelf">
+		insert into shelves_graph (shelfClassID,shelfPath,XMLPath)
+		values
+		(#{shelfEntity.shelfClassID},#{shelfEntity.shelfPath},#{shelfEntity.XMLPath})
+	</insert>
+	
+	<!-- 单独删除图片信息 -->
+	<delete id="del">
+		delete from shelves_graph
+		<where>
+			<if test="shelfEntity.shelfID != null and shelfEntity.shelfID != ''">shelfID = #{shelfEntity.shelfID}</if>
+		</where>
+	</delete>
+	
+	<!-- 批量删除图片信息 -->
+	<delete id="deleteShelves">
+		delete from shelves_graph
+		<where>
+			<if test="groupId !=null">
+				shelfID in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+	
+	
+	<update id="updateShelf">
+		update shelves_graph set
+		shelfClassID = #{shelfEntity.shelfClassID},
+		shelfPath = #{shelfEntity.shelfPath},
+		XMLPath = #{shelfEntity.XMLPath},	
+		<where>
+			shelfID = #{shelfEntity.shelfID}
+		</where>
+	</update>
+	
+	<update id="updateShelf2">
+		update shelves_graph set
+		shelfClassID = #{shelfEntity.shelfClassID},
+		shelfPath = #{shelfEntity.shelfPath},
+		XMLPath = #{shelfEntity.XMLPath},	
+		<where>
+			shelfID = #{shelfEntity.shelfID}
+		</where>
+	</update>
+	
+	
+	<!-- 获取shelf列表 -->
+	<select id="shelvesList" resultMap="shelfMap">
+	<![CDATA[SELECT * from shelf]]>
+	    <![CDATA[ order by shelfID desc]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取shelf列表的总量 -->
+	<select id="shelvesSize" resultType="Integer">  
+	<![CDATA[SELECT * from shelf]]>
+	    <![CDATA[ order by shelfID desc]]>
+	</select>
+	
+	
+	<!-- 获取shelfID最大值 -->
+	<select id="maxShelfID" resultType="Integer">  
+	    <![CDATA[select IFNULL(MAX(shelfID),0) from shelves_graph]]>
+	</select>
+	
+	<select id="getSrc" resultType="String">
+		select shelfClassID from shelves_graph
+			<where>
+				shelfID = #{shelfID}
+			</where>
+	</select>
+	
+	<select id="getClassIDByShelfID" resultType="Integer">
+		<![CDATA[SELECT classID FROM shelves_graph]]>
+			<where>
+				shelfID = #{shelfID}
+			</where>
+	</select>
+</mapper>
+	
