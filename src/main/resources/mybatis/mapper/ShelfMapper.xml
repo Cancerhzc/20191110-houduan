@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.youareright.dao.ShelfDao">
-	<resultMap id="ShelfMap" type="com.youareright.model.sys.ShelfEntity">
+	<resultMap id="shelfMap" type="com.youareright.model.sys.ShelfEntity">
 		<id column="shelfID" property="shelfID" />
 		<result column="shelfClassID" property="shelfClassID" />
 		<result column="shelfPath" property="shelfPath" />
@@ -93,4 +93,3 @@
 			</where>
 	</select>
 </mapper>
-	

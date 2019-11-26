@@ -23,7 +23,6 @@ import com.google.common.io.Files;
 import com.youareright.model.sys.PageResult;
 import com.youareright.model.sys.ShelfEntity;
 import com.youareright.service.sys.ShelfService;
-import com.youareright.service.sys.UserService;
 import com.youareright.utils.FileProcess;
 
 @RestController
@@ -32,8 +31,6 @@ public class ShelfController {
 
 	private Logger log = LoggerFactory.getLogger(ShelfController.class);
 	
-	@Resource(name = "userServiceImpl")
-	private UserService userService;
 	
 	@Resource(name = "shelfServiceImpl")
 	private ShelfService shelfService;
