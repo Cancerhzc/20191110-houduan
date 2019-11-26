@@ -45,17 +45,30 @@ public class ShelfController {
 	 * @return
 	 */
 	@PostMapping("/shelves/shelf")
-	public List<String> insertShelf(@RequestPart("formData") ShelfEntity shelfEntity,@RequestPart("loginname") String loginname,@RequestPart("file") MultipartFile [] multipartFiles) {
+	public List<String> insertShelf(@RequestPart("formData") ShelfEntity shelfEntity,@RequestPart("file") MultipartFile [] multipartFiles) {
 	    List<String> resultList = new ArrayList<>();
-	    int shelfID=shelfEntity.getShelfClassID();
-	    String shelfIDString = Integer.toString(shelfID);
-	    for (MultipartFile multipartFile : multipartFiles) {
-	    	int thisShelfID=shelfService.maxShelfID()+1;
-	        String url = getFile(multipartFile,shelfIDString,thisShelfID);
-	        resultList.add(url);
-			shelfEntity.setShelfPath(url);
-			shelfService.insertShelf(shelfEntity);
+	    int shelfClassID=shelfEntity.getShelfClassID();
+	    System.out.println(shelfClassID);
+	    String shelfClassIDString = Integer.toString(shelfClassID);
+	    int thisShelfID=shelfService.maxShelfID()+1;
+	    for (MultipartFile multipartFile : multipartFiles) {   //遍历两个文件，看哪个是.xml，哪个是图片
+	    	String originalFilename = multipartFile.getOriginalFilename();
+		    String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+		    if(suffix.equals(".xml")) {
+		    	String url = getFile(multipartFile,shelfClassIDString,thisShelfID);
+		    	shelfEntity.setXMLPath(url);
+		    }
 	    }
+	    for (MultipartFile multipartFile : multipartFiles) {
+	    	String originalFilename = multipartFile.getOriginalFilename();
+		    String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+		    if(!suffix.equals(".xml")) {
+		    	String url = getFile(multipartFile,shelfClassIDString,thisShelfID);
+		    	resultList.add(url);
+		    	shelfEntity.setShelfPath(url);
+		    }
+	    }
+	    shelfService.insertShelf(shelfEntity);
 	    log.debug("The method is ending");
 	    return resultList;
 		
@@ -129,14 +142,14 @@ public class ShelfController {
 	
 	
 	
-	private String getFile(MultipartFile file,String shelfClassIDString,int newID) {
+	private String getFile(MultipartFile file,String dirName,int newID) {
 	    String originalFilename = file.getOriginalFilename();
 	    String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 	    String newIDString = Integer.toString(newID); 
 	    //s = s.replaceAll("-", "");
 	    String newName = newIDString + suffix;
-	    String url = "/src/images/shelf/"+shelfClassIDString+"/"+newName;
-	    String parentPath = "G:/git/wh-web/src/images/shelf/"+shelfClassIDString;
+	    String url = "/src/images/shelf/"+dirName+"/"+newName;
+	    String parentPath = "G:/git/wh-web/src/images/shelf/"+dirName;
 	    File dest = new File(parentPath, newName);
 	    try {
 	        //目录不存在则创建，依赖google的guava工具包

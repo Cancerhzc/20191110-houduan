@@ -60,7 +60,7 @@
 	
 	<!-- 获取shelf列表 -->
 	<select id="shelvesList" resultMap="shelfMap">
-	<![CDATA[SELECT * from shelf]]>
+	<![CDATA[SELECT * from shelves_graph]]>
 	    <![CDATA[ order by shelfID desc]]>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
@@ -69,7 +69,7 @@
 	
 	<!-- 获取shelf列表的总量 -->
 	<select id="shelvesSize" resultType="Integer">  
-	<![CDATA[SELECT * from shelf]]>
+	<![CDATA[SELECT count(*) from shelves_graph]]>
 	    <![CDATA[ order by shelfID desc]]>
 	</select>
 	
