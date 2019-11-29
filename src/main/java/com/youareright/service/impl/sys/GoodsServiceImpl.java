@@ -2,6 +2,7 @@ package com.youareright.service.impl.sys;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,11 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public Integer getClassIDByGoodsID(int id) {
 		return goodsDao.getClassIDByGoodsID(id);
+	}
+	
+	@Override
+	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath) {
+		goodsDao.modifyGoods(oldClassID, newClassID, newGoodsPath);
 	}
 
 

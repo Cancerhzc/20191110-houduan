@@ -14,7 +14,7 @@ public interface ClassService {
 	
 	public void deleteClasses(List<String> className);
 	
-	public void del(ClassEntity classEntity);
+	public void del(int classID);
 	
 	public List<ClassEntity> classesList(String searchCondition, int pageSize, int start) ;
 
@@ -25,5 +25,9 @@ public interface ClassService {
 	public Integer maxClassID();
 	
 	public Integer getClassID(String labelName);
+	
+	public String getGoodsNameByClassID(int classID);
+	
+	void modifyClass(int classID,String newClassName,String newGoodsName);
 
 }

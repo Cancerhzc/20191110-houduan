@@ -86,7 +86,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@PostMapping("/goods/good")
-	public List<String> insertGoods(@RequestPart("formData") GoodsEntity goodsEntity,@RequestPart("loginname") String loginname,@RequestPart("file") MultipartFile [] multipartFiles) {
+	public int insertGoods(@RequestPart("formData") GoodsEntity goodsEntity,@RequestPart("loginname") String loginname,@RequestPart("file") MultipartFile [] multipartFiles) {
 		UserEntity currentUser=userService.getUserEntityByLoginName(loginname);
 		int currentUserID=currentUser.getId();
 		int thisClassID;
@@ -111,27 +111,30 @@ public class GoodsController {
 		if(isLabeled==true) {
 			goodsEntity.setMarkUserID(currentUserID);
 			thisClassID=classService.getClassID(labelName);            //通过goodsClass得到classID
-			classIDToString = Integer.toString(thisClassID);
-			goodsEntity.setClassID(thisClassID);
+			String existGoodsName=classService.getGoodsNameByClassID(thisClassID); 
+			if(existGoodsName.equals(goodsName)) {
+				classIDToString = Integer.toString(thisClassID);
+				goodsEntity.setClassID(thisClassID);
+			}
+			else {
+				return -1;
+			}	
 		}
 		
 		goodsEntity.setGoodsState(0);
 		goodsEntity.setUploadUser(currentUserID);
 //		System.out.println(classIDToString);
-	    List<String> resultList = new ArrayList<>();
 	    for (MultipartFile multipartFile : multipartFiles) {
 	    	int thisGoodsID=goodsService.maxGoodsID()+1;
 	        String url = getFile(multipartFile,classIDToString,thisGoodsID);
-	        resultList.add(url);
 			goodsEntity.setGoodsPath(url);
 			goodsService.insertGoods(goodsEntity);
 	    }
 	    log.debug("The method is ending");
-	    return resultList;
-		
-
-
+	    return 1;
 	}
+	
+	
 	@PutMapping("/goods/{id}")
 	public GoodsEntity updateGoods(@RequestBody GoodsEntity goodsEntity, @PathVariable int id) {
 		if (goodsEntity.getGoodsID() == id) {
@@ -201,7 +204,7 @@ public class GoodsController {
 	}
 	
 	@PostMapping("/goods/modify")
-	public void markGoods(@RequestBody Mark goodsModify) {
+	public int markGoods(@RequestBody Mark goodsModify) {
 		GoodsEntity goodsTemp=new GoodsEntity();
 		int thisClassID=0;
 		String classIDToString=new String();
@@ -214,9 +217,16 @@ public class GoodsController {
 		if(classService.checkClassIsExisted(labelName)==0) {
 			classService.insertClass2(labelName,goodsName);		//如果goodsClass中无此标签名，就在goodsClass类中增加
 		}
-		
-		thisClassID=classService.getClassID(labelName);            //通过goodsClass得到classID
-		classIDToString = Integer.toString(thisClassID);
+		else {
+			thisClassID=classService.getClassID(labelName);            //通过goodsClass得到classID
+			String existGoodsName=classService.getGoodsNameByClassID(thisClassID); 
+			if(existGoodsName.equals(goodsName)) {
+				classIDToString = Integer.toString(thisClassID);
+			}
+			else {
+				return -1;
+			}
+		}	
 		
 		goodsTemp.setClassID(thisClassID);
 		goodsTemp.setMarkUserID(currentUserID);
@@ -233,6 +243,8 @@ public class GoodsController {
 			goodsTemp.setGoodsID(currentGoodsID);
 			updateGoods2(goodsTemp, currentGoodsID);
 		}
+		
+		return 0;
 	}
 	
 	private String getFile(MultipartFile file,String classIDString,int newID) {

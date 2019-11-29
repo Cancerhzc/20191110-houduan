@@ -80,14 +80,14 @@
 	</select>
 	
 	<select id="getSrc" resultType="String">
-		select shelfClassID from shelves_graph
+		select shelfPath from shelves_graph
 			<where>
 				shelfID = #{shelfID}
 			</where>
 	</select>
 	
 	<select id="getClassIDByShelfID" resultType="Integer">
-		<![CDATA[SELECT classID FROM shelves_graph]]>
+		<![CDATA[SELECT shelfClassID FROM shelves_graph]]>
 			<where>
 				shelfID = #{shelfID}
 			</where>

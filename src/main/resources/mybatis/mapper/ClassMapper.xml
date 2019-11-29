@@ -25,7 +25,7 @@
 	<delete id="del">
 		delete from goods_class
 		<where>
-			<if test="classEntity.classID != null and classEntity.classID != ''">classID = #{classEntity.classID}</if>
+			classID = #{classID}
 		</where>
 	</delete>
 	
@@ -46,7 +46,6 @@
 	
 	<update id="updateClass">
 		update goods_class set
-		classID = #{classEntity.classID},
 		goodsClass = #{classEntity.goodsClass},
 		goodsName = #{classEntity.goodsName},
 		upClassName = #{classEntity.upClassName},
@@ -112,5 +111,21 @@
 			goodsClass = #{goodsClass}
 		</where>
 	</select>
+	
+	<select id="getGoodsNameByClassID" resultType="String">
+		select goodsName from goods_class
+		<where>
+			classID = #{classID}
+		</where>
+	</select>
+	
+	<update id="modifyClass">
+		update goods_class set
+		goodsClass = #{newClassName},
+		goodsName = #{newGoodsName}
+		<where>
+			classID = #{classID}
+		</where>
+	</update>
 	
 </mapper>

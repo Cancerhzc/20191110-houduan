@@ -24,6 +24,8 @@ public interface GoodsDao {
 	
 	public void deleteGoodses(@Param("groupId") List<String> groupId);
 	
+	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath);
+	
 	/**
 	 * 更新商品图片信息
 	 * @param goodsEntity
@@ -39,4 +41,5 @@ public interface GoodsDao {
 	public String getSrc(@Param("goodsID") int goodsID);
 	
 	public Integer getClassIDByGoodsID(@Param("goodsID")int goodsID);
+	
 }

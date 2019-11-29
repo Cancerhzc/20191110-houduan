@@ -24,4 +24,6 @@ public interface GoodsService {
 	
 	public Integer getClassIDByGoodsID(int id);
 	
+	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath);
+	
 }

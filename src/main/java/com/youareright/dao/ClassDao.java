@@ -24,12 +24,12 @@ public interface ClassDao {
 	public void insertClass2(String goodsClass,String goodsName);
 	
 	/**
-	 * 删除标签
+	 * 批量删除标签
 	 * @param classEntity
 	 */
 	public void deleteClasses(@Param("groupId") List<String> groupID);
 	
-	public void del(@Param("classEntity") ClassEntity classEntity);
+	public void del(int classID);
 	/**
 	 * 更新标签
 	 * @param classEntity
@@ -46,6 +46,10 @@ public interface ClassDao {
 	public Integer maxClassID();
 	
 	public Integer getClassID(@Param("goodsClass")String labelName);
+	
+	public String getGoodsNameByClassID(int classID);
+	
+	public void modifyClass(int classID,String newClassName,String newGoodsName);
 	
 	
 }

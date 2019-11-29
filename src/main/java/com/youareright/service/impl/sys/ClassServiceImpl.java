@@ -29,8 +29,8 @@ public class ClassServiceImpl implements ClassService {
 	}
 	
 	@Override
-	public void del(ClassEntity classEntity) {
-		classDao.del(classEntity);
+	public void del(int classID) {
+		classDao.del(classID);
 	}
 
 	@Override
@@ -61,6 +61,16 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public Integer getClassID(String labelName) {
 		return classDao.getClassID(labelName);
+	}
+	
+	@Override
+	public String getGoodsNameByClassID(int classID) {
+		return classDao.getGoodsNameByClassID(classID);
+	}
+	
+	@Override
+	public void modifyClass(int classID,String newClassName,String newGoodsName) {
+		classDao.modifyClass(classID,newClassName,newGoodsName);
 	}
 
 

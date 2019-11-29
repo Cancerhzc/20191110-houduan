@@ -62,6 +62,14 @@
 		</where>
 	</update>
 	
+	<update id="modifyGoods">
+		update sys_goods set
+		classID = #{newClassID},
+		goodsPath = #{newGoodsPath}
+		<where>
+			classID = #{oldClassID}
+		</where>
+	</update>
 	
 	<!-- 获取goods列表 -->
 	<select id="goodsesList" resultMap="goodsMap">
