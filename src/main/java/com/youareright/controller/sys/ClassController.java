@@ -74,21 +74,23 @@ public class ClassController {
 	 */
 	@PutMapping("/class/{id}")
 	public int updateClass(@RequestBody ClassEntity classEntity) {		
-		String labelName=classEntity.getGoodsClass();
+		String newClassName=classEntity.getGoodsClass();
+		String newGoodsName=classEntity.getGoodsName();
 		int selectClassID=classEntity.getClassID();
-		if(classService.checkClassIsExisted(labelName)==0) {
-			String newClassName=classEntity.getGoodsClass();
-			String newGoodsName=classEntity.getGoodsName();
+		if(classService.checkClassIsExisted(newClassName)==0) {
 			classService.modifyClass(selectClassID,newClassName,newGoodsName);	//修改class类即可
 			System.out.println("直接修改了class，无需修改goods");
 		}
 		else {
-			int newClassID=classService.getClassID(labelName);            //通过goodsClass得到classID
+			int newClassID=classService.getClassID(newClassName);            //通过goodsClass得到classID
 			String newClassIDToString=Integer.toString(newClassID);
 			String existGoodsName=classService.getGoodsNameByClassID(newClassID); 
 			System.out.println(existGoodsName);
 			String goodsName=classEntity.getGoodsName();
-			if(goodsName.equals(existGoodsName)) {
+			if(selectClassID==newClassID) {                //如果没修改label但修改了goodsName，则直接修改class表即可
+				classService.modifyClass(selectClassID,newClassName,newGoodsName);	//修改class类即可
+			}
+			else if(goodsName.equals(existGoodsName)) {
 				//先移动文件，再在sys_goods数据库中更改classID，然后再在goods_class中删去原来的class
 				String selectClassIDString=Integer.toString(selectClassID);
 				String srcDirPath="G:/git/wh-web/src/images/"+selectClassIDString;

@@ -20,7 +20,7 @@ public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private RoleDao roleDao;
 
-	@Override
+
 	public List<MenuEntity> menuList(int id) {
 		List<String> idList = roleDao.getModulesById(id);
 		
@@ -47,37 +47,37 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
-	@Override
+
 	public List<MenuEntity> menusList(int pageSize, int start, String menuId) {
 		return menuDao.menusList(pageSize, start, menuId);
 	}
 
-	@Override
+
 	public Integer menusSize(int pageSize, int start, String menuId) {
 		return menuDao.menusSize(pageSize, start, menuId);
 	}
 
-	@Override
+
 	public void insertMenu(MenuEntity menuEntity) {
 		menuDao.insertMenu(menuEntity);
 	}
 
-	@Override
+
 	public void updateMenu(MenuEntity menuEntity) {
 		menuDao.updateMenu(menuEntity);
 	}
 
-	@Override
+
 	public void deleteMenus(List<String> groupId) {
 		menuDao.deleteMenus(groupId);
 	}
 
-	@Override
+
 	public List<MenuEntity> menusByParentId(int parentId) {
 		return menuDao.menusByParentId(parentId);
 	}
 
-	@Override
+
 	public List<MenuEntity> getSubmenus() {
 		return menuDao.getSubmenus();
 	}

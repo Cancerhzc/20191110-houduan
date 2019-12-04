@@ -46,7 +46,7 @@ public class ShelfController {
 	 */
 	@PostMapping("/shelves/shelf")
 	public List<String> insertShelf(@RequestPart("formData") ShelfEntity shelfEntity,@RequestPart("file") MultipartFile [] multipartFiles) {
-	    List<String> resultList = new ArrayList<>();
+	    List<String> resultList = new ArrayList<String>();
 	    int shelfClassID=shelfEntity.getShelfClassID();
 	    System.out.println(shelfClassID);
 	    String shelfClassIDString = Integer.toString(shelfClassID);

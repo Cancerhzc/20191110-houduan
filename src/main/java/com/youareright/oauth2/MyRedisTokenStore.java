@@ -85,7 +85,6 @@ public class MyRedisTokenStore implements TokenStore{
 		return serializationStrategy.deserializeString(bytes);
 	}
 
-	@Override
 	public OAuth2AccessToken getAccessToken(OAuth2Authentication authentication) {
 		String key = authenticationKeyGenerator.extractKey(authentication);
 		byte[] serializedKey = serializeKey(AUTH_TO_ACCESS + key);
@@ -107,12 +106,10 @@ public class MyRedisTokenStore implements TokenStore{
 		return accessToken;
 	}
 
-	@Override
 	public OAuth2Authentication readAuthentication(OAuth2AccessToken token) {
 		return readAuthentication(token.getValue());
 	}
 
-	@Override
 	public OAuth2Authentication readAuthentication(String token) {
 		byte[] bytes = null;
 		RedisConnection conn = getConnection();
@@ -125,7 +122,6 @@ public class MyRedisTokenStore implements TokenStore{
 		return auth;
 	}
 
-	@Override
 	public OAuth2Authentication readAuthenticationForRefreshToken(OAuth2RefreshToken token) {
 		return readAuthenticationForRefreshToken(token.getValue());
 	}
@@ -141,7 +137,6 @@ public class MyRedisTokenStore implements TokenStore{
 		}
 	}
 
-	@Override
 	public void storeAccessToken(OAuth2AccessToken token, OAuth2Authentication authentication) {
 		byte[] serializedAccessToken = serialize(token);
 		byte[] serializedAuth = serialize(authentication);
@@ -204,12 +199,10 @@ public class MyRedisTokenStore implements TokenStore{
 		return clientId + (userName == null ? "" : ":" + userName);
 	}
 
-	@Override
 	public void removeAccessToken(OAuth2AccessToken accessToken) {
 		removeAccessToken(accessToken.getValue());
 	}
 
-	@Override
 	public OAuth2AccessToken readAccessToken(String tokenValue) {
 		byte[] key = serializeKey(ACCESS + tokenValue);
 		byte[] bytes = null;
@@ -258,7 +251,6 @@ public class MyRedisTokenStore implements TokenStore{
 		}
 	}
 
-	@Override
 	public void storeRefreshToken(OAuth2RefreshToken refreshToken, OAuth2Authentication authentication) {
 		byte[] refreshKey = serializeKey(REFRESH + refreshToken.getValue());
 		byte[] refreshAuthKey = serializeKey(REFRESH_AUTH + refreshToken.getValue());
@@ -284,7 +276,6 @@ public class MyRedisTokenStore implements TokenStore{
 		}
 	}
 
-	@Override
 	public OAuth2RefreshToken readRefreshToken(String tokenValue) {
 		byte[] key = serializeKey(REFRESH + tokenValue);
 		byte[] bytes = null;
@@ -298,7 +289,6 @@ public class MyRedisTokenStore implements TokenStore{
 		return refreshToken;
 	}
 
-	@Override
 	public void removeRefreshToken(OAuth2RefreshToken refreshToken) {
 		removeRefreshToken(refreshToken.getValue());
 	}
@@ -321,7 +311,6 @@ public class MyRedisTokenStore implements TokenStore{
 		}
 	}
 
-	@Override
 	public void removeAccessTokenUsingRefreshToken(OAuth2RefreshToken refreshToken) {
 		removeAccessTokenUsingRefreshToken(refreshToken.getValue());
 	}
@@ -347,8 +336,7 @@ public class MyRedisTokenStore implements TokenStore{
 			removeAccessToken(accessToken);
 		}
 	}
-
-	@Override
+	
 	public Collection<OAuth2AccessToken> findTokensByClientIdAndUserName(String clientId, String userName) {
 		byte[] approvalKey = serializeKey(UNAME_TO_ACCESS + getApprovalKey(clientId, userName));
 		List<byte[]> byteList = null;
@@ -369,7 +357,6 @@ public class MyRedisTokenStore implements TokenStore{
 		return Collections.<OAuth2AccessToken> unmodifiableCollection(accessTokens);
 	}
 
-	@Override
 	public Collection<OAuth2AccessToken> findTokensByClientId(String clientId) {
 		byte[] key = serializeKey(CLIENT_ID_TO_ACCESS + clientId);
 		List<byte[]> byteList = null;

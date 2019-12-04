@@ -28,7 +28,6 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Autowired
 	RoleDao roleDao;
 	
-	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserEntity userEntity = userDao.getUserEntityByLoginName(username);
 		if(userEntity == null) {
