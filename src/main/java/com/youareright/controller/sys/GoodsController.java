@@ -182,8 +182,7 @@ public class GoodsController {
 			}
 		}
 		goodsService.deleteGoodses(groupId);
-		return groupId;
-		
+		return groupId;	
 	}
 	
 	/**
