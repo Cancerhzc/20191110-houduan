@@ -3,13 +3,15 @@ package com.youareright.service.impl.sys;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.youareright.dao.*;
+import com.youareright.model.sys.RelationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.youareright.dao.MenuDao;
-import com.youareright.dao.RoleDao;
 import com.youareright.model.sys.MenuEntity;
 import com.youareright.service.sys.MenuService;
+
+import javax.swing.*;
 
 @Service("menuServiceImpl")
 public class MenuServiceImpl implements MenuService {
@@ -18,17 +20,26 @@ public class MenuServiceImpl implements MenuService {
 	private MenuDao menuDao;
 	
 	@Autowired
-	private RoleDao roleDao;
+	private RelationDao relationDao;
+
+	@Autowired
+	private RoleMenuDao roleMenuDao;
 
 
 	public List<MenuEntity> menuList(int id) {
-		List<String> idList = roleDao.getModulesById(id);
-		
-		String idstemp = "";
-		for (String idtemp : idList) {
-			idstemp = idstemp + idtemp;
+		List<RelationEntity> relationEntities = relationDao.getRelationByUserId(id);
+		List<String> idList = new ArrayList<String>();
+		for(RelationEntity relationEntity : relationEntities ){
+			List<String> tmpList = roleMenuDao.getMenuByRoleId(relationEntity.getRoleId());
+			idList.addAll(tmpList);
 		}
-		String[] ids = idstemp.split(";");
+		
+//		String idstemp = "";
+//		for (String idtemp : idList) {
+//			idstemp = idstemp + idtemp;
+//		}
+//		String[] ids = idstemp.split(";");
+		String[] ids = idList.toArray(new String[idList.size()]);
 		List<MenuEntity> parentMenuList = menuDao.getParentMenuListById(ids);
 		List<MenuEntity> childrenMenuList = menuDao.getMenuListById(ids);
 		List<MenuEntity> menuList = new ArrayList<MenuEntity>();

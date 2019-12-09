@@ -177,7 +177,7 @@ public class GoodsController {
 				if(currentClassID==-1) {            //如果是未打标，则在“未打标商品”文件夹下
 					currentClassIDString="未打标商品";
 				}
-				String filePath="G:/git/wh-web/src/images/"+currentClassIDString+"/"+currentGoodsIDString+srcSuffix;
+				String filePath="E:/JavaProject/youareright-web/src/images/"+currentClassIDString+"/"+currentGoodsIDString+srcSuffix;
 				fileProcess.deleteFile(filePath);
 			}
 		}
@@ -234,8 +234,8 @@ public class GoodsController {
 		for(int i=0;i<currentListOfGoodsID.size();i++) {		//对标记的每个图片进行操作
 			String currentGoodsIDString=currentListOfGoodsID.get(i);
 			int currentGoodsID=Integer.valueOf(currentGoodsIDString);   	//得到当前图片的ID
-			String srcFilePath="G:/git/wh-web/src/images/未打标商品/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
-			String dstPath="G:/git/wh-web/src/images/"+classIDToString;
+			String srcFilePath="E:/JavaProject/youareright-web/src/images/未打标商品/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+			String dstPath="E:/JavaProject/youareright-web/src/images/"+classIDToString;
 			String goodsPath="/src/images/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
 			fileProcess.moveFile(srcFilePath,dstPath);
 			goodsTemp.setGoodsPath(goodsPath);
@@ -257,7 +257,7 @@ public class GoodsController {
 	    //s = s.replaceAll("-", "");
 	    String newName = newIDString + suffix;
 	    String url = "/src/images/"+classIDString+"/"+newName;
-	    String parentPath = "G:/git/wh-web/src/images/"+classIDString;
+	    String parentPath = "E:/JavaProject/youareright-web/src/images/"+classIDString;
 	    File dest = new File(parentPath, newName);
 	    try {
 	        //目录不存在则创建，依赖google的guava工具包

@@ -1,9 +1,6 @@
 package com.youareright.model.sys;
 
-/**
- * @author wanghuan
- *
- */
+
 public class RelationEntity {
 	/**
 	 * 用户ID
