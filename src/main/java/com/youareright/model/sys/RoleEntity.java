@@ -1,9 +1,5 @@
 package com.youareright.model.sys;
 
-/**
- * @author wanghuan
- *
- */
 public class RoleEntity {
 	/**
 	 * id

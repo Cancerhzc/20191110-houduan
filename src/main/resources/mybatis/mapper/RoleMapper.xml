@@ -10,8 +10,8 @@
 	</resultMap>
 	<!-- 获取role列表 -->
 	<select id="rolesList" resultMap="roleMap">
-	<![CDATA[select * from sys_role]]>
-	    <![CDATA[ order by id ]]>
+	<![CDATA[select * from sys_role ]]>
+	    <![CDATA[ order by id]]>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
 		</if>
@@ -31,8 +31,7 @@
 		update sys_role set
 		role = #{roleEntity.role},
 		name = #{roleEntity.name},
-		modules =
-		#{roleEntity.modules},
+		modules = null,
 		`describe` =
 		#{roleEntity.describe}
 		<where>
