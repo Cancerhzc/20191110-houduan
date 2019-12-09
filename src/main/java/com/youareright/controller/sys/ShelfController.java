@@ -106,25 +106,18 @@ public class ShelfController {
 	 */
 	@DeleteMapping("/shelves")
 	public List<String> deleteShelves(@RequestBody List<String> groupId) {
-		System.out.println(groupId);
 		int groupIDSize = groupId.size();
-		System.out.println(groupIDSize);
 		if(groupId != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
 				String currentShelfIDString=groupId.get(i);
-				System.out.println(currentShelfIDString);
 				int currentShelfID=Integer.valueOf(currentShelfIDString);
-				System.out.println(currentShelfID);
 				int currentClassID=getClassIDByShelfID(currentShelfID);          //数据库查询，通过shelfID得到classID
-				System.out.println(currentClassID);
 				String currentClassIDString=Integer.toString(currentClassID);
 				String srcSuffix=getSrcSuffix(currentShelfID);
-				System.out.println(srcSuffix);
-				String filePath="G:/git/wh-web/src/images/shelf/"+currentClassIDString+"/"+currentShelfIDString+srcSuffix;
+				String filePath="E:/JavaProject/youareright-web/src/images/shelf/"+currentClassIDString+"/"+currentShelfIDString+srcSuffix;
 				fileProcess.deleteFile(filePath);
 			}
 		}
-		System.out.println("123123123213");
 		shelfService.deleteShelfes(groupId);
 		return groupId;
 		
@@ -156,7 +149,7 @@ public class ShelfController {
 	    //s = s.replaceAll("-", "");
 	    String newName = newIDString + suffix;
 	    String url = "/src/images/shelf/"+dirName+"/"+newName;
-	    String parentPath = "G:/git/wh-web/src/images/shelf/"+dirName;
+	    String parentPath = "E:/JavaProject/youareright-web/src/images/shelf/"+dirName;
 	    File dest = new File(parentPath, newName);
 	    try {
 	        //目录不存在则创建，依赖google的guava工具包

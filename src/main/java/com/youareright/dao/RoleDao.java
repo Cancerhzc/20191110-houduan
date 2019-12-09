@@ -7,8 +7,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.youareright.model.sys.RoleEntity;
+import org.springframework.stereotype.Repository;
 
 @Mapper
+@Repository
 public interface RoleDao {
 	/**
 	 * 获取role列表
