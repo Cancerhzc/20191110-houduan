@@ -125,6 +125,8 @@ public class ShelfController {
 				System.out.println(srcSuffix);
 				String filePath=absolutePath+"/src/images/shelf/"+currentClassIDString+"/"+currentShelfIDString+srcSuffix;
 				fileProcess.deleteFile(filePath);
+				String XMLFilePath=absolutePath+"/src/images/shelf/"+currentClassIDString+"/"+currentShelfIDString+".xml";
+				fileProcess.deleteFile(XMLFilePath);
 			}
 		}
 		System.out.println("123123123213");

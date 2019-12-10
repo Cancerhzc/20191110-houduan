@@ -75,7 +75,7 @@ public class ClassController {
 	 * @return
 	 */
 	@PutMapping("/class/{id}")
-	public int updateClass(@RequestBody ClassEntity classEntity) {		
+	public String updateClass(@RequestBody ClassEntity classEntity) {		
 		String newClassName=classEntity.getGoodsClass();
 		String newGoodsName=classEntity.getGoodsName();
 		int selectClassID=classEntity.getClassID();
@@ -110,11 +110,11 @@ public class ClassController {
 				System.out.println("goods表改了，原来的class删了");
 			}
 			else {
-				return -1;
+				return existGoodsName;//如果输入的标签名在数据库中已经存在，但商品名不一致的话，需要返回数据库已有的商品名
 			}
 		}	
 		log.debug("The method is ending");
-		return 1;
+		return "@Class Modifies Successfully!@";
 	}
 
 	/**

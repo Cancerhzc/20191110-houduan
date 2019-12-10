@@ -87,7 +87,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@PostMapping("/goods/good")
-	public int insertGoods(@RequestPart("formData") GoodsEntity goodsEntity,@RequestPart("loginname") String loginname,@RequestPart("file") MultipartFile [] multipartFiles) {
+	public String insertGoods(@RequestPart("formData") GoodsEntity goodsEntity,@RequestPart("loginname") String loginname,@RequestPart("file") MultipartFile [] multipartFiles) {
 		UserEntity currentUser=userService.getUserEntityByLoginName(loginname);
 		int currentUserID=currentUser.getId();
 		int thisClassID;
@@ -116,15 +116,14 @@ public class GoodsController {
 			if(existGoodsName.equals(goodsName)) {
 				classIDToString = Integer.toString(thisClassID);
 				goodsEntity.setClassID(thisClassID);
+				
 			}
 			else {
-				return -1;
+				return existGoodsName;  //如果输入的标签名在数据库中已经存在，但商品名不一致的话，需要返回数据库已有的商品名
 			}	
 		}
-		
 		goodsEntity.setGoodsState(0);
 		goodsEntity.setUploadUser(currentUserID);
-//		System.out.println(classIDToString);
 	    for (MultipartFile multipartFile : multipartFiles) {
 	    	int thisGoodsID=goodsService.maxGoodsID()+1;
 	        String url = getFile(multipartFile,classIDToString,thisGoodsID);
@@ -132,7 +131,7 @@ public class GoodsController {
 			goodsService.insertGoods(goodsEntity);
 	    }
 	    log.debug("The method is ending");
-	    return 1;
+	    return "@Picture(s) Upload Successfully!@";
 	}
 	
 	
@@ -204,7 +203,7 @@ public class GoodsController {
 	}
 	
 	@PostMapping("/goods/modify")
-	public int markGoods(@RequestBody Mark goodsModify) {
+	public String markGoods(@RequestBody Mark goodsModify) {
 		GoodsEntity goodsTemp=new GoodsEntity();
 		int thisClassID=0;
 		String classIDToString=new String();
@@ -217,34 +216,39 @@ public class GoodsController {
 		if(classService.checkClassIsExisted(labelName)==0) {
 			classService.insertClass2(labelName,goodsName);		//如果goodsClass中无此标签名，就在goodsClass类中增加
 		}
-		else {
-			thisClassID=classService.getClassID(labelName);            //通过goodsClass得到classID
-			String existGoodsName=classService.getGoodsNameByClassID(thisClassID); 
-			if(existGoodsName.equals(goodsName)) {
-				classIDToString = Integer.toString(thisClassID);
+		thisClassID=classService.getClassID(labelName);            //通过goodsClass得到classID
+		String existGoodsName=classService.getGoodsNameByClassID(thisClassID); 
+		if(existGoodsName.equals(goodsName)) {
+			classIDToString = Integer.toString(thisClassID);
+			goodsTemp.setClassID(thisClassID);
+			goodsTemp.setMarkUserID(currentUserID);
+			goodsTemp.setGoodsState(1);
+			List<String> currentListOfGoodsID=goodsModify.getGroupId();
+			for(int i=0;i<currentListOfGoodsID.size();i++) {		//对标记的每个图片进行操作
+				String currentGoodsIDString=currentListOfGoodsID.get(i);
+				int currentGoodsID=Integer.valueOf(currentGoodsIDString);   	//得到当前图片的ID
+				int currentClassID=getClassIDByGoodsID(currentGoodsID);          //数据库查询，通过goodsID得到classID
+				String currentClassString=new String();
+				if(currentClassID==-1) {
+					currentClassString="未打标商品";
+				}
+				else {
+					currentClassString=Integer.toString(currentClassID);
+				}
+				
+				String srcFilePath=absolutePath+"/src/images/"+currentClassString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+				String dstPath=absolutePath+"/src/images/"+classIDToString;
+				String goodsPath="/src/images/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+				fileProcess.moveFile(srcFilePath,dstPath);
+				goodsTemp.setGoodsPath(goodsPath);
+				goodsTemp.setGoodsID(currentGoodsID);
+				updateGoods2(goodsTemp, currentGoodsID);
 			}
-			else {
-				return -1;
-			}
-		}	
-		
-		goodsTemp.setClassID(thisClassID);
-		goodsTemp.setMarkUserID(currentUserID);
-		goodsTemp.setGoodsState(1);
-		List<String> currentListOfGoodsID=goodsModify.getGroupId();
-		for(int i=0;i<currentListOfGoodsID.size();i++) {		//对标记的每个图片进行操作
-			String currentGoodsIDString=currentListOfGoodsID.get(i);
-			int currentGoodsID=Integer.valueOf(currentGoodsIDString);   	//得到当前图片的ID
-			String srcFilePath=absolutePath+"/src/images/未打标商品/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
-			String dstPath=absolutePath+"/src/images/"+classIDToString;
-			String goodsPath="/src/images/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
-			fileProcess.moveFile(srcFilePath,dstPath);
-			goodsTemp.setGoodsPath(goodsPath);
-			goodsTemp.setGoodsID(currentGoodsID);
-			updateGoods2(goodsTemp, currentGoodsID);
+			return "@Mark Goods Successfully!@";
 		}
-		
-		return 0;
+		else {
+			return existGoodsName;
+		}
 	}
 	
 	private String getFile(MultipartFile file,String classIDString,int newID) {

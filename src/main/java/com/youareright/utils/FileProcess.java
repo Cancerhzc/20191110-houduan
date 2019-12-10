@@ -1,6 +1,9 @@
 package com.youareright.utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class FileProcess {
 	
@@ -16,6 +19,7 @@ public class FileProcess {
 					dstPathOpen.mkdirs();
 				}
 				String newPath=dstPath+"/"+srcFile.getName();
+				System.out.println(srcFilePath);
 				System.out.println(newPath);
 				if (srcFile.renameTo(new File(dstPath+"/"+srcFile.getName()))) //源文件移动至目标文件目录
 				{
@@ -76,5 +80,24 @@ public class FileProcess {
 	        boolean isSuccess=file.delete();
 	        return isSuccess;
 	    }
+		
+		public int writeFile(String content,String path) {
+			try {
+				File file = new File(path);
+				if(!file.exists()) {
+					file.createNewFile();
+				}
+				FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+				BufferedWriter bw = new BufferedWriter(fileWriter);
+				bw.write(content);
+				bw.close();
+				System.out.println("WriteFileSuccessfully!");
+				return 1;
+		    } catch (IOException e) {
+		    	e.printStackTrace();
+		    	return 0;
+		    }
+		        
+		}
 
 }
