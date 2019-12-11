@@ -69,7 +69,6 @@ public class ComposeController {
 		
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
-			
 			String currentClassNoString=Integer.toString(classNo);
 			goodsContent+=absolutePath+"/src/images/"+currentClassNoString+"\n";
 		}
@@ -87,6 +86,9 @@ public class ComposeController {
 			shelvesContent+=absolutePath+"/src/images/shelf/"+currentShelfClassIDString+"/"+currentShelfIDString+".xml\n";
 		}
 		fileProcess.writeFile(shelvesContent, shelvesTextPath);
-
+		
+		String pythonPath=pathController.getPythonPath();
+		String pyPath=absolutePath+"/PhotoMerge.py";
+		fileProcess.runPython(pythonPath,pyPath);
 	}
 }

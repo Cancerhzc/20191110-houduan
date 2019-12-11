@@ -53,7 +53,7 @@ public class ClassController {
 		log.debug("The method is ending");
 		return pageResult;
 	}
-
+	
 	/**
 	 * 新建标签信息
 	 * 
