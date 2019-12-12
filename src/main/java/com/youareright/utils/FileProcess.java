@@ -121,5 +121,10 @@ public class FileProcess {
 	            e.printStackTrace();
 	        } 
 		}
+		
+		public void makeDirectory(String path) {
+			File file = new File(path);
+			file.mkdir();
+		}
 
 }

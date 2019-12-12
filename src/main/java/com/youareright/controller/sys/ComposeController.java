@@ -61,7 +61,7 @@ public class ComposeController {
 	 * @return
 	 */
 	@PostMapping("/compose/submit")
-	public void composePicture(@RequestBody Choose choose) {
+	public String composePicture(@RequestBody Choose choose) {
 		List<Integer> classList=choose.getChooseClass();
 		List<Integer> shelvesList=choose.getChooseShelves();
 		List<Integer> shelvesClassList=choose.getChooseShelvesClass();
@@ -71,9 +71,12 @@ public class ComposeController {
 		String shelvesContent=new String();
 		
 		//三个txt文本的路径
-		String goodsTextPath="./goods_path.txt";
-		String shelvesTextPath="./shelves_path.txt";
-		String pictureNumberPath="./picture_number.txt";
+		String goodsTextPath=pathController.getGoodsTextPath();
+		String shelvesTextPath=pathController.getShelvesTextPath();
+		String pictureNumberPath=pathController.getPictureNumberPath();
+		
+		//输出路径
+		String outPath=pathController.getOutPath();
 		
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
@@ -102,7 +105,12 @@ public class ComposeController {
 		fileProcess.writeFile(mergePictureNumberString, pictureNumberPath);
 		
 		String pythonPath=pathController.getPythonPath();
-		String pyPath="./PhotoMerge.py";
+		String pyPath=pathController.getPyPath();
+		
+		fileProcess.deleteFile(outPath);
+		fileProcess.makeDirectory(outPath);
 		fileProcess.runPython(pythonPath,pyPath);
+		
+		return "合成成功啦！";
 	}
 }
