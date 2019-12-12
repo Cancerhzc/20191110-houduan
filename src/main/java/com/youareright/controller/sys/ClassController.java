@@ -95,14 +95,14 @@ public class ClassController {
 			else if(goodsName.equals(existGoodsName)) {
 				//先移动文件，再在sys_goods数据库中更改classID，然后再在goods_class中删去原来的class
 				String selectClassIDString=Integer.toString(selectClassID);
-				String srcDirPath=absolutePath+"/src/images/"+selectClassIDString;
-				String dstPath=absolutePath+"/src/images/"+newClassIDToString;
+				String srcDirPath=absolutePath+"/myimages/"+selectClassIDString;
+				String dstPath=absolutePath+"/myimages/"+newClassIDToString;
 				File file=new File(srcDirPath);
 				File[] fileList=file.listFiles();
 				for(File f:fileList) {
 					String currentFileName=f.getName();
 					String srcFilePath=srcDirPath+"/"+currentFileName;
-					String src="/src/images/"+newClassIDToString+"/"+currentFileName;
+					String src="/myimages/"+newClassIDToString+"/"+currentFileName;
 					goodsService.modifyGoods(selectClassID, newClassID, src);
 					fileProcess.moveFile(srcFilePath,dstPath);
 				}
@@ -129,7 +129,7 @@ public class ClassController {
 		if(groupID != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
 				String currentClassIDString=groupID.get(i);
-				String path=absolutePath+"/src/images/"+currentClassIDString;
+				String path=absolutePath+"/myimages/"+currentClassIDString;
 				fileProcess.deleteFile(path);
 			}
 		}

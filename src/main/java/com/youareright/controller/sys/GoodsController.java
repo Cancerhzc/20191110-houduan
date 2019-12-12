@@ -177,7 +177,7 @@ public class GoodsController {
 				if(currentClassID==-1) {            //如果是未打标，则在“未打标商品”文件夹下
 					currentClassIDString="未打标商品";
 				}
-				String filePath=absolutePath+"/src/images/"+currentClassIDString+"/"+currentGoodsIDString+srcSuffix;
+				String filePath=absolutePath+"/myimages/"+currentClassIDString+"/"+currentGoodsIDString+srcSuffix;
 				fileProcess.deleteFile(filePath);
 			}
 		}
@@ -236,9 +236,9 @@ public class GoodsController {
 					currentClassString=Integer.toString(currentClassID);
 				}
 				
-				String srcFilePath=absolutePath+"/src/images/"+currentClassString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
-				String dstPath=absolutePath+"/src/images/"+classIDToString;
-				String goodsPath="/src/images/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+				String srcFilePath=absolutePath+"/myimages/"+currentClassString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+				String dstPath=absolutePath+"/myimages/"+classIDToString;
+				String goodsPath="/myimages/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
 				fileProcess.moveFile(srcFilePath,dstPath);
 				goodsTemp.setGoodsPath(goodsPath);
 				goodsTemp.setGoodsID(currentGoodsID);
@@ -261,8 +261,8 @@ public class GoodsController {
 	    String newIDString = Integer.toString(newID); 
 	    //s = s.replaceAll("-", "");
 	    String newName = newIDString + suffix;
-	    String url = "/src/images/"+classIDString+"/"+newName;
-	    String parentPath = absolutePath+"/src/images/"+classIDString;
+	    String url = "/myimages/"+classIDString+"/"+newName;
+	    String parentPath = absolutePath+"/myimages/"+classIDString;
 	    File dest = new File(parentPath, newName);
 	    try {
 	        //目录不存在则创建，依赖google的guava工具包

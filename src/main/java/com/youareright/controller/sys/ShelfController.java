@@ -123,9 +123,9 @@ public class ShelfController {
 				String currentClassIDString=Integer.toString(currentClassID);
 				String srcSuffix=getSrcSuffix(currentShelfID);
 				System.out.println(srcSuffix);
-				String filePath=absolutePath+"/src/images/shelf/"+currentClassIDString+"/"+currentShelfIDString+srcSuffix;
+				String filePath=absolutePath+"/myimages/shelf/"+currentClassIDString+"/"+currentShelfIDString+srcSuffix;
 				fileProcess.deleteFile(filePath);
-				String XMLFilePath=absolutePath+"/src/images/shelf/"+currentClassIDString+"/"+currentShelfIDString+".xml";
+				String XMLFilePath=absolutePath+"/myimages/shelf/"+currentClassIDString+"/"+currentShelfIDString+".xml";
 				fileProcess.deleteFile(XMLFilePath);
 			}
 		}
@@ -160,8 +160,8 @@ public class ShelfController {
 	    String newIDString = Integer.toString(newID); 
 	    //s = s.replaceAll("-", "");
 	    String newName = newIDString + suffix;
-	    String url = "/src/images/shelf/"+dirName+"/"+newName;
-	    String parentPath = absolutePath+"/src/images/shelf/"+dirName;
+	    String url = "/myimages/shelf/"+dirName+"/"+newName;
+	    String parentPath = absolutePath+"/myimages/shelf/"+dirName;
 	    File dest = new File(parentPath, newName);
 	    try {
 	        //目录不存在则创建，依赖google的guava工具包

@@ -15,6 +15,13 @@ class Choose {
 	private List<Integer> chooseClass;
 	private List<Integer> chooseShelves;
 	private List<Integer> chooseShelvesClass;
+	private int pictureNumber;
+	public int getPictureNumber() {
+		return pictureNumber;
+	}
+	public void setPictureNumber(int pictureNumber) {
+		this.pictureNumber = pictureNumber;
+	}
 	public List<Integer> getChooseClass() {
 		return chooseClass;
 	}
@@ -63,14 +70,15 @@ public class ComposeController {
 		String goodsContent=new String();
 		String shelvesContent=new String();
 		
-		//两个txt文本的路径
-		String goodsTextPath=absolutePath+"/goods_path.txt";
-		String shelvesTextPath=absolutePath+"/shelves_path.txt";
+		//三个txt文本的路径
+		String goodsTextPath="./goods_path.txt";
+		String shelvesTextPath="./shelves_path.txt";
+		String pictureNumberPath="./picture_number.txt";
 		
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
 			String currentClassNoString=Integer.toString(classNo);
-			goodsContent+=absolutePath+"/src/images/"+currentClassNoString+"\n";
+			goodsContent+=absolutePath+"/myimages/"+currentClassNoString+"\n";
 		}
 		fileProcess.writeFile(goodsContent, goodsTextPath);
 		
@@ -82,13 +90,19 @@ public class ComposeController {
 			String currentShelfIDSuffix = shelfSourcePath.substring(shelfSourcePath.lastIndexOf("."));
 			String currentShelfClassIDString=Integer.toString(currentShelfClassID);
 			String currentShelfIDString=Integer.toString(currentShelfID);
-			shelvesContent+=absolutePath+"/src/images/shelf/"+currentShelfClassIDString+"/"+currentShelfIDString+currentShelfIDSuffix+",";
-			shelvesContent+=absolutePath+"/src/images/shelf/"+currentShelfClassIDString+"/"+currentShelfIDString+".xml\n";
+			shelvesContent+=absolutePath+"/myimages/shelf/"+currentShelfClassIDString+"/"+currentShelfIDString+currentShelfIDSuffix+",";
+			shelvesContent+=absolutePath+"/myimages/shelf/"+currentShelfClassIDString+"/"+currentShelfIDString+".xml\n";
 		}
 		fileProcess.writeFile(shelvesContent, shelvesTextPath);
 		
+		
+		//以下是对合成图片数量的处理
+		int mergePictureNumber=choose.getPictureNumber();
+		String mergePictureNumberString=Integer.toString(mergePictureNumber);
+		fileProcess.writeFile(mergePictureNumberString, pictureNumberPath);
+		
 		String pythonPath=pathController.getPythonPath();
-		String pyPath=absolutePath+"/PhotoMerge.py";
+		String pyPath="./PhotoMerge.py";
 		fileProcess.runPython(pythonPath,pyPath);
 	}
 }
