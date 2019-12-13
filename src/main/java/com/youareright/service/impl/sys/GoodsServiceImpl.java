@@ -64,6 +64,4 @@ public class GoodsServiceImpl implements GoodsService {
 	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath) {
 		goodsDao.modifyGoods(oldClassID, newClassID, newGoodsPath);
 	}
-
-
 }
