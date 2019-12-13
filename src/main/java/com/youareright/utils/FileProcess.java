@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.zip.ZipFile;
 
 public class FileProcess {
 	
@@ -117,6 +118,20 @@ public class FileProcess {
 		public void makeDirectory(String path) {
 			File file = new File(path);
 			file.mkdir();
+		}
+		
+		public int countNumberInAZip(String zipPath) {
+			try {
+				ZipFile zip = new ZipFile(zipPath);
+				int number=zip.size();
+				zip.close();
+				return number;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return -1;
+			
 		}
 
 }

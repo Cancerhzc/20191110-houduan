@@ -17,4 +17,6 @@ public interface PhotoMergeService {
 	public Integer mergesSize(String searchCondition,int pageSize,int start);
 	
 	public ArrayList<PhotoMergeEntity> mergesList(String searchCondition,int pageSize, int start);
+	
+	public String getMergeUrlByMergeID(int mergeID);
 }

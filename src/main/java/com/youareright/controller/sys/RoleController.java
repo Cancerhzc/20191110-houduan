@@ -1,9 +1,13 @@
 package com.youareright.controller.sys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.youareright.model.sys.RoleMenuEntity;
+import com.youareright.service.impl.sys.RoleMenuServiceImpl;
+import com.youareright.service.sys.RoleMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +30,8 @@ public class RoleController {
 	@Resource(name = "roleServiceImpl")
 	private RoleService roleService;
 
+	@Resource(name = "roleMenuServiceImpl")
+	private RoleMenuService roleMenuService;
 	/**
 	 * 获取role表数据
 	 * 
@@ -66,6 +72,21 @@ public class RoleController {
 	public RoleEntity updateRole(@RequestBody RoleEntity roleEntity, @PathVariable int id) {
 		if (roleEntity.getId() == id) {
 			roleService.updateRole(roleEntity);
+			String[] menuIds = roleEntity.getModules().split(";");
+			List<RoleMenuEntity> roleMenuEntityList = new ArrayList<RoleMenuEntity>();
+			for(String menuId:menuIds){
+				RoleMenuEntity roleMenuEntity = new RoleMenuEntity();
+				roleMenuEntity.setRoleId(id);
+				try {
+					roleMenuEntity.setMenuId(Integer.parseInt(menuId));
+					roleMenuEntityList.add(roleMenuEntity);
+				} catch (Exception e){
+					System.out.println(e);
+				}
+
+
+			}
+			roleMenuService.alterEntity(roleMenuEntityList);
 		}
 		log.debug("The method is ending");
 		return roleEntity;

@@ -1,11 +1,19 @@
 package com.youareright.model.sys;
 
 public class PhotoMergeEntity {
+	private int mergeID;
 	private int mergeUserID;
 	private String submitTime;
 	private int mergePictureNum;
 	private String downloadUrl;
 	private int state;
+	
+	public int getMergeID() {
+		return mergeID;
+	}
+	public void setMergeID(int mergeID) {
+		this.mergeID = mergeID;
+	}
 	public int getMergeUserID() {
 		return mergeUserID;
 	}

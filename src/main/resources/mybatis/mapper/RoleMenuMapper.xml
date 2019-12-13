@@ -23,6 +23,8 @@
     <!-- 通过Entity插入关系 -->
     <insert id="insertEntity">
         insert into r_role_menu(role_id, menu_id)
+        <if test="entity != null">
             values (#{entity.roleId},#{entity.menuId})
+        </if>
     </insert>
 </mapper>

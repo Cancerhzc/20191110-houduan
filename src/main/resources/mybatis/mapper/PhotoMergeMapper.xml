@@ -62,5 +62,13 @@
 		</where>
 	</select>
 	
+	<!-- 通过自增ID获取下载地址-->
+	<select id="getMergeUrlByMergeID" resultType="String">  
+	<![CDATA[select downloadUrl FROM picture_merge]]>
+	    <where>
+			mergeID = #{mergeID}
+		</where>
+	</select>
+	
 	
 </mapper>

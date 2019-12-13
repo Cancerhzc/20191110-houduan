@@ -37,4 +37,8 @@ public class PhotoMergeSeriveImpl implements PhotoMergeService {
 	public ArrayList<PhotoMergeEntity> mergesList(String searchCondition,int pageSize, int start) {
 		return photoMergeDao.mergesList(searchCondition,pageSize, start);
 	}
+	
+	public String getMergeUrlByMergeID(int mergeID) {
+		return photoMergeDao.getMergeUrlByMergeID(mergeID);
+	}
 }

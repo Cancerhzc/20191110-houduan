@@ -18,10 +18,12 @@ public interface PhotoMergeDao {
 	
 	public void deleteMerges(@Param("groupId") List<String> groupId);
 	
-	public void updateMerges(int mergeID);
+	public void updateMerges(@Param("mergeID") int mergeID);
 	
 	public Integer mergesSize(@Param("searchCondition")String searchCondition,@Param("pageSize") int pageSize,@Param("start") int start);
 	
-	public ArrayList<PhotoMergeEntity> mergesList(String searchCondition,int pageSize, int start);
+	public ArrayList<PhotoMergeEntity> mergesList(@Param("searchCondition")String searchCondition,@Param("pageSize")int pageSize,@Param("start") int start);
+	
+	public String getMergeUrlByMergeID(@Param("mergeID")int mergeID);
 
 }
