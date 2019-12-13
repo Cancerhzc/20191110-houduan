@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youareright.dao.PhotoMergeDao">
+	<resultMap id="photoMergeMap" type="com.youareright.model.sys.PhotoMergeEntity">
+		<id column="mergeID" property="mergeID" />
+		<result column="mergeUserID" property="mergeUserID" />
+		<result column="submitTime" property="submitTime" />
+		<result column="mergePictureNum" property="mergePictureNum" />
+		<result column="downloadUrl" property="downloadUrl" />
+		<result column="state" property="state"/>
+	</resultMap>
+	
+	<insert id="insertPhotoMerge">
+		insert into picture_merge(mergeUserID,submitTime,mergePictureNum,downloadUrl,state)
+		values
+		(#{photoMergeEntity.mergeUserID},#{photoMergeEntity.submitTime},#{photoMergeEntity.mergePictureNum},#{photoMergeEntity.downloadUrl},#{photoMergeEntity.state})
+	</insert>
+	
+	<!-- 获取合成列表 -->
+	<select id="MergeList" resultMap="photoMergeMap">
+	<![CDATA[SELECT mergeID, mergeUserID, submitTime, mergePictureNum, downloadUrl, state FROM picture_merge]]>
+		<where>
+			<if test="searchCondition != null and searchCondition != '' ">
+				(mergeUserID like "%"#{searchCondition}"%")
+			</if>
+		</where>
+	    <![CDATA[order by submitTime desc]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 批量删除合成列表信息 -->
+	<delete id="deleteMerges">
+		delete from picture_merge
+		<where>
+			<if test="groupId !=null">
+				mergeID in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+	
+	<update id="updateMerges">
+		update picture_merge set
+		<if test="state != null">state = #{photoMergeEntity.state},</if>
+		<where>
+			mergeID = #{mergeID}
+		</where>
+	</update>
+	
+	<!-- 获取合成列表的总量 -->
+	<select id="mergesSize" resultType="Integer">  
+	<![CDATA[select count(*) FROM picture_merge]]>
+	    <where>
+			<if test="searchCondition != null and searchCondition != '' ">
+				(mergeUserID like "%"#{searchCondition}"%")
+			</if>
+		</where>
+	</select>
+	
+	
+</mapper>

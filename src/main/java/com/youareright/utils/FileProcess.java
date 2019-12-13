@@ -64,7 +64,6 @@ public class FileProcess {
 			}
 		}
 		
-		
 		public boolean deleteFile(String fileName) {    //删除文件或文件夹
 			File file = new File(fileName);
 	        if (!file.exists()) {
@@ -74,7 +73,6 @@ public class FileProcess {
 	        if (file.isDirectory()) {
 	            File[] files = file.listFiles();
 	            for (File f : files) {
-	            	System.out.println("您删除了："+f.getAbsolutePath());
 	            	String currentPath=f.getAbsolutePath();
 	            	deleteFile(currentPath);
 	            }
@@ -93,7 +91,6 @@ public class FileProcess {
 				BufferedWriter bw = new BufferedWriter(fileWriter);
 				bw.write(content);
 				bw.close();
-				System.out.println("WriteFileSuccessfully!");
 				return 1;
 		    } catch (IOException e) {
 		    	e.printStackTrace();
@@ -102,22 +99,17 @@ public class FileProcess {
 		        
 		}
 		
-		public void runPython(String pythonPath,String pyPath) {
+		public void runPython(String pythonPath,String pyPath,String goodsTxtPath,String shelvesTxtPath,String pictureNumTxtPath,String outPath) {
 			Process proc;
 	        try {
-	            String[] args1 = new String[] {pythonPath, pyPath};//pythonPath处为你系统中python的安装位置；pyPath为想要执行的python文件位置
+	            String[] args1 = new String[] {pythonPath, pyPath,goodsTxtPath,shelvesTxtPath,pictureNumTxtPath,outPath,"&"};
+	            //pythonPath处为你系统中python的安装位置；pyPath为想要执行的python文件位置
+	            //
 	            proc=Runtime.getRuntime().exec(args1);
 	            //用输入输出流来截取结果
 	            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-	            String line = null;
-	            while ((line = in.readLine()) != null) {
-	                System.out.println(line);
-	            }
 	            in.close();
-	            proc.waitFor();
 	        } catch (IOException e) {
-	            e.printStackTrace();
-	        } catch (InterruptedException e) {
 	            e.printStackTrace();
 	        } 
 		}

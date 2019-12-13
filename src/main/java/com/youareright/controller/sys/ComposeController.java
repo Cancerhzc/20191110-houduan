@@ -9,12 +9,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.youareright.service.sys.ShelfService;
+import com.youareright.service.sys.UserService;
+import com.youareright.model.sys.PhotoMergeEntity;
+import com.youareright.service.sys.PhotoMergeService;
 import com.youareright.utils.FileProcess;
+import com.youareright.utils.TimeProcess;
 
 class Choose {
 	private List<Integer> chooseClass;
 	private List<Integer> chooseShelves;
 	private List<Integer> chooseShelvesClass;
+	private String submitLoginName;
+	public String getSubmitLoginName() {
+		return submitLoginName;
+	}
+	public void setSubmitLoginName(String submitLoginName) {
+		this.submitLoginName = submitLoginName;
+	}
 	private int pictureNumber;
 	public int getPictureNumber() {
 		return pictureNumber;
@@ -49,10 +60,20 @@ public class ComposeController {
 	@Resource(name = "shelfServiceImpl")
 	private ShelfService shelfService;
 	
+	@Resource(name = "userServiceImpl")
+	private UserService userService;//获取合成图片的人的ID
+	
+	@Resource(name = "photoMergeServiceImpl")
+	private PhotoMergeService photoMergeService;
+	
 	private PathController pathController=new PathController();
 	String absolutePath=pathController.getPath();
 	
 	private FileProcess fileProcess=new FileProcess();
+	
+	private TimeProcess timeProcess=new TimeProcess();
+	
+	private PhotoMergeEntity photoMergeEntity=new PhotoMergeEntity();
 	
 	/**
 	 * 图像合成
@@ -66,17 +87,30 @@ public class ComposeController {
 		List<Integer> shelvesList=choose.getChooseShelves();
 		List<Integer> shelvesClassList=choose.getChooseShelvesClass();
 		
-		//两个txt文本的内容初始化
+		
+		//提交时间
+		String submitTime=timeProcess.nowTime();
+		
+		//获取提交合成人员的信息
+		int currentUserID=userService.getUserEntityByLoginName(choose.getSubmitLoginName()).getId();
+		String currentUserIDString=Integer.toString(currentUserID);
+		
+		//三个txt文本的内容初始化
 		String goodsContent=new String();
 		String shelvesContent=new String();
+		String mergePictureNumberString=new String();
+		
+		//用户-时间专属对应的文件夹
+		String userTimeDir=currentUserIDString+"-"+submitTime;
 		
 		//三个txt文本的路径
-		String goodsTextPath=pathController.getGoodsTextPath();
-		String shelvesTextPath=pathController.getShelvesTextPath();
-		String pictureNumberPath=pathController.getPictureNumberPath();
+		String goodsTextPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/goods_path.txt";
+		String shelvesTextPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/shelves_path.txt";
+		String pictureNumberPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/picture_number.txt";
 		
-		//输出路径
-		String outPath=pathController.getOutPath();
+		//输出路径与下载地址
+		String outPath=pathController.getPath()+"/userMergePhotos";
+		String downloadUrl=pathController.getPath()+"/userMergePhotos"+"/"+userTimeDir+".zip";
 		
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
@@ -101,16 +135,24 @@ public class ComposeController {
 		
 		//以下是对合成图片数量的处理
 		int mergePictureNumber=choose.getPictureNumber();
-		String mergePictureNumberString=Integer.toString(mergePictureNumber);
+		mergePictureNumberString=Integer.toString(mergePictureNumber);
 		fileProcess.writeFile(mergePictureNumberString, pictureNumberPath);
 		
+		//获得执行路径
 		String pythonPath=pathController.getPythonPath();
 		String pyPath=pathController.getPyPath();
 		
-		fileProcess.deleteFile(outPath);
-		fileProcess.makeDirectory(outPath);
-		fileProcess.runPython(pythonPath,pyPath);
+		//执行python
+		fileProcess.runPython(pythonPath,pyPath,goodsTextPath,shelvesTextPath,pictureNumberPath,downloadUrl);
 		
-		return "合成成功啦！";
+		//对添加到数据库实体的处理
+		photoMergeEntity.setSubmitTime(submitTime);
+		photoMergeEntity.setMergeUserID(currentUserID);
+		photoMergeEntity.setMergePictureNum(mergePictureNumber);
+		photoMergeEntity.setState(0);
+		photoMergeEntity.setDownloadUrl(downloadUrl);
+		photoMergeService.insertPhotoMerge(photoMergeEntity);
+		
+		return "已交给后台处理";
 	}
 }
