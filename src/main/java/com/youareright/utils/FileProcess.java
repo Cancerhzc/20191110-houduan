@@ -103,7 +103,7 @@ public class FileProcess {
 		public void runPython(String pythonPath,String pyPath,String goodsTxtPath,String shelvesTxtPath,String pictureNumTxtPath,String outPath) {
 			Process proc;
 	        try {
-	            String[] args1 = new String[] {pythonPath, pyPath,goodsTxtPath,shelvesTxtPath,pictureNumTxtPath,outPath,"&"};
+	            String[] args1 = new String[] {pythonPath, pyPath,goodsTxtPath,shelvesTxtPath,pictureNumTxtPath,outPath};
 	            //pythonPath处为你系统中python的安装位置；pyPath为想要执行的python文件位置
 	            //
 	            proc=Runtime.getRuntime().exec(args1);
@@ -117,7 +117,9 @@ public class FileProcess {
 		
 		public void makeDirectory(String path) {
 			File file = new File(path);
-			file.mkdir();
+			if(!file.exists()) {
+				file.mkdirs();
+			}
 		}
 		
 		public int countNumberInAZip(String zipPath) {

@@ -1,14 +1,23 @@
 package com.youareright.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TimeProcess {
-    public String nowTime() { 
+    public List<String> nowTime() { 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-		String now=df.format(new Date());
-		return now;
+		SimpleDateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
+		Date date=new Date();
+		String now=df.format(date);
+		String nowPath=df2.format(date);
+		List<String> timeList=new ArrayList<String>();
+		timeList.add(now);
+		timeList.add(nowPath);
+		return timeList;
     }
+    
     
     public String waitTimeString(int number) {
     	int second=5*number;

@@ -89,8 +89,8 @@ public class ComposeController {
 		
 		
 		//提交时间
-		String submitTime=timeProcess.nowTime();
-		
+		String submitTime=timeProcess.nowTime().get(0);
+
 		//获取提交合成人员的信息
 		int currentUserID=userService.getUserEntityByLoginName(choose.getSubmitLoginName()).getId();
 		String currentUserIDString=Integer.toString(currentUserID);
@@ -101,16 +101,20 @@ public class ComposeController {
 		String mergePictureNumberString=new String();
 		
 		//用户-时间专属对应的文件夹
-		String userTimeDir=currentUserIDString+"-"+submitTime;
+		String timePath=timeProcess.nowTime().get(1);
+		String userTimeDir=currentUserIDString+"-"+timePath;
 		
 		//三个txt文本的路径
+		fileProcess.makeDirectory(pathController.getIniBasicPath()+"/"+userTimeDir);
 		String goodsTextPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/goods_path.txt";
 		String shelvesTextPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/shelves_path.txt";
 		String pictureNumberPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/picture_number.txt";
 		
+	
 		//输出路径与下载地址
 		String outPath=pathController.getPath()+"/userMergePhotos";
 		String downloadUrl=pathController.getPath()+"/userMergePhotos"+"/"+userTimeDir+".zip";
+		
 		
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
@@ -143,6 +147,7 @@ public class ComposeController {
 		String pyPath=pathController.getPyPath();
 		
 		//执行python
+		fileProcess.makeDirectory(outPath);
 		fileProcess.runPython(pythonPath,pyPath,goodsTextPath,shelvesTextPath,pictureNumberPath,downloadUrl);
 		
 		//对添加到数据库实体的处理
