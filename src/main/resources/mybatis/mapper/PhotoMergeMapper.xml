@@ -46,7 +46,7 @@
 	
 	<update id="updateMerges">
 		update picture_merge set
-		<if test="state != null">state = #{photoMergeEntity.state},</if>
+		state = #{state}
 		<where>
 			mergeID = #{mergeID}
 		</where>

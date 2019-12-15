@@ -18,7 +18,7 @@ public interface PhotoMergeDao {
 	
 	public void deleteMerges(@Param("groupId") List<String> groupId);
 	
-	public void updateMerges(@Param("mergeID") int mergeID);
+	public void updateMerges(@Param("mergeID") int mergeID,@Param("state")int state);
 	
 	public Integer mergesSize(@Param("searchCondition")String searchCondition,@Param("pageSize") int pageSize,@Param("start") int start);
 	

@@ -87,6 +87,8 @@ public class MergeManagerController {
 	
 	private TimeProcess timeProcess=new TimeProcess();
 	
+	private PathController pathController=new PathController();
+	
 	@Resource(name = "photoMergeServiceImpl")
 	private PhotoMergeService photoMergeService;
 	
@@ -106,7 +108,7 @@ public class MergeManagerController {
 			for(int i=0;i<groupIDSize;i++) {
 				String currentMergeIDString=groupId.get(i);
 				int currentMergeID=Integer.valueOf(currentMergeIDString);
-				String currentMergePath=photoMergeService.getMergeUrlByMergeID(currentMergeID);
+				String currentMergePath=pathController.getPath()+photoMergeService.getMergeUrlByMergeID(currentMergeID);
 				fileProcess.deleteFile(currentMergePath);
 			}
 		}
@@ -121,7 +123,7 @@ public class MergeManagerController {
 	 * @return
 	 */
 	@GetMapping("/getMergePictures")
-	public PageResult goodsesList(String searchCondition, int pageSize, int page) {
+	public PageResult mergesList(String searchCondition, int pageSize, int page) {
 		PageResult pageResult = new PageResult();
 		List<MergePhotoInfomation> mergePhotoMoreInfoList=new ArrayList<MergePhotoInfomation>();  //用于给前端的完整信息
 		List<PhotoMergeEntity> photoMergeInfoList=photoMergeService.mergesList(searchCondition, pageSize, page * pageSize);
@@ -138,22 +140,25 @@ public class MergeManagerController {
 			tempInfo.setSubmitTime(photoMergeInfoList.get(i).getSubmitTime());
 			tempInfo.setState(state);
 			tempInfo.setMergePhotoNum(mergePictureNumber);
-			
+			String userTimeDir=downloadPath.substring(downloadPath.lastIndexOf("/")+1, downloadPath.lastIndexOf("."));
 			if(state==0) {
-				int donePictureNumber=fileProcess.countNumberInAZip(downloadPath);//获取已完成图片数量
+				String doneTxtPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/done_number.txt";
+				int donePictureNumber=fileProcess.countNumberInAZip(doneTxtPath);//获取已完成图片数量
 				tempInfo.setCurrentMergeDoneNum(donePictureNumber);
 				if(donePictureNumber==mergePictureNumber) {
-					photoMergeService.updateMerges(1);
+					photoMergeService.updateMerges(photoMergeInfoList.get(i).getMergeID(),1);
 					tempInfo.setState(1);
 					tempInfo.setDownloadUrl(downloadPath);
+					fileProcess.deleteFile(pathController.getIniBasicPath()+"/"+userTimeDir);
 				}
 				else {
-					int toMergePictureNumber=mergePictureNumber-mergePictureNumber;
+					int toMergePictureNumber=mergePictureNumber-donePictureNumber;
 					String ExpectedWaitTime=timeProcess.waitTimeString(toMergePictureNumber);
 					tempInfo.setWaitTime(ExpectedWaitTime);
 				}
 			}
 			else {
+				tempInfo.setCurrentMergeDoneNum(mergePictureNumber);
 				tempInfo.setDownloadUrl(downloadPath);
 			}
 			mergePhotoMoreInfoList.add(tempInfo);

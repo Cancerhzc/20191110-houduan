@@ -106,8 +106,8 @@ public class ClassController {
 					goodsService.modifyGoods(selectClassID, newClassID, src);
 					fileProcess.moveFile(srcFilePath,dstPath);
 				}
+				fileProcess.deleteFile(absolutePath+"/myimages/"+selectClassIDString);//删除原文件夹
 				classService.del(selectClassID);
-				System.out.println("goods表改了，原来的class删了");
 			}
 			else {
 				return existGoodsName;//如果输入的标签名在数据库中已经存在，但商品名不一致的话，需要返回数据库已有的商品名

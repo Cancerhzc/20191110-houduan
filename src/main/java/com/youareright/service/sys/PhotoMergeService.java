@@ -12,7 +12,7 @@ public interface PhotoMergeService {
 	
 	public void deleteMerges(List<String> groupId);
 	
-	public void updateMerges(int mergeID);
+	public void updateMerges(int mergeID,int state);
 	
 	public Integer mergesSize(String searchCondition,int pageSize,int start);
 	

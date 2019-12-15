@@ -115,6 +115,7 @@ public class ComposeController {
 		String outPath=pathController.getPath()+"/userMergePhotos";
 		String downloadPath=pathController.getPath()+"/userMergePhotos"+"/"+userTimeDir+".zip";
 		String downloadUrl="/userMergePhotos"+"/"+userTimeDir+".zip";
+		String doneNumberPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/done_number.txt";
 		
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
@@ -148,7 +149,7 @@ public class ComposeController {
 		
 		//执行python
 		fileProcess.makeDirectory(outPath);
-		fileProcess.runPython(pythonPath,pyPath,goodsTextPath,shelvesTextPath,pictureNumberPath,downloadPath);
+		fileProcess.runPython(pythonPath,pyPath,goodsTextPath,shelvesTextPath,pictureNumberPath,downloadPath,doneNumberPath);
 		
 		//对添加到数据库实体的处理
 		photoMergeEntity.setSubmitTime(submitTime);

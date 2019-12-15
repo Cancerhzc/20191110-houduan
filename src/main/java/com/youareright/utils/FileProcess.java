@@ -3,6 +3,7 @@ package com.youareright.utils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -100,10 +101,10 @@ public class FileProcess {
 		        
 		}
 		
-		public void runPython(String pythonPath,String pyPath,String goodsTxtPath,String shelvesTxtPath,String pictureNumTxtPath,String outPath) {
+		public void runPython(String pythonPath,String pyPath,String goodsTxtPath,String shelvesTxtPath,String pictureNumTxtPath,String outPath,String doneNumberPath) {
 			Process proc;
 	        try {
-	            String[] args1 = new String[] {pythonPath, pyPath,goodsTxtPath,shelvesTxtPath,pictureNumTxtPath,outPath};
+	            String[] args1 = new String[] {pythonPath, pyPath,goodsTxtPath,shelvesTxtPath,pictureNumTxtPath,outPath,doneNumberPath};
 	            //pythonPath处为你系统中python的安装位置；pyPath为想要执行的python文件位置
 	            //
 	            proc=Runtime.getRuntime().exec(args1);
@@ -122,18 +123,46 @@ public class FileProcess {
 			}
 		}
 		
-		public int countNumberInAZip(String zipPath) {
-			try {
-				ZipFile zip = new ZipFile(zipPath);
-				int number=zip.size();
-				zip.close();
-				return number;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		public int countNumberInAZip(String txtPath) {
+//			try {
+//				ZipFile zip = new ZipFile(zipPath);
+//				int number=zip.size();
+//				zip.close();
+//				return number;
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			return 0;
+			String numString=readTxt(txtPath);
+			if(numString==null) {
+				return 0;
 			}
-			return 0;
-			
+			else {
+				int number=Integer.valueOf(numString);
+				return number;
+			}
 		}
+		
+		public static String readTxt(String txtPath) {
+	        File file = new File(txtPath);
+	        if(file.isFile() && file.exists()){
+	            try {
+	                FileInputStream fileInputStream = new FileInputStream(file);
+	                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+	                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+	                StringBuffer sb = new StringBuffer();
+	                String text = null;
+	                while((text = bufferedReader.readLine()) != null){
+	                    sb.append(text);
+	                }
+	                bufferedReader.close();
+	                return sb.toString();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        return null;
+	    }
 
 }

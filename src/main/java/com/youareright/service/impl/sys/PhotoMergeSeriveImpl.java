@@ -26,8 +26,8 @@ public class PhotoMergeSeriveImpl implements PhotoMergeService {
 		photoMergeDao.deleteMerges(groupId);
 	}
 	
-	public void updateMerges(int mergeID) {
-		photoMergeDao.updateMerges(mergeID);
+	public void updateMerges(int mergeID,int state) {
+		photoMergeDao.updateMerges(mergeID,state);
 	}
 	
 	public Integer mergesSize(String searchCondition,int pageSize,int start) {

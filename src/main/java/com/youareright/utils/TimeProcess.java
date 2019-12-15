@@ -20,7 +20,7 @@ public class TimeProcess {
     
     
     public String waitTimeString(int number) {
-    	int second=5*number;
+    	int second=10*number;
     	int minute=second/60;
     	int hour=minute/60;
     	String waitTime;
