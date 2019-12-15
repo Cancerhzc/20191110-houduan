@@ -132,7 +132,7 @@ public class FileProcess {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return -1;
+			return 0;
 			
 		}
 

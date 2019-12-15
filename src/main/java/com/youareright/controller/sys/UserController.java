@@ -26,7 +26,7 @@ public class UserController {
 
 	@Resource(name = "userServiceImpl")
 	private UserService userService;
-
+	
 	@GetMapping("/user/{loginName}")
 	public UserEntity userGet(@PathVariable String loginName) {
 		UserEntity userEntity = userService.getUserEntityByLoginName(loginName);
@@ -81,19 +81,6 @@ public class UserController {
 		return userEntity;
 	}
 	
-	/**
-	 * 通过用户ID获得用户名
-	 * 
-	 * @param id
-	 * @return
-	 */
-	public String getUsernameByUserID(int id) {
-		String username=userService.getUsernameByUserID(id);
-		if(username==null) {
-			username="该用户不存在";
-		}
-		return username;
-	}
 
 	/**
 	 * 删除用户信息
