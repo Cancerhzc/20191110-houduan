@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.youareright.model.sys.PageResult;
 import com.youareright.model.sys.PhotoMergeEntity;
 import com.youareright.service.sys.PhotoMergeService;
+import com.youareright.service.sys.UserService;
 import com.youareright.utils.FileProcess;
 import com.youareright.utils.TimeProcess;
 
 class MergePhotoInfomation {
 	private int mergeID;         //自增的ID
-	private int mergeUserID;    //提交合成的用户ID
+	private String mergeUsername;    //提交合成的用户
 	private String submitTime;    //提交时间
 	private int mergePhotoNum;   //所需合成张数
 	private int currentMergeDoneNum;   //已合成张数
@@ -33,11 +34,11 @@ class MergePhotoInfomation {
 	public void setMergeID(int mergeID) {
 		this.mergeID = mergeID;
 	}
-	public int getMergeUserID() {
-		return mergeUserID;
+	public String getMergeUsername() {
+		return mergeUsername;
 	}
-	public void setMergeUserID(int mergeUserID) {
-		this.mergeUserID = mergeUserID;
+	public void setMergeUsername(String mergeUsername) {
+		this.mergeUsername = mergeUsername;
 	}
 	public String getSubmitTime() {
 		return submitTime;
@@ -48,8 +49,8 @@ class MergePhotoInfomation {
 	public int getMergePhotoNum() {
 		return mergePhotoNum;
 	}
-	public void setMergePhotoNum(int mergePictureNum) {
-		this.mergePhotoNum = mergePictureNum;
+	public void setMergePhotoNum(int mergePhotoNum) {
+		this.mergePhotoNum = mergePhotoNum;
 	}
 	public int getCurrentMergeDoneNum() {
 		return currentMergeDoneNum;
@@ -75,6 +76,7 @@ class MergePhotoInfomation {
 	public void setDownloadUrl(String downloadUrl) {
 		this.downloadUrl = downloadUrl;
 	}
+
 }
 
 @RestController
@@ -87,6 +89,9 @@ public class MergeManagerController {
 	
 	@Resource(name = "photoMergeServiceImpl")
 	private PhotoMergeService photoMergeService;
+	
+	@Resource(name = "userServiceImpl")
+	private UserService userService;
 	
 	/**
 	 * 删除合并的图片信息
@@ -126,8 +131,10 @@ public class MergeManagerController {
 			String downloadPath=photoMergeInfoList.get(i).getDownloadUrl();
 			int state=photoMergeInfoList.get(i).getState();
 			int mergePictureNumber=photoMergeInfoList.get(i).getMergePictureNum();
+			int mergeUserID=photoMergeInfoList.get(i).getMergeUserID();
+			String mergeUsername=userService.getUsernameByUserID(mergeUserID);
 			tempInfo.setMergeID(photoMergeInfoList.get(i).getMergeID());
-			tempInfo.setMergeUserID(photoMergeInfoList.get(i).getMergeUserID());
+			tempInfo.setMergeUsername(mergeUsername);
 			tempInfo.setSubmitTime(photoMergeInfoList.get(i).getSubmitTime());
 			tempInfo.setState(state);
 			tempInfo.setMergePhotoNum(mergePictureNumber);

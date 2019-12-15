@@ -89,6 +89,9 @@ public class UserController {
 	 */
 	public String getUsernameByUserID(int id) {
 		String username=userService.getUsernameByUserID(id);
+		if(username==null) {
+			username="该用户不存在";
+		}
 		return username;
 	}
 
