@@ -23,10 +23,11 @@
 	</select>
 	
 	<select id="getUsernameByUserID" resultType="String">
-	<![CDATA[select name from sys_user]]>
+	SELECT IFNULL((SELECT NAME FROM sys_user
 		<where>
-			id = #{id}
+			id = #{id})
 		</where>
+	,"该用户不存在") FROM DUAL;
 	</select>
 	
 	<!-- 获取user列表的总量 -->
