@@ -21,6 +21,16 @@
 			limit #{start},#{pageSize}
 		</if>
 	</select>
+	<select id="getUsernameByUserID" resultMap="String">
+	<![CDATA[select name from sys_user]]>
+		<where>
+				id = #{id}
+		</where>
+	    <![CDATA[ order by id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
 	<!-- 获取user列表的总量 -->
 	<select id="usersSize" resultType="Integer">  
 	    <![CDATA[select count(*) from sys_user]]>

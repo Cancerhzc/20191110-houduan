@@ -50,4 +50,6 @@ public interface UserService {
 	 * @param groupId
 	 */
 	public void deleteUsers(List<String> groupId);
+	
+	public String getUsernameByUserID(int id);
 }

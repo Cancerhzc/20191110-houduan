@@ -3,6 +3,7 @@ package com.youareright.controller.sys;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -58,7 +59,58 @@ class Mark{
 	public void setGroupId(List<String> groupId) {
 		this.groupId = groupId;
 	}	
-	
+}
+class ReturnGoodsList {
+    private int goodsID;
+    private String goodsClass;
+    private String goodsPath;
+    private String goodsFilename;
+    private int goodsState;
+    private String uploadUsername;
+    private String markUsername;
+	public int getGoodsID() {
+		return goodsID;
+	}
+	public void setGoodsID(int goodsID) {
+		this.goodsID = goodsID;
+	}
+	public String getGoodsClass() {
+		return goodsClass;
+	}
+	public void setGoodsClass(String goodsClass) {
+		this.goodsClass = goodsClass;
+	}
+	public String getGoodsPath() {
+		return goodsPath;
+	}
+	public void setGoodsPath(String goodsPath) {
+		this.goodsPath = goodsPath;
+	}
+	public String getGoodsFilename() {
+		return goodsFilename;
+	}
+	public void setGoodsFilename(String goodsFilename) {
+		this.goodsFilename = goodsFilename;
+	}
+	public int getGoodsState() {
+		return goodsState;
+	}
+	public void setGoodsState(int goodsState) {
+		this.goodsState = goodsState;
+	}
+	public String getUploadUsername() {
+		return uploadUsername;
+	}
+	public void setUploadUsername(String uploadUsername) {
+		this.uploadUsername = uploadUsername;
+	}
+	public String getMarkUsername() {
+		return markUsername;
+	}
+	public void setMarkUsername(String markUsername) {
+		this.markUsername = markUsername;
+	}
+
 }
 
 @RestController
@@ -196,7 +248,30 @@ public class GoodsController {
 	@GetMapping("/goods")
 	public PageResult goodsesList(String searchCondition, int pageSize, int page) {
 		PageResult pageResult = new PageResult();
-		pageResult.setData(goodsService.goodsesList(searchCondition, pageSize, page * pageSize));
+		List<GoodsEntity> goodsesList=goodsService.goodsesList(searchCondition, pageSize, page * pageSize);
+		List<ReturnGoodsList> returnGoodesList=new ArrayList<ReturnGoodsList>();
+		int goodsesListLength=goodsesList.size();
+		for(int i=0;i<goodsesListLength;i++) {
+		    int goodsID=goodsesList.get(i).getGoodsID();
+		    String goodsClass=goodsesList.get(i).getGoodsClass();
+		    String goodsPath=goodsesList.get(i).getGoodsPath();
+		    String goodsFilename=goodsesList.get(i).getGoodsFilename();
+		    int goodsState=goodsesList.get(i).getGoodsState();
+		    int uploadUser=goodsesList.get(i).getUploadUser();
+		    int markUserID=goodsesList.get(i).getMarkUserID();
+		    String uploadUsername=userService.getUsernameByUserID(uploadUser);
+		    String markUsername=userService.getUsernameByUserID(markUserID);
+		    ReturnGoodsList temp=new ReturnGoodsList();
+		    temp.setGoodsID(goodsID);
+		    temp.setGoodsClass(goodsClass);
+		    temp.setGoodsPath(goodsPath);
+		    temp.setGoodsFilename(goodsFilename);
+		    temp.setGoodsState(goodsState);
+		    temp.setUploadUsername(uploadUsername);
+		    temp.setMarkUsername(markUsername);
+		    returnGoodesList.add(temp);
+		}
+		pageResult.setData(returnGoodesList);
 		pageResult.setTotalCount(goodsService.goodsesSize(searchCondition, pageSize, page * pageSize));
 		log.debug("The method is ending");
 		return pageResult;

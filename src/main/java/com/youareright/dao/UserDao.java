@@ -62,4 +62,6 @@ public interface UserDao {
 	 */
 	public void deleteUsers(@Param("groupId") List<String> groupId);
 	
+	public String getUsernameByUserID(@Param("id")int id);
+	
 }

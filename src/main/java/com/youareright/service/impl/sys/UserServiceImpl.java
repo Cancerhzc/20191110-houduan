@@ -65,5 +65,9 @@ public class UserServiceImpl implements UserService {
 	public void deleteUsers(List<String> groupId) {
 		userDao.deleteUsers(groupId);
 	}
+	
+	public String getUsernameByUserID(int id) {
+		return userDao.getUsernameByUserID(id);
+	}
 
 }

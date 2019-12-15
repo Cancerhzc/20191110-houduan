@@ -1,8 +1,8 @@
 package com.youareright.model.sys;
 
 public class GoodsEntity {
-    private Integer goodsID;
-    private Integer classID;
+    private int goodsID;
+    private int classID;
     private String goodsClass;
     private String goodsPath;
     private String goodsFilename;

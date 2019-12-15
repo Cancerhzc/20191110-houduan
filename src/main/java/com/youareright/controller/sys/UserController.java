@@ -80,6 +80,17 @@ public class UserController {
 		log.debug("The method is ending");
 		return userEntity;
 	}
+	
+	/**
+	 * 通过用户ID获得用户名
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public String getUsernameByUserID(int id) {
+		String username=userService.getUsernameByUserID(id);
+		return username;
+	}
 
 	/**
 	 * 删除用户信息

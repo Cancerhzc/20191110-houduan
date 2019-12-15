@@ -17,7 +17,7 @@
 	</insert>
 	
 	<!-- 获取合成列表 -->
-	<select id="MergeList" resultMap="photoMergeMap">
+	<select id="mergesList" resultMap="photoMergeMap">
 	<![CDATA[SELECT mergeID, mergeUserID, submitTime, mergePictureNum, downloadUrl, state FROM picture_merge]]>
 		<where>
 			<if test="searchCondition != null and searchCondition != '' ">
