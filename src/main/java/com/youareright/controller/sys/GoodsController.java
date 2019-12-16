@@ -256,11 +256,18 @@ public class GoodsController {
 		    String goodsClass=goodsesList.get(i).getGoodsClass();
 		    String goodsPath=goodsesList.get(i).getGoodsPath();
 		    String goodsFilename=goodsesList.get(i).getGoodsFilename();
+		    String markUsername=new String();
 		    int goodsState=goodsesList.get(i).getGoodsState();
 		    int uploadUser=goodsesList.get(i).getUploadUser();
-		    int markUserID=goodsesList.get(i).getMarkUserID();
-		    String uploadUsername=userService.getUsernameByUserID(uploadUser);
-		    String markUsername=userService.getUsernameByUserID(markUserID);
+		    if(goodsesList.get(i).getMarkUserID()!=null) {
+		    	int markUserID=goodsesList.get(i).getMarkUserID();
+		    	markUsername=userService.getUsernameByUserID(markUserID);
+		    }
+		    else 
+		    {
+		    	markUsername="[未打标]";
+		    }
+	    	String uploadUsername=userService.getUsernameByUserID(uploadUser);
 		    ReturnGoodsList temp=new ReturnGoodsList();
 		    temp.setGoodsID(goodsID);
 		    temp.setGoodsClass(goodsClass);

@@ -123,10 +123,10 @@ public class MergeManagerController {
 	 * @return
 	 */
 	@GetMapping("/getMergePictures")
-	public PageResult mergesList(String searchCondition, int pageSize, int page) {
+	public PageResult mergesList(String searchCondition,int pageSize, int page) {
 		PageResult pageResult = new PageResult();
 		List<MergePhotoInfomation> mergePhotoMoreInfoList=new ArrayList<MergePhotoInfomation>();  //用于给前端的完整信息
-		List<PhotoMergeEntity> photoMergeInfoList=photoMergeService.mergesList(searchCondition, pageSize, page * pageSize);
+		List<PhotoMergeEntity> photoMergeInfoList=photoMergeService.mergesList(searchCondition,pageSize, page * pageSize);
 		int photoMergeInfoListSize=photoMergeInfoList.size();
 		for(int i=0;i<photoMergeInfoListSize;i++) {
 			MergePhotoInfomation tempInfo=new MergePhotoInfomation();

@@ -18,10 +18,11 @@
 	
 	<!-- 获取合成列表 -->
 	<select id="mergesList" resultMap="photoMergeMap">
-	<![CDATA[SELECT mergeID, mergeUserID, submitTime, mergePictureNum, downloadUrl, state FROM picture_merge]]>
+	<![CDATA[SELECT mergeID, mergeUserID, submitTime, mergePictureNum, downloadUrl, state FROM picture_merge,sys_user]]>
 		<where>
+			(picture_merge.mergeUserID=sys_user.id)
 			<if test="searchCondition != null and searchCondition != '' ">
-				(mergeUserID like "%"#{searchCondition}"%")
+				and (sys_user.id like "%"#{searchCondition}"%")
 			</if>
 		</where>
 	    <![CDATA[order by submitTime desc]]>
@@ -54,10 +55,11 @@
 	
 	<!-- 获取合成列表的总量 -->
 	<select id="mergesSize" resultType="Integer">  
-	<![CDATA[select count(*) FROM picture_merge]]>
+	<![CDATA[select count(*) FROM picture_merge,sys_user]]>
 	    <where>
+			(picture_merge.mergeUserID=sys_user.id)
 			<if test="searchCondition != null and searchCondition != '' ">
-				(mergeUserID like "%"#{searchCondition}"%")
+				and (sys_user.id like "%"#{searchCondition}"%")
 			</if>
 		</where>
 	</select>
@@ -66,7 +68,7 @@
 	<select id="getMergeUrlByMergeID" resultType="String">  
 	<![CDATA[select downloadUrl FROM picture_merge]]>
 	    <where>
-			mergeID = #{mergeID}
+			(mergeUserID like "%"#{searchCondition}"%")
 		</where>
 	</select>
 	

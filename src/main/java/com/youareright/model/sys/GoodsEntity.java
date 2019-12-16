@@ -2,13 +2,13 @@ package com.youareright.model.sys;
 
 public class GoodsEntity {
     private int goodsID;
-    private int classID;
+    private Integer classID;//不能用int
     private String goodsClass;
     private String goodsPath;
     private String goodsFilename;
     private int goodsState;
     private int uploadUser;
-    private int markUserID;
+    private Integer markUserID;
 
     
     
@@ -60,7 +60,7 @@ public class GoodsEntity {
         this.uploadUser = uploadUser;
     }
 
-    public int getMarkUserID() {
+    public Integer getMarkUserID() {
         return markUserID;
     }
 

@@ -27,7 +27,7 @@
 		<where>
 			id = #{id})
 		</where>
-	,"该用户不存在") FROM DUAL;
+	,"[用户已被删除]") FROM DUAL;
 	</select>
 	
 	<!-- 获取user列表的总量 -->
