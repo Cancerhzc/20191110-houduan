@@ -33,7 +33,7 @@ class Mark{
 	String goodsClass;
 	String goodsFilename;
 	String currentLoginName;
-	List<String> groupId;
+	List<Integer> groupId;
 	
 	public String getGoodsClass() {
 		return goodsClass;
@@ -53,10 +53,10 @@ class Mark{
 	public void setCurrentLoginName(String currentLoginName) {
 		this.currentLoginName = currentLoginName;
 	}
-	public List<String> getGroupId() {
+	public List<Integer> getGroupId() {
 		return groupId;
 	}
-	public void setGroupId(List<String> groupId) {
+	public void setGroupId(List<Integer> groupId) {
 		this.groupId = groupId;
 	}	
 }
@@ -110,7 +110,23 @@ class ReturnGoodsList {
 	public void setMarkUsername(String markUsername) {
 		this.markUsername = markUsername;
 	}
+}
 
+class VerifyData {
+	int state;
+	List<Integer> groupId;
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+	public List<Integer> getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(List<Integer> groupId) {
+		this.groupId = groupId;
+	}
 }
 
 @RestController
@@ -217,12 +233,12 @@ public class GoodsController {
 	 * @return
 	 */
 	@DeleteMapping("/goodses")
-	public List<String> deleteGoodses(@RequestBody List<String> groupId) {
+	public List<Integer> deleteGoodses(@RequestBody List<Integer> groupId) {
 		int groupIDSize = groupId.size();
 		if(groupId != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
-				String currentGoodsIDString=groupId.get(i);
-				int currentGoodsID=Integer.valueOf(currentGoodsIDString);
+				int currentGoodsID=groupId.get(i);
+				String currentGoodsIDString=Integer.toString(currentGoodsID);
 				int currentClassID=getClassIDByGoodsID(currentGoodsID);          //数据库查询，通过goodsID得到classID
 				String currentClassIDString=Integer.toString(currentClassID);
 				String srcSuffix=getSrcSuffix(currentGoodsID);
@@ -238,17 +254,17 @@ public class GoodsController {
 	}
 	
 	/**
-	 * 获取goods表数据
+	 * 获取goods表数据-图像审核通过 且标签审核通过
 	 * 
 	 * @param goodsFilename
 	 * @param pageSize
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/goods")
-	public PageResult goodsesList(String searchCondition, int pageSize, int page) {
+	@GetMapping("/goods/13")
+	public PageResult goodsesList13(String searchCondition, int pageSize, int page) {
 		PageResult pageResult = new PageResult();
-		List<GoodsEntity> goodsesList=goodsService.goodsesList(searchCondition, pageSize, page * pageSize);
+		List<GoodsEntity> goodsesList=goodsService.goodsesList13(searchCondition, pageSize, page * pageSize);
 		List<ReturnGoodsList> returnGoodesList=new ArrayList<ReturnGoodsList>();
 		int goodsesListLength=goodsesList.size();
 		for(int i=0;i<goodsesListLength;i++) {
@@ -279,7 +295,54 @@ public class GoodsController {
 		    returnGoodesList.add(temp);
 		}
 		pageResult.setData(returnGoodesList);
-		pageResult.setTotalCount(goodsService.goodsesSize(searchCondition, pageSize, page * pageSize));
+		pageResult.setTotalCount(goodsService.goodsesSize13(searchCondition, pageSize, page * pageSize));
+		log.debug("The method is ending");
+		return pageResult;
+	}
+	
+	/**
+	 * 获取goods表数据-图像审核通过但标签审核未通过  或者图像待审核
+	 * 
+	 * @param goodsFilename
+	 * @param pageSize
+	 * @param page
+	 * @return
+	 */
+	@GetMapping("/goods/02")
+	public PageResult goodsesList02(String searchCondition, int pageSize, int page) {
+		PageResult pageResult = new PageResult();
+		List<GoodsEntity> goodsesList=goodsService.goodsesList02(searchCondition, pageSize, page * pageSize);
+		List<ReturnGoodsList> returnGoodesList=new ArrayList<ReturnGoodsList>();
+		int goodsesListLength=goodsesList.size();
+		for(int i=0;i<goodsesListLength;i++) {
+		    int goodsID=goodsesList.get(i).getGoodsID();
+		    String goodsClass=goodsesList.get(i).getGoodsClass();
+		    String goodsPath=goodsesList.get(i).getGoodsPath();
+		    String goodsFilename=goodsesList.get(i).getGoodsFilename();
+		    String markUsername=new String();
+		    int goodsState=goodsesList.get(i).getGoodsState();
+		    int uploadUser=goodsesList.get(i).getUploadUser();
+		    if(goodsesList.get(i).getMarkUserID()!=null) {
+		    	int markUserID=goodsesList.get(i).getMarkUserID();
+		    	markUsername=userService.getUsernameByUserID(markUserID);
+		    }
+		    else 
+		    {
+		    	markUsername="[未打标]";
+		    }
+	    	String uploadUsername=userService.getUsernameByUserID(uploadUser);
+		    ReturnGoodsList temp=new ReturnGoodsList();
+		    temp.setGoodsID(goodsID);
+		    temp.setGoodsClass(goodsClass);
+		    temp.setGoodsPath(goodsPath);
+		    temp.setGoodsFilename(goodsFilename);
+		    temp.setGoodsState(goodsState);
+		    temp.setUploadUsername(uploadUsername);
+		    temp.setMarkUsername(markUsername);
+		    returnGoodesList.add(temp);
+		}
+		pageResult.setData(returnGoodesList);
+		pageResult.setTotalCount(goodsService.goodsesSize02(searchCondition, pageSize, page * pageSize));
 		log.debug("The method is ending");
 		return pageResult;
 	}
@@ -304,11 +367,12 @@ public class GoodsController {
 			classIDToString = Integer.toString(thisClassID);
 			goodsTemp.setClassID(thisClassID);
 			goodsTemp.setMarkUserID(currentUserID);
-			goodsTemp.setGoodsState(1);
-			List<String> currentListOfGoodsID=goodsModify.getGroupId();
+			goodsTemp.setGoodsState(2);
+			List<Integer> currentListOfGoodsID=goodsModify.getGroupId();
 			for(int i=0;i<currentListOfGoodsID.size();i++) {		//对标记的每个图片进行操作
-				String currentGoodsIDString=currentListOfGoodsID.get(i);
-				int currentGoodsID=Integer.valueOf(currentGoodsIDString);   	//得到当前图片的ID
+				
+				int currentGoodsID=currentListOfGoodsID.get(i);
+				String currentGoodsIDString=Integer.toString(currentGoodsID);   	//得到当前图片的ID
 				int currentClassID=getClassIDByGoodsID(currentGoodsID);          //数据库查询，通过goodsID得到classID
 				String currentClassString=new String();
 				if(currentClassID==-1) {
@@ -319,8 +383,8 @@ public class GoodsController {
 				}
 				
 				String srcFilePath=absolutePath+"/myimages/"+currentClassString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
-				String dstPath=absolutePath+"/myimages/"+classIDToString;
-				String goodsPath="/myimages/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
+				String dstPath=absolutePath+"/myimages/waitcheck/"+classIDToString;
+				String goodsPath="/myimages/waitcheck/"+classIDToString+"/"+currentGoodsIDString+getSrcSuffix(currentGoodsID);
 				fileProcess.moveFile(srcFilePath,dstPath);
 				goodsTemp.setGoodsPath(goodsPath);
 				goodsTemp.setGoodsID(currentGoodsID);
@@ -330,6 +394,68 @@ public class GoodsController {
 		}
 		else {
 			return existGoodsName;
+		}
+	}
+	
+	@PostMapping("/goods/verify")
+	public void verifyGoods(@RequestBody VerifyData verifyData) {
+		System.out.println(verifyData.getState());
+		System.out.println(verifyData.getGroupId());
+		int state=verifyData.getState();
+		List<Integer> groupId=verifyData.getGroupId();
+		int lengthOfGroupId=groupId.size();
+		
+		if(state==3) {
+			for(int i=0;i<lengthOfGroupId;i++) {
+				GoodsEntity tempGoodsEntity=goodsService.getGoodsEntityByGoodsID(groupId.get(i));
+				String oldPath=tempGoodsEntity.getGoodsPath();
+				String oldSrcPath=absolutePath+tempGoodsEntity.getGoodsPath();
+				String newGoodsPath="/myimages"+oldPath.substring(oldPath.indexOf("waitcheck")+9);
+				String dstPath=absolutePath+newGoodsPath.substring(0,newGoodsPath.lastIndexOf("/"));
+//				System.out.println(oldPath);
+//				System.out.println(oldSrcPath);
+//				System.out.println(newGoodsPath);
+//				System.out.println(dstPath);
+				int fileMoveState=fileProcess.moveFile(oldSrcPath, dstPath);
+				if(fileMoveState==0) {
+					tempGoodsEntity.setGoodsPath(newGoodsPath);
+					tempGoodsEntity.setGoodsState(state);
+					goodsService.updateGoods(tempGoodsEntity);
+				}
+			}
+		}
+		else if(state==1) {
+			for(int i=0;i<lengthOfGroupId;i++) {
+				GoodsEntity tempGoodsEntity=goodsService.getGoodsEntityByGoodsID(groupId.get(i));
+				String oldPath=tempGoodsEntity.getGoodsPath();
+				String oldSrcPath=absolutePath+tempGoodsEntity.getGoodsPath();
+				String newGoodsPath="/myimages/未打标商品"+oldPath.substring(oldPath.lastIndexOf("/"));
+				String dstPath=absolutePath+newGoodsPath.substring(0,newGoodsPath.lastIndexOf("/"));
+//				System.out.println(oldPath);
+//				System.out.println(oldSrcPath);
+//				System.out.println(newGoodsPath);
+//				System.out.println(dstPath);
+				int fileMoveState=fileProcess.moveFile(oldSrcPath, dstPath);
+				if(fileMoveState==0) {
+					tempGoodsEntity.setGoodsPath(newGoodsPath);
+					tempGoodsEntity.setGoodsState(state);
+					goodsService.updateGoods(tempGoodsEntity);
+				}
+			}
+		}
+		else if(state==4) {
+			for(int i=0;i<lengthOfGroupId;i++) {
+				GoodsEntity tempGoodsEntity=goodsService.getGoodsEntityByGoodsID(groupId.get(i));
+				String filePath=absolutePath+tempGoodsEntity.getGoodsPath();
+				fileProcess.deleteFile(filePath);
+				String dirPath=filePath.substring(0,filePath.lastIndexOf("/"));
+				File file=new File(dirPath);
+				File[] fileList=file.listFiles();
+				if(fileList.length==0) {
+					fileProcess.deleteFile(dirPath);
+				}
+			}
+			goodsService.deleteGoodses(groupId);
 		}
 	}
 	
@@ -343,8 +469,8 @@ public class GoodsController {
 	    String newIDString = Integer.toString(newID); 
 	    //s = s.replaceAll("-", "");
 	    String newName = newIDString + suffix;
-	    String url = "/myimages/"+classIDString+"/"+newName;
-	    String parentPath = absolutePath+"/myimages/"+classIDString;
+	    String url = "/myimages/waitcheck/"+classIDString+"/"+newName;
+	    String parentPath = absolutePath+"/myimages/waitcheck/"+classIDString;
 	    File dest = new File(parentPath, newName);
 	    try {
 	        //目录不存在则创建，依赖google的guava工具包

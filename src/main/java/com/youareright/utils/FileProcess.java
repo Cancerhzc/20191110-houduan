@@ -13,7 +13,7 @@ public class FileProcess {
 	
 	//以下函数是对文件的处理
 	
-		public void moveFile(String srcFilePath,String dstPath)            //可移动文件，也可移动一个文件夹里的文件
+		public int moveFile(String srcFilePath,String dstPath)            //可移动文件，也可移动一个文件夹里的文件
 		{
 			try
 			{
@@ -28,15 +28,18 @@ public class FileProcess {
 				if (srcFile.renameTo(new File(dstPath+"/"+srcFile.getName()))) //源文件移动至目标文件目录
 				{
 					System.out.println("File is moved successful!");//输出移动成功
+					return 0;
 				}
 				else
 				{
 					System.out.println("File is failed to move!");//输出移动失败
+					return -1;
 				}	
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
+				return -1;
 			}
 		}
 		

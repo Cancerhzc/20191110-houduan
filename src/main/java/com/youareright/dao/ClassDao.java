@@ -48,6 +48,8 @@ public interface ClassDao {
 	
 	public String getGoodsNameByClassID(int classID);
 	
+	public String getClassNameByClassID(int classID);
+	
 	public void modifyClass(int classID,String newClassName,String newGoodsName);
 	
 	

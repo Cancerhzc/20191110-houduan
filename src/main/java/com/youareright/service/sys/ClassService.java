@@ -29,5 +29,7 @@ public interface ClassService {
 	public String getGoodsNameByClassID(int classID);
 	
 	void modifyClass(int classID,String newClassName,String newGoodsName);
+	
+	public String getClassNameByClassID(int classID);
 
 }

@@ -12,11 +12,15 @@ public interface GoodsService {
 	
 	public void del(GoodsEntity goodsEntity);
 	
-	public void deleteGoodses(List<String> groupId);
+	public void deleteGoodses(List<Integer> groupId);
 
-	public List<GoodsEntity> goodsesList(String searchCondition, int pageSize, int start);
+	public List<GoodsEntity> goodsesList13(String searchCondition, int pageSize, int start);
 	
-	public Integer goodsesSize(String searchCondition,int pageSize, int start);
+	public List<GoodsEntity> goodsesList02(String searchCondition, int pageSize, int start);
+	
+	public Integer goodsesSize13(String searchCondition,int pageSize, int start);
+	
+	public Integer goodsesSize02(String searchCondition,int pageSize, int start);
 	
 	public Integer maxGoodsID();
 	
@@ -25,5 +29,7 @@ public interface GoodsService {
 	public Integer getClassIDByGoodsID(int id);
 	
 	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath);
+	
+	public GoodsEntity getGoodsEntityByGoodsID(int goodsID);
 	
 }

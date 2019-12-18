@@ -8,11 +8,18 @@ public class GoodsEntity {
     private String goodsFilename;
     private int goodsState;
     private int uploadUser;
-    private Integer markUserID;
+    private Integer markUserID;//不能用int
 
     
     
-    public String getGoodsClass() {
+    @Override
+	public String toString() {
+		return "GoodsEntity [goodsID=" + goodsID + ", classID=" + classID + ", goodsClass=" + goodsClass
+				+ ", goodsPath=" + goodsPath + ", goodsFilename=" + goodsFilename + ", goodsState=" + goodsState
+				+ ", uploadUser=" + uploadUser + ", markUserID=" + markUserID + "]";
+	}
+
+	public String getGoodsClass() {
 		return goodsClass;
 	}
 

@@ -129,8 +129,10 @@ public class ClassController {
 		if(groupID != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
 				String currentClassIDString=groupID.get(i);
-				String path=absolutePath+"/myimages/"+currentClassIDString;
-				fileProcess.deleteFile(path);
+				String path1=absolutePath+"/myimages/"+currentClassIDString;
+				fileProcess.deleteFile(path1);
+				String path2=absolutePath+"/myimages/待审核/"+currentClassIDString;
+				fileProcess.deleteFile(path2);
 			}
 		}
 		classService.deleteClasses(groupID);

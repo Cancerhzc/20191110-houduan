@@ -54,11 +54,11 @@
 		</where>
 	</update>
 	
-	<!-- 获取class列表 -->
+	<!-- 获取class列表  信息中的图像个数是审核通过的图片个数-->
 	<select id="classesList" resultMap="classMap">
 	<![CDATA[SELECT goods_class.classID,goods_class.goodsClass AS goodsClass,goods_class.goodsName AS goodsName,IFNULL(myCount,0) containGoodsNumber FROM 
 			goods_class LEFT OUTER JOIN 
-			(SELECT classID,COUNT(*) AS myCount FROM sys_goods GROUP BY classID) a 
+			(SELECT classID,COUNT(*) AS myCount FROM sys_goods where ((goodsState=1) or (goodsState=3)) GROUP BY classID) a 
 			ON goods_class.classID=a.classID]]>
 		<where>
 			<if test="searchCondition != null and searchCondition != ''">
@@ -114,6 +114,13 @@
 	
 	<select id="getGoodsNameByClassID" resultType="String">
 		select goodsName from goods_class
+		<where>
+			classID = #{classID}
+		</where>
+	</select>
+	
+	<select id="getClassNameByClassID" resultType="String">
+		select goodsClass from goods_class
 		<where>
 			classID = #{classID}
 		</where>

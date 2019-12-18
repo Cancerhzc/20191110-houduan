@@ -71,17 +71,18 @@
 		</where>
 	</update>
 	
-	<!-- 获取goods列表 -->
-	<select id="goodsesList" resultMap="goodsMap">
+	<!-- 获取goods列表  图像审核通过 标签审核通过-->
+	<select id="goodsesList13" resultMap="goodsMap">
 	<![CDATA[SELECT goodsID ,goods_class.goodsClass as goodsClass,goodsPath,goods_class.goodsName as goodsFilename,goodsState,uploadUser,markUserID 
 	FROM sys_goods LEFT JOIN goods_class ON sys_goods.classID = goods_class.classID]]>
 		<where>
+			((goodsState=1) or (goodsState=3))
 			<if test="searchCondition != null and searchCondition != '' and searchCondition!='未打标' ">
-				(goods_class.goodsName like "%"#{searchCondition}"%"
+				and (goods_class.goodsName like "%"#{searchCondition}"%"
 				or goods_class.goodsClass like "%"#{searchCondition}"%")
 			</if>
 			<if test="searchCondition == '未打标' ">
-				(sys_goods.classID is null)
+				and (sys_goods.classID is null)
 			</if>
 		</where>
 	    <![CDATA[ order by goodsID desc]]>
@@ -90,25 +91,60 @@
 		</if>
 	</select>
 	
-	<!-- 获取goods列表的总量 -->
-	<select id="goodsesSize" resultType="Integer">  
-	<![CDATA[select count(*) FROM sys_goods LEFT JOIN goods_class ON sys_goods.classID = goods_class.classID]]>
-	    <where>
+		<!-- 获取goods列表  图像审核通过 标签审核未通过 或者图像待审核-->
+	<select id="goodsesList02" resultMap="goodsMap">
+	<![CDATA[SELECT goodsID ,goods_class.goodsClass as goodsClass,goodsPath,goods_class.goodsName as goodsFilename,goodsState,uploadUser,markUserID 
+	FROM sys_goods LEFT JOIN goods_class ON sys_goods.classID = goods_class.classID]]>
+		<where>
+			((goodsState=0) or (goodsState=2))
 			<if test="searchCondition != null and searchCondition != '' and searchCondition!='未打标' ">
-				(goods_class.goodsName like "%"#{searchCondition}"%"
+				and (goods_class.goodsName like "%"#{searchCondition}"%"
 				or goods_class.goodsClass like "%"#{searchCondition}"%")
 			</if>
 			<if test="searchCondition == '未打标' ">
-				(sys_goods.classID is null)
+				and (sys_goods.classID is null)
+			</if>
+		</where>
+	    <![CDATA[ order by goodsID desc]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取goods列表的总量  图像审核通过 标签审核未通过 或者图像待审核-->
+	<select id="goodsesSize02" resultType="Integer">  
+	<![CDATA[select count(*) FROM sys_goods LEFT JOIN goods_class ON sys_goods.classID = goods_class.classID]]>
+		<where>
+			((goodsState=0) or (goodsState=2))
+			<if test="searchCondition != null and searchCondition != '' and searchCondition!='未打标' ">
+				and (goods_class.goodsName like "%"#{searchCondition}"%"
+				or goods_class.goodsClass like "%"#{searchCondition}"%")
+			</if>
+			<if test="searchCondition == '未打标' ">
+				and (sys_goods.classID is null)
 			</if>
 		</where>
 	</select>
 	
-	<select id="selectAll">
+	<!-- 获取goods列表的总量  图像审核通过 标签审核通过-->
+	<select id="goodsesSize13" resultType="Integer">  
+	<![CDATA[select count(*) FROM sys_goods LEFT JOIN goods_class ON sys_goods.classID = goods_class.classID]]>
+		<where>
+			((goodsState=1) or (goodsState=3))
+			<if test="searchCondition != null and searchCondition != '' and searchCondition!='未打标' ">
+				and (goods_class.goodsName like "%"#{searchCondition}"%"
+				or goods_class.goodsClass like "%"#{searchCondition}"%")
+			</if>
+			<if test="searchCondition == '未打标' ">
+				and (sys_goods.classID is null)
+			</if>
+		</where>
+	</select>
+	
+	<select id="getGoodsEntityByGoodsID" resultType="com.youareright.model.sys.GoodsEntity">
 		select * from sys_goods
 		<where>
 			<if test="goodsID != null">goodsID = #{goodsID}</if>
-			<if test="goodsClass != null">classID = #{classID}</if>
 		</where>
 	</select>
 	

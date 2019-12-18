@@ -31,18 +31,25 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 	
 
-	public void deleteGoodses(List<String> groupId) {
+	public void deleteGoodses(List<Integer> groupId) {
 		goodsDao.deleteGoodses(groupId);
 	}
 	
 
-	public List<GoodsEntity> goodsesList(String searchCondition, int pageSize, int start) {
-		return goodsDao.goodsesList(searchCondition, pageSize, start);
+	public List<GoodsEntity> goodsesList13(String searchCondition, int pageSize, int start) {
+		return goodsDao.goodsesList13(searchCondition, pageSize, start);
 	}
 	
+	public List<GoodsEntity> goodsesList02(String searchCondition, int pageSize, int start) {
+		return goodsDao.goodsesList02(searchCondition, pageSize, start);
+	}
 
-	public Integer goodsesSize(String searchCondition, int pageSize, int start) {
-		return goodsDao.goodsesSize(searchCondition, pageSize, start);
+	public Integer goodsesSize13(String searchCondition, int pageSize, int start) {
+		return goodsDao.goodsesSize13(searchCondition, pageSize, start);
+	}
+	
+	public Integer goodsesSize02(String searchCondition, int pageSize, int start) {
+		return goodsDao.goodsesSize02(searchCondition, pageSize, start);
 	}
 	
 
@@ -63,5 +70,9 @@ public class GoodsServiceImpl implements GoodsService {
 
 	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath) {
 		goodsDao.modifyGoods(oldClassID, newClassID, newGoodsPath);
+	}
+	
+	public GoodsEntity getGoodsEntityByGoodsID(int goodsID) {
+		return goodsDao.getGoodsEntityByGoodsID(goodsID);
 	}
 }

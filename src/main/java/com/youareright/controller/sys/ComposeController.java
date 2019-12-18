@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.youareright.service.sys.ShelfService;
 import com.youareright.service.sys.UserService;
 import com.youareright.model.sys.PhotoMergeEntity;
+import com.youareright.service.sys.ClassService;
 import com.youareright.service.sys.PhotoMergeService;
 import com.youareright.utils.FileProcess;
 import com.youareright.utils.TimeProcess;
@@ -62,6 +63,9 @@ public class ComposeController {
 	
 	@Resource(name = "userServiceImpl")
 	private UserService userService;//获取合成图片的人的ID
+	
+	@Resource(name = "classServiceImpl")
+	private ClassService classService;//获取合成图片的人的ID
 	
 	@Resource(name = "photoMergeServiceImpl")
 	private PhotoMergeService photoMergeService;
@@ -120,7 +124,8 @@ public class ComposeController {
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
 			String currentClassNoString=Integer.toString(classNo);
-			goodsContent+=absolutePath+"/myimages/"+currentClassNoString+"\n";
+			String className=classService.getClassNameByClassID(classNo);
+			goodsContent+=absolutePath+"/myimages/"+currentClassNoString+","+className+"\n";
 		}
 		fileProcess.writeFile(goodsContent, goodsTextPath);
 		

@@ -58,6 +58,10 @@ public class ClassServiceImpl implements ClassService {
 		return classDao.getGoodsNameByClassID(classID);
 	}
 	
+	public String getClassNameByClassID(int classID) {
+		return classDao.getClassNameByClassID(classID);
+	}
+	
 	public void modifyClass(int classID,String newClassName,String newGoodsName) {
 		classDao.modifyClass(classID,newClassName,newGoodsName);
 	}
