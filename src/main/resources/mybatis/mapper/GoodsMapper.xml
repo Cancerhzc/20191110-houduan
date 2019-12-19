@@ -42,10 +42,10 @@
 	
 	<update id="updateGoods">
 		update sys_goods set
-		<if test="goodsEntity.classID != null">classID = #{goodsEntity.classID},</if>
-		<if test="goodsEntity.goodsPath != null">goodsPath = #{goodsEntity.goodsPath},</if>
-		<if test="goodsEntity.goodsState != null">goodsState = #{goodsEntity.goodsState},</if>
-		<if test="goodsEntity.markUserID != null">markUserID = #{goodsEntity.markUserID}</if>	
+		classID = #{goodsEntity.classID},
+		goodsPath = #{goodsEntity.goodsPath},
+		goodsState = #{goodsEntity.goodsState},
+		markUserID = #{goodsEntity.markUserID}
 		<where>
 			goodsID = #{goodsEntity.goodsID}
 		</where>
@@ -53,10 +53,10 @@
 	
 	<update id="updateGoods2">
 		update sys_goods set
-		<if test="goodsEntity.classID != null">classID = #{goodsEntity.classID},</if>
-		<if test="goodsEntity.goodsPath != null">goodsPath = #{goodsEntity.goodsPath},</if>
-		<if test="goodsEntity.goodsState != null">goodsState = #{goodsEntity.goodsState},</if>
-		<if test="goodsEntity.markUserID != null">markUserID = #{goodsEntity.markUserID}</if>
+		classID = #{goodsEntity.classID},
+		goodsPath = #{goodsEntity.goodsPath},
+		goodsState = #{goodsEntity.goodsState},
+		markUserID = #{goodsEntity.markUserID}
 		<where>
 			goodsID = #{goodsEntity.goodsID}
 		</where>

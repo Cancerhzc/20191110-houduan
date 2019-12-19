@@ -275,7 +275,7 @@ public class GoodsController {
 		    String markUsername=new String();
 		    int goodsState=goodsesList.get(i).getGoodsState();
 		    int uploadUser=goodsesList.get(i).getUploadUser();
-		    if(goodsesList.get(i).getMarkUserID()!=null) {
+		    if(goodsesList.get(i).getClassID()!=null) {
 		    	int markUserID=goodsesList.get(i).getMarkUserID();
 		    	markUsername=userService.getUsernameByUserID(markUserID);
 		    }
@@ -322,7 +322,7 @@ public class GoodsController {
 		    String markUsername=new String();
 		    int goodsState=goodsesList.get(i).getGoodsState();
 		    int uploadUser=goodsesList.get(i).getUploadUser();
-		    if(goodsesList.get(i).getMarkUserID()!=null) {
+		    if(goodsesList.get(i).getClassID()!=null) {
 		    	int markUserID=goodsesList.get(i).getMarkUserID();
 		    	markUsername=userService.getUsernameByUserID(markUserID);
 		    }
@@ -435,6 +435,7 @@ public class GoodsController {
 //				System.out.println(oldSrcPath);
 //				System.out.println(newGoodsPath);
 //				System.out.println(dstPath);
+				tempGoodsEntity.setClassID(null);
 				int fileMoveState=fileProcess.moveFile(oldSrcPath, dstPath);
 				if(fileMoveState==0) {
 					tempGoodsEntity.setGoodsPath(newGoodsPath);
@@ -451,7 +452,11 @@ public class GoodsController {
 				String dirPath=filePath.substring(0,filePath.lastIndexOf("/"));
 				File file=new File(dirPath);
 				File[] fileList=file.listFiles();
-				if(fileList.length==0) {
+				int countFile=0;
+				for(File fileIndex:fileList){
+					countFile++;
+				}
+				if(countFile==0) {
 					fileProcess.deleteFile(dirPath);
 				}
 			}
