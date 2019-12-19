@@ -22,7 +22,7 @@
 		<where>
 			(picture_merge.mergeUserID=sys_user.id)
 			<if test="searchCondition != null and searchCondition != '' ">
-				and (sys_user.id like "%"#{searchCondition}"%")
+				and (name like "%"#{searchCondition}"%")
 			</if>
 		</where>
 	    <![CDATA[order by submitTime desc]]>
@@ -59,7 +59,7 @@
 	    <where>
 			(picture_merge.mergeUserID=sys_user.id)
 			<if test="searchCondition != null and searchCondition != '' ">
-				and (sys_user.id like "%"#{searchCondition}"%")
+				and (name like "%"#{searchCondition}"%")
 			</if>
 		</where>
 	</select>
@@ -68,7 +68,7 @@
 	<select id="getMergeUrlByMergeID" resultType="String">  
 	<![CDATA[select downloadUrl FROM picture_merge]]>
 	    <where>
-			(mergeUserID like "%"#{searchCondition}"%")
+			mergeID = #{mergeID}
 		</where>
 	</select>
 	
