@@ -15,15 +15,58 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.youareright.model.sys.PageResult;
+import com.youareright.model.sys.UserEntity;
 import com.youareright.model.sys.ClassEntity;
 import com.youareright.service.sys.ClassService;
 import com.youareright.service.sys.GoodsService;
+import com.youareright.service.sys.OperationService;
+import com.youareright.service.sys.PathService;
+import com.youareright.service.sys.UserService;
 import com.youareright.utils.FileProcess;
+import com.youareright.utils.TimeProcess;
+
+class DeleteClassInfo {
+	List<String> groupId;
+	String currentLoginName;
+	public List<String> getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(List<String> groupId) {
+		this.groupId = groupId;
+	}
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
+	}
+}
+
+class UpdateClassInfo {
+	ClassEntity classEntity;
+	String currentLoginName;
+	public ClassEntity getClassEntity() {
+		return classEntity;
+	}
+	public void setClassEntity(ClassEntity classEntity) {
+		this.classEntity = classEntity;
+	}
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
+	}
+	
+}
 
 @RestController
 /*@PreAuthorize("hasRole('ADMI')")*/
 public class ClassController {
 
+//	ClassController() {
+//		absolutePath=pathService.runningPath().getPath();
+//	}
 	private Logger log = LoggerFactory.getLogger(ClassController.class);
 
 	@Resource(name = "classServiceImpl")
@@ -32,10 +75,18 @@ public class ClassController {
 	@Resource(name = "goodsServiceImpl")
 	private GoodsService goodsService;
 	
+	@Resource(name = "userServiceImpl")
+	private UserService userService;
+	
+	@Resource(name = "pathServiceImpl")
+	private PathService pathService;
+	
+	@Resource(name = "operationServiceImpl")
+	private OperationService operationService;
+	
 	private FileProcess fileProcess=new FileProcess();
 	
-	private PathController pathController=new PathController();
-	String absolutePath=pathController.getPath();
+	private TimeProcess timeProcess=new TimeProcess();
 
 	/**
 	 * 获取class表数据
@@ -75,7 +126,13 @@ public class ClassController {
 	 * @return
 	 */
 	@PutMapping("/class/{id}")
-	public String updateClass(@RequestBody ClassEntity classEntity) {		
+//	public String updateClass(@RequestBody ClassEntity classEntity) {	
+	public String updateClass(@RequestBody UpdateClassInfo updateClassInfo) {	
+		ClassEntity classEntity=updateClassInfo.getClassEntity();
+		String currentLoginName=updateClassInfo.getCurrentLoginName();
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
+		String absolutePath=pathService.runningPath().getPath();
 		String newClassName=classEntity.getGoodsClass();
 		String newGoodsName=classEntity.getGoodsName();
 		int selectClassID=classEntity.getClassID();
@@ -114,6 +171,11 @@ public class ClassController {
 			}
 		}	
 		log.debug("The method is ending");
+		//日志
+		String operationString="修改了标签[标签ID："+Integer.toString(selectClassID)+"]";
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
+		
 		return "@Class Modifies Successfully!@";
 	}
 
@@ -124,7 +186,12 @@ public class ClassController {
 	 * @return
 	 */
 	@DeleteMapping("/classes")
-	public List<String> deleteClasses(@RequestBody List<String> groupID) {
+	public List<String> deleteClasses(@RequestBody DeleteClassInfo deleteClassInfo) {
+		List<String> groupID=deleteClassInfo.getGroupId();
+		String currentLoginName=deleteClassInfo.getCurrentLoginName();
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
+		String absolutePath=pathService.runningPath().getPath();
 		int groupIDSize = groupID.size();
 		if(groupID != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
@@ -136,6 +203,11 @@ public class ClassController {
 			}
 		}
 		classService.deleteClasses(groupID);
+		
+		//日志
+		String operationString="删除了"+Integer.toString(groupIDSize)+"个标签";
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
 		return groupID;
 	}
 	

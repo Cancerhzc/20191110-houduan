@@ -9,7 +9,7 @@ public interface ShelfService {
 	
 	public void del(ShelfEntity shelfEntity);
 	
-	public void deleteShelfes(List<String> groupId);
+	public void deleteShelfes(List<Integer> groupId);
 
 	public List<ShelfEntity> shelvesList(String searchCondition, int pageSize, int start);
 	

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youareright.dao.OperationDao">
+	<resultMap id="operationMap" type="com.youareright.model.sys.OperationEntity">
+		<id column="operationID" property="operationID" />
+		<result column="userID" property="userID" />
+		<result column="operation" property="operation" />
+		<result column="time" property="time" />
+	</resultMap>
+	
+	
+	<insert id="insertOperation">
+		insert into user_log (userID,operation,time)
+		values
+		(#{userID},#{operation},#{time})
+	</insert>
+	
+	<!-- 获取所有操作列表 -->
+	<select id="getOperation" resultMap="operationMap">
+		select operationID,userID,operation,time from user_log
+		order by time desc
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取操作列表的总量 -->
+	<select id="operationSize" resultType="Integer">  
+	    <![CDATA[select count(*) from user_log]]>
+	</select>
+</mapper>

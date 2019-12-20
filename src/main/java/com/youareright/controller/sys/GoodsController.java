@@ -23,8 +23,12 @@ import com.google.common.io.Files;
 import com.youareright.model.sys.GoodsEntity;
 import com.youareright.service.sys.ClassService;
 import com.youareright.service.sys.GoodsService;
+import com.youareright.service.sys.OperationService;
+import com.youareright.service.sys.PathService;
 import com.youareright.service.sys.UserService;
 import com.youareright.utils.FileProcess;
+import com.youareright.utils.TimeProcess;
+
 import java.io.File;
 
 import java.io.IOException;
@@ -112,9 +116,18 @@ class ReturnGoodsList {
 	}
 }
 
-class VerifyData {
+class VerifyData { //审核图片
+	String currentLoginName;
 	int state;
 	List<Integer> groupId;
+	
+	
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
+	}
 	public int getState() {
 		return state;
 	}
@@ -126,6 +139,23 @@ class VerifyData {
 	}
 	public void setGroupId(List<Integer> groupId) {
 		this.groupId = groupId;
+	}
+}
+
+class DeleteGoodsInfo {
+	List<Integer> groupId;
+	String currentLoginName;
+	public List<Integer> getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(List<Integer> groupId) {
+		this.groupId = groupId;
+	}
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
 	}
 }
 
@@ -143,10 +173,17 @@ public class GoodsController {
 	@Resource(name = "classServiceImpl")
 	private ClassService classService;
 	
+	@Resource(name = "pathServiceImpl")
+	private PathService pathService;
+	
+	@Resource(name = "operationServiceImpl")
+	private OperationService operationService;
+	
 	private FileProcess fileProcess=new FileProcess();
 	
-	private PathController pathController=new PathController();
-	String absolutePath=pathController.getPath();
+	private TimeProcess timeProcess=new TimeProcess();
+	
+
 	/**
 	 * 新建商品
 	 * 
@@ -192,12 +229,20 @@ public class GoodsController {
 		}
 		goodsEntity.setGoodsState(0);
 		goodsEntity.setUploadUser(currentUserID);
+		int countUploadPicture=0;
 	    for (MultipartFile multipartFile : multipartFiles) {
 	    	int thisGoodsID=goodsService.maxGoodsID()+1;
 	        String url = getFile(multipartFile,classIDToString,thisGoodsID);
 			goodsEntity.setGoodsPath(url);
 			goodsService.insertGoods(goodsEntity);
+			countUploadPicture++;
 	    }
+	    
+	    //日志
+	    String operationString="上传了"+Integer.toString(countUploadPicture)+"张图片";
+	    String operationTime=timeProcess.nowTime().get(0);
+	    operationService.insertOperation(currentUserID, operationString, operationTime);
+	    
 	    log.debug("The method is ending");
 	    return "@Picture(s) Upload Successfully!@";
 	}
@@ -233,8 +278,14 @@ public class GoodsController {
 	 * @return
 	 */
 	@DeleteMapping("/goodses")
-	public List<Integer> deleteGoodses(@RequestBody List<Integer> groupId) {
+	public List<Integer> deleteGoodses(@RequestBody DeleteGoodsInfo deleteGoodsInfo) {
+		List<Integer> groupId=deleteGoodsInfo.getGroupId();
+		String currentLoginName=deleteGoodsInfo.getCurrentLoginName();
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
+		String absolutePath=pathService.runningPath().getPath();
 		int groupIDSize = groupId.size();
+		System.out.println(currentLoginName);
 		if(groupId != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
 				int currentGoodsID=groupId.get(i);
@@ -250,6 +301,11 @@ public class GoodsController {
 			}
 		}
 		goodsService.deleteGoodses(groupId);
+		
+		//日志
+		String operationString="删除了"+Integer.toString(groupIDSize)+"张图片";
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
 		return groupId;	
 	}
 	
@@ -275,7 +331,7 @@ public class GoodsController {
 		    String markUsername=new String();
 		    int goodsState=goodsesList.get(i).getGoodsState();
 		    int uploadUser=goodsesList.get(i).getUploadUser();
-		    if(goodsesList.get(i).getClassID()!=null) {
+		    if(goodsesList.get(i).getGoodsClass()!=null) {
 		    	int markUserID=goodsesList.get(i).getMarkUserID();
 		    	markUsername=userService.getUsernameByUserID(markUserID);
 		    }
@@ -322,7 +378,7 @@ public class GoodsController {
 		    String markUsername=new String();
 		    int goodsState=goodsesList.get(i).getGoodsState();
 		    int uploadUser=goodsesList.get(i).getUploadUser();
-		    if(goodsesList.get(i).getClassID()!=null) {
+		    if(goodsesList.get(i).getGoodsClass()!=null) {
 		    	int markUserID=goodsesList.get(i).getMarkUserID();
 		    	markUsername=userService.getUsernameByUserID(markUserID);
 		    }
@@ -349,6 +405,7 @@ public class GoodsController {
 	
 	@PostMapping("/goods/modify")
 	public String markGoods(@RequestBody Mark goodsModify) {
+		String absolutePath=pathService.runningPath().getPath();
 		GoodsEntity goodsTemp=new GoodsEntity();
 		int thisClassID=0;
 		String classIDToString=new String();
@@ -390,6 +447,12 @@ public class GoodsController {
 				goodsTemp.setGoodsID(currentGoodsID);
 				updateGoods2(goodsTemp, currentGoodsID);
 			}
+			
+			
+			//日志
+			String operationString="打标了"+Integer.toString(currentListOfGoodsID.size())+"张图片";
+			String operationTime=timeProcess.nowTime().get(0);
+			operationService.insertOperation(currentUserID, operationString, operationTime);
 			return "@Mark Goods Successfully!@";
 		}
 		else {
@@ -399,6 +462,9 @@ public class GoodsController {
 	
 	@PostMapping("/goods/verify")
 	public void verifyGoods(@RequestBody VerifyData verifyData) {
+		String currentUserName=verifyData.getCurrentLoginName();
+		int currentUserID=userService.getUserEntityByLoginName(currentUserName).getId();
+		String absolutePath=pathService.runningPath().getPath();
 		System.out.println(verifyData.getState());
 		System.out.println(verifyData.getGroupId());
 		int state=verifyData.getState();
@@ -423,6 +489,10 @@ public class GoodsController {
 					goodsService.updateGoods(tempGoodsEntity);
 				}
 			}
+			//日志
+			String operationString="审核了"+Integer.toString(lengthOfGroupId)+"张图片[图像和标签均通过]";
+			String operationTime=timeProcess.nowTime().get(0);
+			operationService.insertOperation(currentUserID, operationString, operationTime);
 		}
 		else if(state==1) {
 			for(int i=0;i<lengthOfGroupId;i++) {
@@ -442,6 +512,11 @@ public class GoodsController {
 					tempGoodsEntity.setGoodsState(state);
 					goodsService.updateGoods(tempGoodsEntity);
 				}
+				
+				//日志
+				String operationString="审核了"+Integer.toString(lengthOfGroupId)+"张图片[图片通过，但标签不通过]";
+				String operationTime=timeProcess.nowTime().get(0);
+				operationService.insertOperation(currentUserID, operationString, operationTime);
 			}
 		}
 		else if(state==4) {
@@ -461,10 +536,15 @@ public class GoodsController {
 				}
 			}
 			goodsService.deleteGoodses(groupId);
+			//日志
+			String operationString="审核了"+Integer.toString(lengthOfGroupId)+"张图片[图像、标签均不通过]";
+			String operationTime=timeProcess.nowTime().get(0);
+			operationService.insertOperation(currentUserID, operationString, operationTime);
 		}
 	}
 	
 	private String getFile(MultipartFile file,String classIDString,int newID) {
+		String absolutePath=pathService.runningPath().getPath();
 		if(classIDString.equals("")) {
 			classIDString="未打标商品";
 		}

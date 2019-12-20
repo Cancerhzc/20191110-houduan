@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.youareright.model.sys.PageResult;
 import com.youareright.model.sys.PhotoMergeEntity;
+import com.youareright.model.sys.UserEntity;
+import com.youareright.service.sys.OperationService;
+import com.youareright.service.sys.PathService;
 import com.youareright.service.sys.PhotoMergeService;
 import com.youareright.service.sys.UserService;
 import com.youareright.utils.FileProcess;
@@ -79,6 +82,23 @@ class MergePhotoInfomation {
 
 }
 
+class MergeDeleteInfo {
+	List<String> groupId;
+	String currentLoginName;
+	public List<String> getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(List<String> groupId) {
+		this.groupId = groupId;
+	}
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
+	}
+}
+
 @RestController
 public class MergeManagerController {
 	private Logger log = LoggerFactory.getLogger(MergeManagerController.class);
@@ -87,13 +107,18 @@ public class MergeManagerController {
 	
 	private TimeProcess timeProcess=new TimeProcess();
 	
-	private PathController pathController=new PathController();
 	
 	@Resource(name = "photoMergeServiceImpl")
 	private PhotoMergeService photoMergeService;
 	
 	@Resource(name = "userServiceImpl")
 	private UserService userService;
+	
+	@Resource(name = "pathServiceImpl")
+	private PathService pathService;
+	
+	@Resource(name = "operationServiceImpl")
+	private OperationService operationService;
 	
 	/**
 	 * 删除合并的图片信息
@@ -102,17 +127,27 @@ public class MergeManagerController {
 	 * @return
 	 */
 	@DeleteMapping("/deleteMergePictures")
-	public List<String> deleteMergePicture(@RequestBody List<String> groupId) {
+	public List<String> deleteMergePicture(@RequestBody MergeDeleteInfo mergeDeleteInfo) {
+		List<String> groupId=mergeDeleteInfo.getGroupId();
+		String currentLoginName=mergeDeleteInfo.getCurrentLoginName();
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
 		int groupIDSize = groupId.size();
 		if(groupId != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
 				String currentMergeIDString=groupId.get(i);
 				int currentMergeID=Integer.valueOf(currentMergeIDString);
-				String currentMergePath=pathController.getPath()+photoMergeService.getMergeUrlByMergeID(currentMergeID);
+				String currentMergePath=pathService.runningPath().getPath()+photoMergeService.getMergeUrlByMergeID(currentMergeID);
 				fileProcess.deleteFile(currentMergePath);
 			}
 		}
 		photoMergeService.deleteMerges(groupId);
+		
+		//日志
+		String operationString="删除了"+Integer.toString(groupIDSize)+"项合成图片的压缩包";
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
+		
 		return groupId;	
 	}
 	
@@ -142,14 +177,14 @@ public class MergeManagerController {
 			tempInfo.setMergePhotoNum(mergePictureNumber);
 			String userTimeDir=downloadPath.substring(downloadPath.lastIndexOf("/")+1, downloadPath.lastIndexOf("."));
 			if(state==0) {
-				String doneTxtPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/done_number.txt";
+				String doneTxtPath=pathService.runningPath().getIniBasicPath()+"/"+userTimeDir+"/done_number.txt";
 				int donePictureNumber=fileProcess.countNumberInAZip(doneTxtPath);//获取已完成图片数量
 				tempInfo.setCurrentMergeDoneNum(donePictureNumber);
 				if(donePictureNumber==mergePictureNumber) {
 					photoMergeService.updateMerges(photoMergeInfoList.get(i).getMergeID(),1);
 					tempInfo.setState(1);
 					tempInfo.setDownloadUrl(downloadPath);
-					fileProcess.deleteFile(pathController.getIniBasicPath()+"/"+userTimeDir);
+					fileProcess.deleteFile(pathService.runningPath().getIniBasicPath()+"/"+userTimeDir);
 				}
 				else {
 					int toMergePictureNumber=mergePictureNumber-donePictureNumber;

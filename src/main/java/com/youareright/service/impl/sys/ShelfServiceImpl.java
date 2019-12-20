@@ -27,7 +27,7 @@ public class ShelfServiceImpl implements ShelfService {
 		shelfDao.del(shelfEntity);
 	}
 	
-	public void deleteShelfes(List<String> groupId) {
+	public void deleteShelfes(List<Integer> groupId) {
 		shelfDao.deleteShelves(groupId);
 	}
 	

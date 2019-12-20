@@ -22,7 +22,7 @@ public interface ShelfDao {
 	 */
 	public void del(@Param("shelfEntity") ShelfEntity shelfEntity);
 	
-	public void deleteShelves(@Param("groupId") List<String> groupId);
+	public void deleteShelves(@Param("groupId") List<Integer> groupId);
 	
 	/**
 	 * 更新货架图片信息

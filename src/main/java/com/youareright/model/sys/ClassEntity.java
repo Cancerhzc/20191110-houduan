@@ -6,7 +6,10 @@ public class ClassEntity {
 	private String upClassName;
 	private String goodsName;
 	private Integer containGoodsNumber;
-	
+
+	public void setContainGoodsNumber(Integer containGoodsNumber) {
+		this.containGoodsNumber = containGoodsNumber;
+	}
 	public int getContainGoodsNumber() {
 		return containGoodsNumber;
 	}

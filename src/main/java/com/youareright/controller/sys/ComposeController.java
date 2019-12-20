@@ -12,6 +12,8 @@ import com.youareright.service.sys.ShelfService;
 import com.youareright.service.sys.UserService;
 import com.youareright.model.sys.PhotoMergeEntity;
 import com.youareright.service.sys.ClassService;
+import com.youareright.service.sys.OperationService;
+import com.youareright.service.sys.PathService;
 import com.youareright.service.sys.PhotoMergeService;
 import com.youareright.utils.FileProcess;
 import com.youareright.utils.TimeProcess;
@@ -70,8 +72,12 @@ public class ComposeController {
 	@Resource(name = "photoMergeServiceImpl")
 	private PhotoMergeService photoMergeService;
 	
-	private PathController pathController=new PathController();
-	String absolutePath=pathController.getPath();
+	@Resource(name = "pathServiceImpl")
+	private PathService pathService;
+	
+	@Resource(name = "operationServiceImpl")
+	private OperationService operationService;
+	
 	
 	private FileProcess fileProcess=new FileProcess();
 	
@@ -87,6 +93,7 @@ public class ComposeController {
 	 */
 	@PostMapping("/compose/submit")
 	public String composePicture(@RequestBody Choose choose) {
+		String absolutePath=pathService.runningPath().getPath();
 		List<Integer> classList=choose.getChooseClass();
 		List<Integer> shelvesList=choose.getChooseShelves();
 		List<Integer> shelvesClassList=choose.getChooseShelvesClass();
@@ -109,17 +116,17 @@ public class ComposeController {
 		String userTimeDir=currentUserIDString+"-"+timePath;
 		
 		//三个txt文本的路径
-		fileProcess.makeDirectory(pathController.getIniBasicPath()+"/"+userTimeDir);
-		String goodsTextPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/goods_path.txt";
-		String shelvesTextPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/shelves_path.txt";
-		String pictureNumberPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/picture_number.txt";
+		fileProcess.makeDirectory(pathService.runningPath().getIniBasicPath()+"/"+userTimeDir);
+		String goodsTextPath=pathService.runningPath().getIniBasicPath()+"/"+userTimeDir+"/goods_path.txt";
+		String shelvesTextPath=pathService.runningPath().getIniBasicPath()+"/"+userTimeDir+"/shelves_path.txt";
+		String pictureNumberPath=pathService.runningPath().getIniBasicPath()+"/"+userTimeDir+"/picture_number.txt";
 		
 	
 		//输出路径与下载地址
-		String outPath=pathController.getPath()+"/userMergePhotos";
-		String downloadPath=pathController.getPath()+"/userMergePhotos"+"/"+userTimeDir+".zip";
+		String outPath=pathService.runningPath().getPath()+"/userMergePhotos";
+		String downloadPath=pathService.runningPath().getPath()+"/userMergePhotos"+"/"+userTimeDir+".zip";
 		String downloadUrl="/userMergePhotos"+"/"+userTimeDir+".zip";
-		String doneNumberPath=pathController.getIniBasicPath()+"/"+userTimeDir+"/done_number.txt";
+		String doneNumberPath=pathService.runningPath().getIniBasicPath()+"/"+userTimeDir+"/done_number.txt";
 		
 		//以下对图像文本的处理
 		for(Integer classNo:classList) {
@@ -149,8 +156,8 @@ public class ComposeController {
 		fileProcess.writeFile(mergePictureNumberString, pictureNumberPath);
 		
 		//获得执行路径
-		String pythonPath=pathController.getPythonPath();
-		String pyPath=pathController.getPyPath();
+		String pythonPath=pathService.runningPath().getPythonPath();
+		String pyPath=pathService.runningPath().getPyPath();
 		
 		//执行python
 		fileProcess.makeDirectory(outPath);
@@ -163,6 +170,12 @@ public class ComposeController {
 		photoMergeEntity.setState(0);
 		photoMergeEntity.setDownloadUrl(downloadUrl);
 		photoMergeService.insertPhotoMerge(photoMergeEntity);
+		
+
+		//日志
+		String operationString="合成图片[输出图片数量："+Integer.toString(mergePictureNumber)+"]";
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
 		
 		return "已交给后台处理";
 	}

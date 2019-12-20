@@ -22,8 +22,30 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.io.Files;
 import com.youareright.model.sys.PageResult;
 import com.youareright.model.sys.ShelfEntity;
+import com.youareright.model.sys.UserEntity;
+import com.youareright.service.sys.OperationService;
+import com.youareright.service.sys.PathService;
 import com.youareright.service.sys.ShelfService;
+import com.youareright.service.sys.UserService;
 import com.youareright.utils.FileProcess;
+import com.youareright.utils.TimeProcess;
+class DeleteShelfInfo {
+	List<Integer> groupId;
+	String currentLoginName;
+	public List<Integer> getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(List<Integer> groupId) {
+		this.groupId = groupId;
+	}
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
+	}
+}
+
 
 @RestController
 public class ShelfController {
@@ -35,10 +57,20 @@ public class ShelfController {
 	@Resource(name = "shelfServiceImpl")
 	private ShelfService shelfService;
 	
+	@Resource(name = "pathServiceImpl")
+	private PathService pathService;
+	
+	@Resource(name = "userServiceImpl")
+	private UserService userService;
+	
+	@Resource(name = "operationServiceImpl")
+	private OperationService operationService;
+	
+	
 	private FileProcess fileProcess=new FileProcess();
 	
-	private PathController pathController=new PathController();
-	String absolutePath=pathController.getPath();
+	private TimeProcess timeProcess=new TimeProcess();
+
 	
 	/**
 	 * 新建货架商品
@@ -48,7 +80,10 @@ public class ShelfController {
 	 * @return
 	 */
 	@PostMapping("/shelves/shelf")
-	public List<String> insertShelf(@RequestPart("formData") ShelfEntity shelfEntity,@RequestPart("file") MultipartFile [] multipartFiles) {
+	public List<String> insertShelf(@RequestPart("formData") ShelfEntity shelfEntity,
+			@RequestPart("file") MultipartFile [] multipartFiles,@RequestPart("currentLoginName")String currentLoginName) {
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
 	    List<String> resultList = new ArrayList<String>();
 	    int shelfClassID=shelfEntity.getShelfClassID();
 	    System.out.println(shelfClassID);
@@ -62,6 +97,7 @@ public class ShelfController {
 		    	shelfEntity.setXMLPath(url);
 		    }
 	    }
+	    int countUploadPicture=0;
 	    for (MultipartFile multipartFile : multipartFiles) {
 	    	String originalFilename = multipartFile.getOriginalFilename();
 		    String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
@@ -69,14 +105,18 @@ public class ShelfController {
 		    	String url = getFile(multipartFile,shelfClassIDString,thisShelfID);
 		    	resultList.add(url);
 		    	shelfEntity.setShelfPath(url);
+		    	countUploadPicture++;
 		    }
 	    }
 	    shelfService.insertShelf(shelfEntity);
+		
+		//日志
+		String operationString="上传了"+Integer.toString(countUploadPicture)+"张货架图片";
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
+		
 	    log.debug("The method is ending");
 	    return resultList;
-		
-
-
 	}
 	@PutMapping("/shelf/{id}")
 	public ShelfEntity updateShelf(@RequestBody ShelfEntity shelfEntity, @PathVariable int id) {
@@ -108,29 +148,33 @@ public class ShelfController {
 	 * @return
 	 */
 	@DeleteMapping("/shelves")
-	public List<String> deleteShelves(@RequestBody List<String> groupId) {
-		System.out.println(groupId);
+	public List<Integer> deleteShelves(@RequestBody DeleteShelfInfo deleteShelfInfo) {
+		List<Integer> groupId=deleteShelfInfo.getGroupId();
+		String currentLoginName=deleteShelfInfo.getCurrentLoginName();
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
+		String absolutePath=pathService.runningPath().getPath();
 		int groupIDSize = groupId.size();
-		System.out.println(groupIDSize);
 		if(groupId != null && groupIDSize != 0) {
 			for(int i=0;i<groupIDSize;i++) {
-				String currentShelfIDString=groupId.get(i);
-				System.out.println(currentShelfIDString);
-				int currentShelfID=Integer.valueOf(currentShelfIDString);
-				System.out.println(currentShelfID);
+				int currentShelfID=groupId.get(i);
+				String currentShelfIDString=Integer.toString(currentShelfID);
 				int currentClassID=getClassIDByShelfID(currentShelfID);          //数据库查询，通过shelfID得到classID
-				System.out.println(currentClassID);
 				String currentClassIDString=Integer.toString(currentClassID);
 				String srcSuffix=getSrcSuffix(currentShelfID);
-				System.out.println(srcSuffix);
 				String filePath=absolutePath+"/myimages/shelf/"+currentClassIDString+"/"+currentShelfIDString+srcSuffix;
 				fileProcess.deleteFile(filePath);
 				String XMLFilePath=absolutePath+"/myimages/shelf/"+currentClassIDString+"/"+currentShelfIDString+".xml";
 				fileProcess.deleteFile(XMLFilePath);
 			}
 		}
-		System.out.println("123123123213");
 		shelfService.deleteShelfes(groupId);
+		
+		//日志
+		String operationString="删除了"+Integer.toString(groupIDSize)+"张货架图片";
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
+		
 		return groupId;
 		
 	}
@@ -155,6 +199,7 @@ public class ShelfController {
 	
 	
 	private String getFile(MultipartFile file,String dirName,int newID) {
+		String absolutePath=pathService.runningPath().getPath();
 	    String originalFilename = file.getOriginalFilename();
 	    String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 	    String newIDString = Integer.toString(newID); 
