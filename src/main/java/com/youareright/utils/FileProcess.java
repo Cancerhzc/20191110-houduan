@@ -99,8 +99,7 @@ public class FileProcess {
 		    } catch (IOException e) {
 		    	e.printStackTrace();
 		    	return 0;
-		    }
-		        
+		    }   
 		}
 		
 		public void runPython(String pythonPath,String pyPath,String goodsTxtPath,String shelvesTxtPath,String pictureNumTxtPath,String outPath,String doneNumberPath) {
@@ -126,16 +125,6 @@ public class FileProcess {
 		}
 		
 		public int countNumberInAZip(String txtPath) {
-//			try {
-//				ZipFile zip = new ZipFile(zipPath);
-//				int number=zip.size();
-//				zip.close();
-//				return number;
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			return 0;
 			String numString=readTxt(txtPath);
 			if(numString==null) {
 				return 0;

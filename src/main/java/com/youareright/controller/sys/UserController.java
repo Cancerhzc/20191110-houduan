@@ -182,7 +182,7 @@ public class UserController {
 				userService.updateUser(userEntity);
 			}
 			//日志
-			String operationString="修改了用户登录名["+userEntity.getLoginName()+"]的用户信息";
+			String operationString="修改了用户[登录名："+userEntity.getLoginName()+"]的用户信息";
 			String operationTime=timeProcess.nowTime().get(0);
 			operationService.insertOperation(currentUserID, operationString, operationTime);
 			
@@ -207,13 +207,14 @@ public class UserController {
 		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
 		int currentUserID=currentUser.getId();
 		String oldPassword=changePasswordInfo.getOldPassword();
-		String bcryptOldPassword="{bcrypt}"+new BCryptPasswordEncoder().encode(oldPassword);
-		if(bcryptOldPassword.equals(currentUser.getPassword())) {
+		String oldRightPassword=currentUser.getPassword().substring(8);
+		BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+		if(bcryptPasswordEncoder.matches(oldPassword,oldRightPassword)) {
 			currentUser.setPassword(changePasswordInfo.getNewPassword());
 			userService.updateUser(currentUser);
 			
 			//日志
-			String operationString="用户登录名["+currentUser.getLoginName()+"]修改了密码";
+			String operationString="用户[登录名："+currentUser.getLoginName()+"]修改了密码";
 			String operationTime=timeProcess.nowTime().get(0);
 			operationService.insertOperation(currentUserID, operationString, operationTime);
 			
@@ -222,8 +223,7 @@ public class UserController {
 		}
 		else {
 			return "@Old password is wrong!@";
-		}
-		
+		}	
 	}
 	
 
