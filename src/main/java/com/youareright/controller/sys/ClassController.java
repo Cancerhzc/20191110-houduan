@@ -105,6 +105,12 @@ public class ClassController {
 		return pageResult;
 	}
 	
+	@GetMapping("/classes/getTable")
+	public PageResult classesListTable(String searchCondition, int pageSize, int page) {
+		PageResult pageResult =classesList(searchCondition, pageSize, page);
+		return pageResult;
+	}
+	
 	/**
 	 * 新建标签信息
 	 * 

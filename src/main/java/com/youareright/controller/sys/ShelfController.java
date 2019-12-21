@@ -196,6 +196,11 @@ public class ShelfController {
 		return pageResult;
 	}
 	
+	@GetMapping("/shelf/getTable")
+	public PageResult shelvesListTable(String searchCondition, int pageSize, int page) {
+		PageResult pageResult = shelvesList(searchCondition, pageSize, page);
+		return pageResult;
+	}
 	
 	
 	private String getFile(MultipartFile file,String dirName,int newID) {

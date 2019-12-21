@@ -403,6 +403,12 @@ public class GoodsController {
 		return pageResult;
 	}
 	
+	@GetMapping("/goods/uploadGetTable")
+	public PageResult goodsesListUploadGetTable(String searchCondition, int pageSize, int page) {
+		PageResult pageResult =goodsesList02(searchCondition,pageSize,page);
+		return pageResult;
+	}
+	
 	@PostMapping("/goods/modify")
 	public String markGoods(@RequestBody Mark goodsModify) {
 		String absolutePath=pathService.runningPath().getPath();
