@@ -221,7 +221,7 @@ public class UserController {
 			return "@Change password successfully!@";
 		}
 		else {
-			return "@Old password is wrong@!";
+			return "@Old password is wrong!@";
 		}
 		
 	}
