@@ -32,6 +32,6 @@ public interface ClassService {
 	
 	public String getClassNameByClassID(int classID);
 	
-	public void giveUpClassID(List<Integer> groupID,int upClassID);
+	public void giveUpClassID(List<Integer> groupID,Integer upClassID);
 
 }

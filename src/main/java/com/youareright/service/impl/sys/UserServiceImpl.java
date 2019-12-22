@@ -58,7 +58,11 @@ public class UserServiceImpl implements UserService {
 
 	public void updateUser(UserEntity userEntity) {
 		//userEntity.setPassword(new Md5PasswordEncoder().encodePassword(userEntity.getPassword(), null));
-		userEntity.setPassword("{bcrypt}"+new BCryptPasswordEncoder().encode(userEntity.getPassword()));
+		
+		if(userEntity.getPassword()!=null) {
+			userEntity.setPassword("{bcrypt}"+new BCryptPasswordEncoder().encode(userEntity.getPassword()));
+		}
+		
 		userDao.updateUser(userEntity);
 	}
 

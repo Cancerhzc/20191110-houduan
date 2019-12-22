@@ -84,12 +84,10 @@
 	<!-- 更新用户信息 -->
 	<update id="updateUser">
 		update sys_user set
+		<if test="userEntity.password != null">password = #{userEntity.password},</if>
 		name = #{userEntity.name},
-		login_name =
-		#{userEntity.loginName},
-		password = #{userEntity.password},
-		email =
-		#{userEntity.email}
+		login_name =#{userEntity.loginName},
+		email =#{userEntity.email}
 		<where>
 			id = #{userEntity.id}
 		</where>

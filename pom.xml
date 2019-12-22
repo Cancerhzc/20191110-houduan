@@ -5,7 +5,7 @@
 
 	<groupId>com.youareright</groupId>
 	<artifactId>youareright-spring-boot</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>youareright-spring-boot</name>

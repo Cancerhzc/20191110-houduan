@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youareright.dao.SourceDownloadDao">
+	<resultMap id="sourceDownloadMap" type="com.youareright.model.sys.SourceDownloadEntity">
+		<id column="file_id" property="file_id" />
+		<result column="file_name" property="file_name" />
+		<result column="file_path" property="file_path" />
+		<result column="comments" property="comments" />
+	</resultMap>
+	
+	<select id="sourceList" resultMap="sourceDownloadMap">
+	<![CDATA[SELECT file_id,file_name,file_path,comments FROM file_download]]>
+		<where>
+			<if test="searchCondition != null and searchCondition != ''">
+				file_name like "%"#{searchCondition}"%"
+			</if>
+		</where>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取class列表的总量 -->
+	<select id="sourceListSize" resultType="Integer">  
+	    <![CDATA[select count(*) from file_download]]>
+	    <where>
+			<if test="searchCondition != null and searchCondition != ''">
+				file_name like "%"#{searchCondition}"%"
+			</if>
+		</where>
+	</select>
+	
+</mapper>

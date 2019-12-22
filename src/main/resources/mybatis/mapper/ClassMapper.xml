@@ -142,7 +142,7 @@
 		upClassID = #{upClassID}
 		<where>
 			<if test="groupId !=null">
-				upClassID in
+				classID in
 				<foreach collection="groupId" item="item" index="index"
 					open="(" separator="," close=")">
 					#{item}

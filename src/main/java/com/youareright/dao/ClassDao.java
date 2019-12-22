@@ -52,7 +52,7 @@ public interface ClassDao {
 	
 	public void modifyClass(int classID,String newClassName,String newGoodsName);
 	
-	public void giveUpClassID(@Param("groupId") List<Integer> groupID,@Param("upClassID")int upClassID);
+	public void giveUpClassID(@Param("groupId") List<Integer> groupID,@Param("upClassID")Integer upClassID);
 	
 	
 }

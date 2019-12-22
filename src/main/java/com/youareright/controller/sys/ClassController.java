@@ -1,6 +1,7 @@
 package com.youareright.controller.sys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -131,7 +132,19 @@ public class ClassController {
 	
 	@GetMapping("/classes/getTable")
 	public PageResult classesListTable(String searchCondition, int pageSize, int page) {
-		PageResult pageResult =classesList(searchCondition, pageSize, page);
+		PageResult pageResult = new PageResult();
+		List<ClassEntity> classesList=classService.classesList(searchCondition, pageSize, page * pageSize);
+		List<ClassEntity> filterNoneClassesList=new ArrayList<ClassEntity>();
+		int listSize=classesList.size();
+		int count=0;
+		for(int i=0;i<listSize;i++) {
+			if(classesList.get(i).getContainGoodsNumber()!=0) {
+				filterNoneClassesList.add(classesList.get(i));
+				count++;
+			}
+		}
+		pageResult.setData(filterNoneClassesList);
+		pageResult.setTotalCount(count);
 		return pageResult;
 	}
 	

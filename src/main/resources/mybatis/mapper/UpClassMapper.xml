@@ -8,6 +8,11 @@
 	
 	<select id="upClassesList" resultMap="upClassMap">
 	<![CDATA[select upClassID,upClassName from upClass]]>
+		<where>
+			<if test="searchCondition != null and searchCondition != ''">
+				upClassName like "%"#{searchCondition}"%"
+			</if>
+		</where>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
 		</if>
@@ -58,7 +63,7 @@
 	
 	<update id="updateUpClass">
 		update upClass set
-		upClassName = #{upClassName},
+		upClassName = #{upClassName}
 		<where>
 			upClassID = #{upClassID}
 		</where>

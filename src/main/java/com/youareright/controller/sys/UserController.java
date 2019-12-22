@@ -181,6 +181,9 @@ public class UserController {
 			return "@Username is existed!@";
 		}
 		else {
+			if(userEntity.getPassword().equals(existUserEntity.getPassword())) {
+				userEntity.setPassword(null);
+			}
 			userService.updateUser(userEntity);
 			
 			//日志
@@ -192,7 +195,9 @@ public class UserController {
 			return "@Update user successfully!@";
 		}
 	}
-	
+
+
+
 	/**
 	 * 修改密码
 	 * 

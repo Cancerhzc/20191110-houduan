@@ -2,7 +2,6 @@ package com.youareright.service.impl.sys;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +66,7 @@ public class ClassServiceImpl implements ClassService {
 		classDao.modifyClass(classID,newClassName,newGoodsName);
 	}
 	
-	public void giveUpClassID(List<Integer> groupID,int upClassID) {
+	public void giveUpClassID(List<Integer> groupID,Integer upClassID) {
 		classDao.giveUpClassID(groupID,upClassID);
 	}
 
