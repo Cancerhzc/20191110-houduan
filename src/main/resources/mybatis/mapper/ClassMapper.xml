@@ -4,7 +4,7 @@
 	<resultMap id="classMap" type="com.youareright.model.sys.ClassEntity">
 		<id column="classID" property="classID" />
 		<result column="goodsClass" property="goodsClass" />
-		<result column="upClassName" property="upClassName" />
+		<result column="upClassID" property="upClassID" />
 		<result column="goodsName" property="goodsName" />
 		<result column="containGoodsNumber" property="containGoodsNumber"/>
 	</resultMap>
@@ -48,7 +48,7 @@
 		update goods_class set
 		goodsClass = #{classEntity.goodsClass},
 		goodsName = #{classEntity.goodsName},
-		upClassName = #{classEntity.upClassName},
+		upClassID = #{classEntity.upClassID}
 		<where>
 			classID = #{classEntity.classID}
 		</where>
@@ -129,7 +129,8 @@
 	<update id="modifyClass">
 		update goods_class set
 		goodsClass = #{newClassName},
-		goodsName = #{newGoodsName}
+		goodsName = #{newGoodsName},
+		upClassID = #{classEntity.upClassID}
 		<where>
 			classID = #{classID}
 		</where>

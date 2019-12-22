@@ -201,7 +201,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@PutMapping("/users/changePassword")
+	@PutMapping("/user/changePassword")
 	public String changePassword(@RequestBody ChangePasswordInfo changePasswordInfo) {
 		String currentLoginName=changePasswordInfo.getCurrentLoginName();
 		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);

@@ -3,19 +3,10 @@ package com.youareright.model.sys;
 public class ClassEntity {
 	private Integer classID;
 	private String goodsClass;
-	private String upClassName;
+	private Integer upClassID;
 	private String goodsName;
 	private Integer containGoodsNumber;
-
-	public void setContainGoodsNumber(Integer containGoodsNumber) {
-		this.containGoodsNumber = containGoodsNumber;
-	}
-	public int getContainGoodsNumber() {
-		return containGoodsNumber;
-	}
-	public void setContainGoodsNumber(int containGoodsNumber) {
-		this.containGoodsNumber = containGoodsNumber;
-	}
+	
 	public Integer getClassID() {
 		return classID;
 	}
@@ -28,11 +19,11 @@ public class ClassEntity {
 	public void setGoodsClass(String goodsClass) {
 		this.goodsClass = goodsClass;
 	}
-	public String getUpClassName() {
-		return upClassName;
+	public Integer getUpClassID() {
+		return upClassID;
 	}
-	public void setUpClassName(String upClassName) {
-		this.upClassName = upClassName;
+	public void setUpClassID(Integer upClassID) {
+		this.upClassID = upClassID;
 	}
 	public String getGoodsName() {
 		return goodsName;
@@ -40,5 +31,10 @@ public class ClassEntity {
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
-	
+	public Integer getContainGoodsNumber() {
+		return containGoodsNumber;
+	}
+	public void setContainGoodsNumber(Integer containGoodsNumber) {
+		this.containGoodsNumber = containGoodsNumber;
+	}
 }

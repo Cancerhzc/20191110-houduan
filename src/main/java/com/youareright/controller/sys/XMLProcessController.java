@@ -5,13 +5,12 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.youareright.service.sys.PathService;
 import com.youareright.utils.FileProcess;
-import com.youareright.utils.TimeProcess;
 class LocationInfo {
 	List<Integer> xStart;
 	List<Integer> yStart;
@@ -39,15 +38,17 @@ public class XMLProcessController {
 	
 	private FileProcess fileProcess=new FileProcess();
 	
-	@GetMapping("/XMLProcess")
+	@PostMapping("/XMLProcess")
 	public String XMLProcess(@RequestBody LocationInfo locationInfo) {
 		List<Integer> xStart=locationInfo.getxStart();
 		List<Integer> yStart=locationInfo.getyStart();
 		List<Integer> xEnd=locationInfo.getxEnd();
 		List<Integer> yEnd=locationInfo.getyEnd();
-		fileProcess.deleteFile(pathService.runningPath().getIniBasicPath()+"/XMLTempPath");
+//		fileProcess.deleteFile(pathService.runningPath().getPath()+"/XMLTempPath");
+		fileProcess.makeDirectory(pathService.runningPath().getPath()+"/XMLTempPath");
 		String thisUUID= UUID.randomUUID().toString().replaceAll("-","");
-		String XMLPath=pathService.runningPath().getIniBasicPath()+"/XMLTempPath/"+thisUUID+".xml";
+		String XMLPath=pathService.runningPath().getPath()+"/XMLTempPath/"+thisUUID+".xml";
+		String returnPath="/XMLTempPath/"+thisUUID+".xml";
 		String content=new String();
 		content+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+'\n';
 		content+="<shelf>"+"\n";
@@ -66,7 +67,7 @@ public class XMLProcessController {
 		}
 		content+="</shelf>";
 		fileProcess.writeFile(content,XMLPath);
-		return XMLPath;
+		return returnPath;
 	}
 	
 }
