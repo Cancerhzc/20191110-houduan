@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import com.youareright.dao.MenuDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,16 @@ import com.youareright.model.sys.UserEntity;
 @Component
 public class MyUserDetailsService implements UserDetailsService {
 	Logger log = LoggerFactory.getLogger(MyUserDetailsService.class);
-	
+
 	@Autowired
 	UserDao userDao;
-	
+
+	@Autowired
+	MenuDao menuDao;
+
 	@Autowired
 	RoleDao roleDao;
-	
+
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserEntity userEntity = userDao.getUserEntityByLoginName(username);
 		if(userEntity == null) {
@@ -35,15 +39,22 @@ public class MyUserDetailsService implements UserDetailsService {
 		}
 		String password = userEntity.getPassword();
 		log.info(password);
-		
-		
+
+
 		Collection<SimpleGrantedAuthority> collection = new HashSet<SimpleGrantedAuthority>();
-        Iterator<String> iterator =  roleDao.getRolesByUserId(userEntity.getId()).iterator();
-        while (iterator.hasNext()){
-            collection.add(new SimpleGrantedAuthority(iterator.next()));
-        }
-		
+
+//		for (String s : roleDao.getRolesByUserId(userEntity.getId())) {
+//			collection.add(new SimpleGrantedAuthority(s));
+//			System.out.println(collection);
+//		}
+
+		for (String s : menuDao.getUrlByUserId(userEntity.getId())) {
+			if (!s.equals("")) {
+				collection.add(new SimpleGrantedAuthority(s));
+			}
+		}
 		/*return new User(username, password, AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN"));*/
+		System.out.println(new User(username, password, collection));
 		return new User(username, password, collection);
 	}
 

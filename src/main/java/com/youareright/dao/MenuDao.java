@@ -77,4 +77,5 @@ public interface MenuDao {
 	 */
 	public List<MenuEntity> getSubmenus();
 
+	List<String> getUrlByUserId(int id);
 }

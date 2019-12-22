@@ -14,7 +14,20 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 		http.
 		authorizeRequests()
 		.antMatchers("/usernamepassword/token").permitAll()
-		.antMatchers("/users/**","/menus/**","/roles/**").hasRole("ADMIN")
+				.antMatchers("/users/**").hasAuthority("/base/user")
+				.antMatchers("/menus/**").hasAuthority("/base/menu")
+				.antMatchers("/roles/**").hasAuthority("/base/role")
+				.antMatchers("/goods/uploadGetTable").hasAuthority("/base/picture")
+				.antMatchers("/goods/13").hasAuthority("/base/picturedel")
+				.antMatchers("/shelf").hasAuthority("/base/shelves")
+				.antMatchers("/classes").hasAuthority("/base/class")
+				.antMatchers("/classes/getTable","/shelf/getTable").hasAuthority("/base/compose")
+				.antMatchers("/getMergePictures").hasAuthority("/base/mergephoto")
+				.antMatchers("/goods/02").hasAuthority("/base/verify")
+				.antMatchers("/XMLProcess").hasAuthority("/base/canvas")
+				.antMatchers("/operation").hasAuthority("/base/log")
+				.antMatchers("/upClasses").hasAuthority("/base/upclass")
+				.antMatchers("/sourceDownload").hasAuthority("/base/source")
 		.anyRequest()
 		.authenticated();
 	}

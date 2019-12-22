@@ -110,4 +110,10 @@
 			url is not null
 		</where>
 	</select>
+	<select id="getUrlByUserId" resultType="String">
+		select url from sys_menu
+		where id in
+			  (select menu_id from r_role_menu where role_id in
+													 (select role_id from r_user_role where user_id = #{id}))
+	</select>
 </mapper>
