@@ -56,4 +56,12 @@
 		(#{upClassName})
 	</insert>
 	
+	<update id="updateUpClass">
+		update upClass set
+		upClassName = #{upClassName},
+		<where>
+			upClassID = #{upClassID}
+		</where>
+	</update>
+	
 </mapper>

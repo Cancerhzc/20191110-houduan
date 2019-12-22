@@ -17,4 +17,6 @@ public interface UpClassService {
 	public UpClassEntity getUpClassEntityByUpClassID(int upClassID);
 	
 	public UpClassEntity getUpClassEntityByUpClassName(String upClassName);
+	
+	public void updateUpClass(int upClassID,String newUpClassName);
 }

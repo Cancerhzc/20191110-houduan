@@ -177,10 +177,12 @@ public class UserController {
 		UserEntity userEntity=updateUserInfo.getUserEntity();
 		UserEntity existUserEntity=userService.getUserEntityByLoginName(userEntity.getLoginName());
 		
-		if(existUserEntity==null) {
-			if (userEntity.getId() == id) {
-				userService.updateUser(userEntity);
-			}
+		if(existUserEntity!=null && existUserEntity.getId()!=id) {
+			return "@Username is existed!@";
+		}
+		else {
+			userService.updateUser(userEntity);
+			
 			//日志
 			String operationString="修改了用户[登录名："+userEntity.getLoginName()+"]的用户信息";
 			String operationTime=timeProcess.nowTime().get(0);
@@ -188,9 +190,6 @@ public class UserController {
 			
 			log.debug("The method is ending");
 			return "@Update user successfully!@";
-		}
-		else {
-			return "@Username is existed!@";
 		}
 	}
 	

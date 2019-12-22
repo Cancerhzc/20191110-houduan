@@ -37,4 +37,8 @@ public class UpClassServiceImpl implements UpClassService {
 	public UpClassEntity getUpClassEntityByUpClassName(String upClassName) {
 		return upClassDao.getUpClassEntityByUpClassName(upClassName);
 	}
+	
+	public void updateUpClass(int upClassID,String newUpClassName) {
+		upClassDao.updateUpClass(upClassID,newUpClassName);
+	}
 }

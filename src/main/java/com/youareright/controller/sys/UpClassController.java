@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.youareright.model.sys.PageResult;
@@ -133,4 +134,31 @@ public class UpClassController {
 		}
 	}
 	
+	@PutMapping("/updateUpClass")
+	public String updateUpClass(@RequestBody UpdateUpClassInfo updateUpClassInfo) {	
+		String currentLoginName=updateUpClassInfo.getCurrentLoginName();
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
+		UpClassEntity postUpClassEntity=updateUpClassInfo.getUpClassEntity();
+		
+		String postUpClassName=postUpClassEntity.getUpClassName();
+		int postUpClassID=postUpClassEntity.getUpClassID();
+		UpClassEntity existedUpClass=upClassService.getUpClassEntityByUpClassName(postUpClassName);
+		if(existedUpClass!=null && existedUpClass.getUpClassID()!=postUpClassEntity.getUpClassID()) {
+			return "@Upclass name is existed!@";
+		}
+		else {
+			upClassService.updateUpClass(postUpClassID,postUpClassName);
+			
+			//日志
+			String operationString="修改了大类别，类别ID为["+Integer.toString(postUpClassID)+"]，新类别名为["+postUpClassName+"]";
+			String operationTime=timeProcess.nowTime().get(0);
+			operationService.insertOperation(currentUserID, operationString, operationTime);
+			
+			return "@Update upclass successfully!@";
+		}
+		
+		
+		
+	}
 }

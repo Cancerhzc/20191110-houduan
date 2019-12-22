@@ -21,4 +21,6 @@ public interface UpClassDao {
 	public UpClassEntity getUpClassEntityByUpClassID(@Param("upClassID")int upClassID);
 	
 	public UpClassEntity getUpClassEntityByUpClassName(@Param("upClassName")String upClassName);
+	
+	public void updateUpClass(@Param("upClassID") int upClassID,@Param("upClassName")String newUpClassName);
 }
