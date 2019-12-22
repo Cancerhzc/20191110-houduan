@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.youareright.model.sys.PageResult;
 import com.youareright.model.sys.UpClassEntity;
@@ -68,7 +69,7 @@ class UpdateUpClassInfo {
 	}
 }
 
-
+@RestController
 public class UpClassController {
 	@Resource(name = "upClassServiceImpl")
 	private UpClassService upClassService;

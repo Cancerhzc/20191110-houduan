@@ -59,6 +59,31 @@ class UpdateClassInfo {
 	}
 }
 
+class GiveClassUpClassInfo {
+	List<Integer> groupId;
+	Integer upClassID;
+	String currentLoginName;
+	public List<Integer> getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(List<Integer> groupId) {
+		this.groupId = groupId;
+	}
+	public Integer getUpClassID() {
+		return upClassID;
+	}
+	public void setUpClassID(Integer upClassID) {
+		this.upClassID = upClassID;
+	}
+	public String getCurrentLoginName() {
+		return currentLoginName;
+	}
+	public void setCurrentLoginName(String currentLoginName) {
+		this.currentLoginName = currentLoginName;
+	}
+	
+}
+
 @RestController
 /*@PreAuthorize("hasRole('ADMI')")*/
 public class ClassController {
@@ -131,7 +156,6 @@ public class ClassController {
 	 * @return
 	 */
 	@PutMapping("/class/{id}")
-//	public String updateClass(@RequestBody ClassEntity classEntity) {	
 	public String updateClass(@RequestBody UpdateClassInfo updateClassInfo) {	
 		ClassEntity classEntity=updateClassInfo.getClassEntity();
 		String currentLoginName=updateClassInfo.getCurrentLoginName();
@@ -218,6 +242,28 @@ public class ClassController {
 	
 	public Integer getClassID(String labelName) {
 		return classService.getClassID(labelName);
+	}
+	
+	@PostMapping("/giveUpClassID")
+	public void giveUpClassID(@RequestBody GiveClassUpClassInfo giveClassUpClassInfo) {
+		List<Integer> groupID=giveClassUpClassInfo.getGroupId();
+		String currentLoginName=giveClassUpClassInfo.getCurrentLoginName();
+		UserEntity currentUser=userService.getUserEntityByLoginName(currentLoginName);
+		int currentUserID=currentUser.getId();
+		List<Integer> groupId=giveClassUpClassInfo.getGroupId();
+		Integer upClassID=giveClassUpClassInfo.getUpClassID();
+		classService.giveUpClassID(groupId,upClassID);
+		
+		//日志
+		String operationString=new String();
+		if(upClassID!=null) {
+			operationString="给"+Integer.toString(groupID.size())+"个标签赋予类别[类别ID："+Integer.toString(upClassID)+"]";
+		}
+		else {
+			operationString="给"+Integer.toString(groupID.size())+"个标签解除设置类别";
+		}
+		String operationTime=timeProcess.nowTime().get(0);
+		operationService.insertOperation(currentUserID, operationString, operationTime);
 	}
 	
 }

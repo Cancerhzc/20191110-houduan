@@ -41,7 +41,7 @@
 		delete from upClass
 		<where>
 			<if test="groupId !=null">
-				classID in
+				upClassID in
 				<foreach collection="groupId" item="item" index="index"
 					open="(" separator="," close=")">
 					#{item}

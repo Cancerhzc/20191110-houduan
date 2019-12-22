@@ -6,7 +6,15 @@ public class ClassEntity {
 	private Integer upClassID;
 	private String goodsName;
 	private Integer containGoodsNumber;
+	private String upClassName;
 	
+	
+	public String getUpClassName() {
+		return upClassName;
+	}
+	public void setUpClassName(String upClassName) {
+		this.upClassName = upClassName;
+	}
 	public Integer getClassID() {
 		return classID;
 	}

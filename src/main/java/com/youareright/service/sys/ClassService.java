@@ -31,5 +31,7 @@ public interface ClassService {
 	void modifyClass(int classID,String newClassName,String newGoodsName);
 	
 	public String getClassNameByClassID(int classID);
+	
+	public void giveUpClassID(List<Integer> groupID,int upClassID);
 
 }

@@ -47,8 +47,7 @@
 	<update id="updateClass">
 		update goods_class set
 		goodsClass = #{classEntity.goodsClass},
-		goodsName = #{classEntity.goodsName},
-		upClassID = #{classEntity.upClassID}
+		goodsName = #{classEntity.goodsName}
 		<where>
 			classID = #{classEntity.classID}
 		</where>
@@ -56,10 +55,13 @@
 	
 	<!-- 获取class列表  信息中的图像个数是审核通过的图片个数-->
 	<select id="classesList" resultMap="classMap">
-	<![CDATA[SELECT goods_class.classID,goods_class.goodsClass AS goodsClass,goods_class.goodsName AS goodsName,IFNULL(myCount,0) containGoodsNumber FROM 
-			goods_class LEFT OUTER JOIN 
-			(SELECT classID,COUNT(*) AS myCount FROM sys_goods where ((goodsState=1) or (goodsState=3)) GROUP BY classID) a 
-			ON goods_class.classID=a.classID]]>
+	<![CDATA[SELECT goods_class.classID,goods_class.goodsClass AS goodsClass,goods_class.goodsName AS goodsName,upClassName,IFNULL(myCount,0) containGoodsNumber FROM 
+			(goods_class 
+			LEFT OUTER JOIN 
+			(SELECT classID,COUNT(*) AS myCount FROM sys_goods WHERE ((goodsState=1) OR (goodsState=3)) GROUP BY classID) a 
+			ON goods_class.classID=a.classID
+			)  
+			LEFT OUTER JOIN upClass ON goods_class.upClassID=upClass.upClassID]]>
 		<where>
 			<if test="searchCondition != null and searchCondition != ''">
 				goods_class.goodsName like "%"#{searchCondition}"%"
@@ -129,10 +131,23 @@
 	<update id="modifyClass">
 		update goods_class set
 		goodsClass = #{newClassName},
-		goodsName = #{newGoodsName},
-		upClassID = #{classEntity.upClassID}
+		goodsName = #{newGoodsName}
 		<where>
 			classID = #{classID}
+		</where>
+	</update>
+	
+	<update id="giveUpClassID">
+		update goods_class set
+		upClassID = #{upClassID}
+		<where>
+			<if test="groupId !=null">
+				upClassID in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 		</where>
 	</update>
 	
