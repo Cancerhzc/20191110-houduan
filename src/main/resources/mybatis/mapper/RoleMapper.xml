@@ -11,6 +11,9 @@
 	<!-- 获取role列表 -->
 	<select id="rolesList" resultMap="roleMap">
 	<![CDATA[select * from sys_role ]]>
+		<where>
+	    	id!=1
+	    </where>
 	    <![CDATA[ order by id]]>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
@@ -19,6 +22,9 @@
 	<!-- 获取role列表的总量 -->
 	<select id="rolesSize" resultType="Integer">  
 	    <![CDATA[select count(*) from sys_role]]>
+	    <where>
+	    	id!=1
+	    </where>
 	</select>
 	<!-- 新建角色信息 -->
 	<insert id="insertRole">

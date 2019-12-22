@@ -12,8 +12,9 @@
 	<select id="usersList" resultMap="userMap">
 	<![CDATA[select * from sys_user]]>
 		<where>
+			(id!=1)
 			<if test="loginName != null and loginName != ''">
-				login_name = #{loginName}
+				and (login_name = #{loginName})
 			</if>
 		</where>
 	    <![CDATA[ order by id desc ]]>
@@ -34,8 +35,9 @@
 	<select id="usersSize" resultType="Integer">  
 	    <![CDATA[select count(*) from sys_user]]>
 		<where>
+			(id!=1)
 			<if test="loginName != null and loginName != ''">
-				login_name = #{loginName}
+				and (login_name = #{loginName})
 			</if>
 		</where>
 	</select>
