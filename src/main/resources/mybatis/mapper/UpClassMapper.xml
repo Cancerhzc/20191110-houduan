@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youareright.dao.UpClassDao">
+	<resultMap id="upClassMap" type="com.youareright.model.sys.UpClassEntity">
+		<id column="upClassID" property="upClassID" />
+		<result column="upClassName" property="upClassName" />
+	</resultMap>
+	
+	<select id="upClassesList" resultMap="upClassMap">
+	<![CDATA[select upClassID,upClassName from upClass]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="upClassesSize" resultType="Integer">  
+	    <![CDATA[select count(*) from upClass]]>
+	    <where>
+			<if test="searchCondition != null and searchCondition != ''">
+				upClassName like "%"#{searchCondition}"%"
+			</if>
+		</where>
+	</select>
+	
+	<select id="getUpClassEntityByUpClassName" resultMap="upClassMap">
+	<![CDATA[select upClassID,upClassName from upClass]]>
+	    <where>
+			upClassName=#{upClassName}
+		</where>
+	</select>
+	
+	<select id="getUpClassEntityByUpClassID" resultMap="upClassMap">
+	<![CDATA[select upClassID,upClassName from upClass]]>
+	    <where>
+			upClassID=#{upClassID}
+		</where>
+	</select>
+
+	
+	<delete id="deleteUpClasses">
+		delete from upClass
+		<where>
+			<if test="groupId !=null">
+				classID in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+	
+	<insert id="insertUpClass">
+		insert into upClass(upClassName)
+		values
+		(#{upClassName})
+	</insert>
+	
+</mapper>

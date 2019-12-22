@@ -57,7 +57,6 @@ class UpdateClassInfo {
 	public void setCurrentLoginName(String currentLoginName) {
 		this.currentLoginName = currentLoginName;
 	}
-	
 }
 
 @RestController
