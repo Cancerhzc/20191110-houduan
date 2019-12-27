@@ -532,14 +532,16 @@ public class GoodsController {
 				fileProcess.deleteFile(filePath);
 				String dirPath=filePath.substring(0,filePath.lastIndexOf("/"));
 				File file=new File(dirPath);
-				File[] fileList=file.listFiles();
 				int countFile=0;
-				for(File fileIndex:fileList){
-					countFile++;
-				}
-				if(countFile==0) {
-					fileProcess.deleteFile(dirPath);
-				}
+		        if (file.exists()) {
+					File[] fileList=file.listFiles();
+					for(File fileIndex:fileList){
+						countFile++;
+					}
+					if(countFile==0) {
+						fileProcess.deleteFile(dirPath);
+					}
+		        }
 			}
 			goodsService.deleteGoodses(groupId);
 			//日志

@@ -197,16 +197,36 @@ public class ClassController {
 				String srcDirPath=absolutePath+"/myimages/"+selectClassIDString;
 				String dstPath=absolutePath+"/myimages/"+newClassIDToString;
 				File file=new File(srcDirPath);
-				File[] fileList=file.listFiles();
-				for(File f:fileList) {
-					String currentFileName=f.getName();
-					String srcFilePath=srcDirPath+"/"+currentFileName;
-					String src="/myimages/"+newClassIDToString+"/"+currentFileName;
-					goodsService.modifyGoods(selectClassID, newClassID, src);
-					fileProcess.moveFile(srcFilePath,dstPath);
-				}
-				fileProcess.deleteFile(absolutePath+"/myimages/"+selectClassIDString);//删除原文件夹
-				classService.del(selectClassID);
+		        if (file.exists()) {
+					File[] fileList=file.listFiles();
+					for(File f:fileList) {
+						String currentFileName=f.getName();
+						String fileNumberString=currentFileName.substring(0,currentFileName.indexOf("."));
+						int goodsID=Integer.valueOf(fileNumberString);
+						String srcFilePath=srcDirPath+"/"+currentFileName;
+						String src="/myimages/"+newClassIDToString+"/"+currentFileName;
+						goodsService.modifyGoods(goodsID, newClassID, src);
+						fileProcess.moveFile(srcFilePath,dstPath);
+					}
+					fileProcess.deleteFile(absolutePath+"/myimages/"+selectClassIDString);//删除原文件夹
+		        }
+				String srcDirPath2=absolutePath+"/myimages/waitcheck/"+selectClassIDString;
+				String dstPath2=absolutePath+"/myimages/waitcheck/"+newClassIDToString;
+				File file2=new File(srcDirPath2);
+		        if (file2.exists()) {
+					File[] fileList2=file2.listFiles();
+					for(File f2:fileList2) {
+						String currentFileName2=f2.getName();
+						String srcFilePath2=srcDirPath2+"/"+currentFileName2;
+						String src2="/myimages/waitcheck/"+newClassIDToString+"/"+currentFileName2;
+						String fileNumberString=currentFileName2.substring(0,currentFileName2.indexOf("."));
+						int goodsID=Integer.valueOf(fileNumberString);
+						goodsService.modifyGoods(goodsID, newClassID, src2);
+						fileProcess.moveFile(srcFilePath2,dstPath2);
+					}
+					fileProcess.deleteFile(absolutePath+"/myimages/waitcheck/"+selectClassIDString);//删除原文件夹
+		        }
+		        classService.del(selectClassID);
 			}
 			else {
 				return existGoodsName;//如果输入的标签名在数据库中已经存在，但商品名不一致的话，需要返回数据库已有的商品名

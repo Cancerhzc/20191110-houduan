@@ -21,9 +21,6 @@ public class FileProcess {
 				if(!dstPathOpen.exists()) {
 					dstPathOpen.mkdirs();
 				}
-				String newPath=dstPath+"/"+srcFile.getName();
-				System.out.println(srcFilePath);
-				System.out.println(newPath);
 				if (srcFile.renameTo(new File(dstPath+"/"+srcFile.getName()))) //源文件移动至目标文件目录
 				{
 					System.out.println("File is moved successful!");//输出移动成功

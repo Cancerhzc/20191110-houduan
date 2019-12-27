@@ -67,7 +67,7 @@
 		classID = #{newClassID},
 		goodsPath = #{newGoodsPath}
 		<where>
-			classID = #{oldClassID}
+			goodsID = #{goodsID}
 		</where>
 	</update>
 	

@@ -54,5 +54,7 @@ public interface ClassDao {
 	
 	public void giveUpClassID(@Param("groupId") List<Integer> groupID,@Param("upClassID")Integer upClassID);
 	
+	public void modifyClass2(int classID,String newClassName,String newGoodsName);
+	
 	
 }

@@ -24,7 +24,7 @@ public interface GoodsDao {
 	
 	public void deleteGoodses(@Param("groupId") List<Integer> groupId);
 	
-	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath);
+	public void modifyGoods(int goodsID,int newClassID,String newGoodsPath);
 	
 	/**
 	 * 更新商品图片信息

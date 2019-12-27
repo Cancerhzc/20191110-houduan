@@ -69,6 +69,7 @@ public class ClassServiceImpl implements ClassService {
 	public void giveUpClassID(List<Integer> groupID,Integer upClassID) {
 		classDao.giveUpClassID(groupID,upClassID);
 	}
+	
 
 
 }

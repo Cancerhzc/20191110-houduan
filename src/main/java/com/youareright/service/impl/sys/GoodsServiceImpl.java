@@ -68,8 +68,8 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 	
 
-	public void modifyGoods(int oldClassID,int newClassID,String newGoodsPath) {
-		goodsDao.modifyGoods(oldClassID, newClassID, newGoodsPath);
+	public void modifyGoods(int goodsID,int newClassID,String newGoodsPath) {
+		goodsDao.modifyGoods(goodsID, newClassID, newGoodsPath);
 	}
 	
 	public GoodsEntity getGoodsEntityByGoodsID(int goodsID) {
